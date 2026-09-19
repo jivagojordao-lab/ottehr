@@ -25,7 +25,7 @@ export const CompleteIntakeButton: React.FC<{
 
   const { ConfirmationModal, requestConfirmation } = useReactNavigationBlocker(
     shouldBlock,
-    'You have entered an abnormal value. Please verify:',
+    'Você inseriu um valor alterado de sinal vital. Por favor, verifique:',
     { interceptNavigation: false }
   );
 
@@ -38,7 +38,7 @@ export const CompleteIntakeButton: React.FC<{
 
   return (
     <GenericToolTip
-      title={status !== 'intake' ? 'Only available in Intake status' : null}
+      title={status !== 'intake' ? 'Disponível apenas no status Triagem' : null}
       sx={{ width: '120px', textAlign: 'center' }}
       placement="top"
     >
@@ -50,13 +50,13 @@ export const CompleteIntakeButton: React.FC<{
           onClick={onClick}
           disabled={isDisabled}
         >
-          Complete Intake
+          Finalizar Triagem
         </Button>
 
         <ConfirmationModal
-          title="Abnormal Vital Value"
-          confirmText="Back"
-          closeButtonText="Continue"
+          title="Valor de Sinal Vital Alterado"
+          confirmText="Voltar"
+          closeButtonText="Continuar"
           ContentComponent={<AbnormalVitalsContent />}
         />
       </Box>

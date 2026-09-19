@@ -48,7 +48,7 @@ export const ChiefComplaintField: FC = () => {
             });
           }}
           disabled={isChiefComplaintChartDataLoading}
-          label="Additional Information"
+          label="Informações Adicionais (Triagem)"
           fullWidth
           multiline
           data-testid={dataTestIds.telemedEhrFlow.hpiChiefComplaintNotes}
@@ -70,7 +70,7 @@ interface ChiefComplaintFieldReadOnlyProps {
 }
 
 export const ChiefComplaintFieldReadOnly: FC<ChiefComplaintFieldReadOnlyProps> = ({
-  label = 'Additional information',
+  label = 'Informações adicionais',
 }) => {
   const { data: chartFields } = useChartFields({
     requestedFields: {

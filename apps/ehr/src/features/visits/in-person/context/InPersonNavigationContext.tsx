@@ -252,25 +252,25 @@ export const InPersonNavigationProvider: React.FC<{ children: ReactNode }> = ({ 
     if (interactionMode === 'main') {
       switch (currentRoute) {
         case 'allergies':
-          return chartData?.allergies?.length ? 'Allergies Confirmed' : 'Confirmed No Known Allergies';
+          return chartData?.allergies?.length ? 'Alergias Confirmadas' : 'Confirmado Sem Alergias Conhecidas';
         case 'medications':
           return filterActiveMedications(chartData?.medications).length
-            ? 'Medications Confirmed'
-            : 'Confirmed No Medications';
+            ? 'Medicamentos Confirmados'
+            : 'Confirmado Sem Medicamentos em Uso';
         case 'medical-conditions':
-          return chartData?.conditions?.length ? 'Medical Conditions Confirmed' : 'Confirmed No Medical Conditions';
+          return chartData?.conditions?.length ? 'Comorbidades Confirmadas' : 'Confirmado Sem Comorbidades';
         case 'surgical-history':
-          return chartData?.surgicalHistory?.length ? 'Surgical History Confirmed' : 'Confirmed No Surgical History';
+          return chartData?.surgicalHistory?.length ? 'Histórico Cirúrgico Confirmado' : 'Confirmado Sem Histórico Cirúrgico';
         case 'hospitalization':
           return `${
-            chartFields?.episodeOfCare?.length ? 'Hospitalization Confirmed' : 'Confirmed No Hospitalization'
-          } AND Complete Intake`;
+            chartFields?.episodeOfCare?.length ? 'Internações Confirmadas' : 'Confirmado Sem Internações'
+          } E Finalizar Triagem`;
         default:
-          return isLastPage ? 'Complete' : 'Next';
+          return isLastPage ? 'Concluir' : 'Avançar';
       }
     }
 
-    return 'Next';
+    return 'Avançar';
   })();
 
   return (

@@ -34,14 +34,14 @@ export const HPISection: FC = () => {
                 textTransform: 'uppercase',
               }}
             >
-              Patient Provided
+              Informado pelo Paciente
             </Typography>
 
             <ReasonForVisitFieldReadOnly valueSource="patient" />
 
             <ReasonForVisitFieldReadOnly valueSource="intake" />
 
-            <ChiefComplaintFieldReadOnly label="Additional information on intake" />
+            <ChiefComplaintFieldReadOnly label="Informações adicionais da triagem" />
 
             <AiHpiSuggestion />
           </Stack>
@@ -55,7 +55,7 @@ export const HPISection: FC = () => {
                 textTransform: 'uppercase',
               }}
             >
-              Provider
+              Atendimento Médico
             </Typography>
 
             {isReadOnly ? <HistoryOfPresentIllnessFieldReadOnly /> : <HistoryOfPresentIllnessField />}

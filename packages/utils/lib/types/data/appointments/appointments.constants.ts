@@ -1,4 +1,4 @@
 export const MDM_FIELD_DEFAULT_TEXT =
-  'Reviewed diagnosis, expected course, treatment plan, and reasons to seek urgent and/or emergent care.  Discharge instructions reviewed.  Caregiver expressed understanding.  All questions were answered, and caregiver is comfortable with discharge plan.';
+  'Diagnóstico revisado, evolução clínica esperada, plano terapêutico e critérios para procurar atendimento de urgência/emergência orientados. Orientações de alta esclarecidas. Paciente/responsável compreendeu as informações, dúvidas sanadas e concorda com o plano estabelecido.';
 
-export const DIAGNOSIS_MAKE_PRIMARY_BUTTON = 'Make Primary';
+export const DIAGNOSIS_MAKE_PRIMARY_BUTTON = 'Tornar Principal';

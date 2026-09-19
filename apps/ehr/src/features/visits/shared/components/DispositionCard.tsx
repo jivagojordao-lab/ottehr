@@ -52,7 +52,7 @@ import { useGetAppointmentAccessibility } from '../hooks/useGetAppointmentAccess
 import { useSaveChartData } from '../stores/appointment/appointment.store';
 import { UppercaseCaptionTypography } from './UppercaseCaptionTypography';
 
-const ERROR_TEXT = 'Disposition data update was unsuccessful, please change some disposition field data to try again.';
+const ERROR_TEXT = 'Falha na atualização do desfecho clínico. Altere algum dado para tentar novamente.';
 
 export const DispositionCard: FC = () => {
   const { isAppointmentReadOnly: isReadOnly } = useGetAppointmentAccessibility();
@@ -155,7 +155,7 @@ export const DispositionCard: FC = () => {
 
   if (isChartFieldsLoading || !chartFields?.disposition) {
     return (
-      <AccordionCard label="Disposition">
+      <AccordionCard label="Desfecho / Destino do Atendimento">
         <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
           <Skeleton variant="rounded" height={36} />
           <Skeleton variant="rounded" height={36} />
@@ -167,7 +167,7 @@ export const DispositionCard: FC = () => {
 
   return (
     <AccordionCard
-      label="Disposition"
+      label="Desfecho / Destino do Atendimento"
       headerItem={
         isLoading || isDirty ? (
           <CircularProgress size="20px" />
@@ -296,7 +296,7 @@ export const DispositionCard: FC = () => {
                     <TextField
                       select
                       disabled={isReadOnly}
-                      label="Follow up visit in"
+                      label="Retorno em"
                       data-testid={dataTestIds.telemedEhrFlow.planTabDispositionFollowUpDropdown}
                       size="small"
                       sx={{ minWidth: '200px', width: 'fit-content' }}
@@ -304,7 +304,7 @@ export const DispositionCard: FC = () => {
                       onChange={onChange}
                     >
                       <MenuItem value={''}>
-                        <em>None</em>
+                        <em>Nenhum</em>
                       </MenuItem>
                       {followUpInOptions.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
@@ -324,7 +324,7 @@ export const DispositionCard: FC = () => {
                     <TextField
                       select
                       disabled={isReadOnly}
-                      label="Specialty"
+                      label="Especialidade"
                       size="small"
                       sx={{ minWidth: '200px', width: '40%' }}
                       value={value}
@@ -337,7 +337,7 @@ export const DispositionCard: FC = () => {
                       }}
                     >
                       <MenuItem value={''}>
-                        <em>None</em>
+                        <em>Nenhuma</em>
                       </MenuItem>
                       {specialtyTransferOptions.map((option) => (
                         <MenuItem key={option} value={option}>
@@ -356,7 +356,7 @@ export const DispositionCard: FC = () => {
                   render={({ field: { onChange, value } }) => (
                     <TextField
                       disabled={isReadOnly}
-                      label="Please specify"
+                      label="Especifique"
                       size="small"
                       sx={{ minWidth: '200px', width: '40%' }}
                       value={value}
@@ -376,8 +376,8 @@ export const DispositionCard: FC = () => {
                 <TextField
                   select
                   disabled={isReadOnly}
-                  label="Reason for transfer"
-                  placeholder="Select"
+                  label="Motivo da transferência/encaminhamento"
+                  placeholder="Selecione"
                   data-testid={dataTestIds.telemedEhrFlow.planTabDispositionReasonForTransferDropdown}
                   size="small"
                   sx={{ minWidth: '200px', width: '50%' }}
@@ -385,7 +385,7 @@ export const DispositionCard: FC = () => {
                   onChange={onChange}
                 >
                   <MenuItem value={''}>
-                    <em>None</em>
+                    <em>Nenhum</em>
                   </MenuItem>
                   {reasonsForTransferOptions.map((option) => (
                     <MenuItem key={option} value={option}>
@@ -401,7 +401,7 @@ export const DispositionCard: FC = () => {
             getValues('note') ? (
               <Typography sx={{ whiteSpace: 'pre-wrap' }}>{getValues('note')}</Typography>
             ) : (
-              <Typography color="secondary.light">Note not provided</Typography>
+              <Typography color="secondary.light">Nenhuma observação informada</Typography>
             )
           ) : (
             <Controller
@@ -409,7 +409,7 @@ export const DispositionCard: FC = () => {
               control={control}
               render={({ field: { value, onChange } }) => (
                 <TextField
-                  label="Note"
+                  label="Observações / Conduta"
                   multiline
                   fullWidth
                   size="small"
@@ -465,13 +465,13 @@ export const DispositionCard: FC = () => {
               />
               {isEmsTransportRefused && (
                 <Typography variant="body2" sx={{ fontSize: 12, opacity: '60%', lineHeight: '125%' }}>
-                  Patient was advised that their condition requires immediate transfer to the Emergency Department via
-                  EMS or higher-level care to ensure proper treatment for this condition. Patient has decision-making
-                  capacity and has been informed of the risks of self-transport, including potential clinical worsening,
-                  permanent disability, or death during transit. Patient refused EMS transport and elected to transport
-                  self against medical advice (AMA). Advised to go to the Emergency Department immediately for worsening
-                  or persistent symptoms. Patient understands that the clinic's responsibility for care ends upon their
-                  departure from this facility.
+                  Paciente foi orientado de que seu quadro clínico necessita de transferência imediata ao Serviço de
+                  Emergência (Pronto-Socorro / UPA) via ambulância/SAMU para assistência médica contínua e tratamento
+                  adequado. O paciente possui capacidade de discernimento e foi devidamente esclarecido sobre os riscos
+                  do transporte por meios próprios, incluindo potencial agravamento clínico, sequelas permanentes ou óbito
+                  em trânsito. O paciente recusou o transporte por ambulância e optou por deslocamento próprio contra
+                  orientação médica (alta a pedido). Orientado a procurar atendimento emergencial imediatamente em caso
+                  de persistência ou piora dos sintomas.
                 </Typography>
               )}
             </Box>
@@ -479,7 +479,7 @@ export const DispositionCard: FC = () => {
 
           {fields.includes('bookVisit') && (
             <RoundedButton disabled={isReadOnly} to="/visits/add" target="_blank" variant="contained">
-              Book a visit
+              Agendar Retorno / Consulta
             </RoundedButton>
           )}
 
@@ -488,7 +488,7 @@ export const DispositionCard: FC = () => {
               <Divider />
 
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <UppercaseCaptionTypography>Subspecialty Follow Up (optional)</UppercaseCaptionTypography>
+                <UppercaseCaptionTypography>Seguimento Especializado (opcional)</UppercaseCaptionTypography>
 
                 <Box sx={{ display: 'flex', gap: 3 }}>
                   {dispositionCheckboxOptions.map((option) => (
@@ -519,7 +519,7 @@ export const DispositionCard: FC = () => {
                       {option.name === 'other' && (
                         <Box display="flex" alignItems="center" gap={1}>
                           <Typography component="label" htmlFor="other-input">
-                            Other
+                            Outro
                           </Typography>
                           <Controller
                             name="otherNote"
@@ -527,7 +527,7 @@ export const DispositionCard: FC = () => {
                             render={({ field: { value, onChange } }) => (
                               <TextField
                                 disabled={isReadOnly}
-                                label="Please specify"
+                                label="Especifique"
                                 size="small"
                                 value={value}
                                 onChange={onChange}

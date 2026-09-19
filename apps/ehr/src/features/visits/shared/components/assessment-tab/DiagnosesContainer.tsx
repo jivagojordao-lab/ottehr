@@ -39,7 +39,7 @@ export const useAddDiagnosis = (): { onAdd: (value: IcdSearchResponse['codes'][n
 
   const onAdd = (value: IcdSearchResponse['codes'][number]): void => {
     if (diagnoses.some((d) => d.code === value.code)) {
-      enqueueSnackbar(`This diagnosis code "${value.display}" has already been added.`, { variant: 'warning' });
+      enqueueSnackbar(`O diagnóstico "${value.display}" já foi adicionado.`, { variant: 'warning' });
       return;
     }
     const preparedValue = { ...value, isPrimary: !primaryDiagnosis };
@@ -60,7 +60,7 @@ export const useAddDiagnosis = (): { onAdd: (value: IcdSearchResponse['codes'][n
           });
         },
         onError: () => {
-          enqueueSnackbar('An error has occurred while adding diagnosis. Please try again.', { variant: 'error' });
+          enqueueSnackbar('Ocorreu um erro ao adicionar o diagnóstico. Por favor, tente novamente.', { variant: 'error' });
           // Rollback to previous state
           setPartialChartData({
             diagnosis: previousDiagnoses,
@@ -120,7 +120,7 @@ export const DiagnosesContainer: FC<DiagnosesContainerProps> = ({ aiSuggestedDia
       },
       {
         onError: () => {
-          enqueueSnackbar('An error has occurred while deleting diagnosis. Please try again.', { variant: 'error' });
+          enqueueSnackbar('Ocorreu um erro ao excluir o diagnóstico. Por favor, tente novamente.', { variant: 'error' });
           setPartialChartData({ diagnosis: prevDiagnoses });
         },
       }
@@ -145,7 +145,7 @@ export const DiagnosesContainer: FC<DiagnosesContainerProps> = ({ aiSuggestedDia
             },
             onError: () => {
               enqueueSnackbar(
-                'An error has occurred while setting primary diagnosis. Please try to set primary diagnosis manually.',
+                'Ocorreu um erro ao definir o diagnóstico principal. Por favor, tente definir manualmente.',
                 { variant: 'error' }
               );
               setPartialChartData({
@@ -193,7 +193,7 @@ export const DiagnosesContainer: FC<DiagnosesContainerProps> = ({ aiSuggestedDia
           });
         },
         onError: () => {
-          enqueueSnackbar('An error has occurred while changing primary diagnosis. Please try again.', {
+          enqueueSnackbar('Ocorreu um erro ao alterar o diagnóstico principal. Por favor, tente novamente.', {
             variant: 'error',
           });
           // Rollback to previous state
@@ -209,7 +209,7 @@ export const DiagnosesContainer: FC<DiagnosesContainerProps> = ({ aiSuggestedDia
     window.open('https://docs.oystehr.com/ottehr/setup/terminology/', '_blank');
   };
   const addedViaLabOrderInfo = (
-    <GenericToolTip title="Added during lab order" placement="right">
+    <GenericToolTip title="Adicionado durante pedido de exame" placement="right">
       <InfoOutlinedIcon style={{ color: otherColors.disabled, height: '15px', width: '15px' }} />
     </GenericToolTip>
   );
@@ -220,16 +220,16 @@ export const DiagnosesContainer: FC<DiagnosesContainerProps> = ({ aiSuggestedDia
       data-testid={dataTestIds.diagnosisContainer.allDiagnosesContainer}
     >
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-        <AssessmentTitle>Dx</AssessmentTitle>
+        <AssessmentTitle>Diagnóstico (CID-10)</AssessmentTitle>
         {!isReadOnly && <DiagnosesField onChange={onAdd} disabled={isLoading} disableForPrimary={!primaryDiagnosis} />}
       </Box>
 
-      {isReadOnly && diagnoses.length === 0 && <Typography color="secondary.light">Not provided</Typography>}
+      {isReadOnly && diagnoses.length === 0 && <Typography color="secondary.light">Não informado</Typography>}
       {isNlmLoading ? <CircularProgress /> : nlmApiKeyMissing && <CompleteConfiguration handleSetup={handleSetup} />}
 
       {primaryDiagnosis && (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          <AssessmentTitle>Primary *</AssessmentTitle>
+          <AssessmentTitle>Diagnóstico Principal *</AssessmentTitle>
           <ActionsList
             data={[primaryDiagnosis]}
             getKey={(value, index) => value.resourceId || index}
@@ -258,7 +258,7 @@ export const DiagnosesContainer: FC<DiagnosesContainerProps> = ({ aiSuggestedDia
           sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
           data-testid={dataTestIds.diagnosisContainer.secondaryDiagnosisContainer}
         >
-          <AssessmentTitle>Secondary (optional)</AssessmentTitle>
+          <AssessmentTitle>Diagnóstico Secundário (opcional)</AssessmentTitle>
           <ActionsList
             data={otherDiagnoses}
             getKey={(value, index) => value.resourceId || index}
@@ -316,7 +316,7 @@ export const DiagnosesContainer: FC<DiagnosesContainerProps> = ({ aiSuggestedDia
                           <InfoOutlined sx={{ fontSize: '17px' }} />
                         </IconButton>
                       </Tooltip>
-                      <Tooltip title="Add diagnosis">
+                      <Tooltip title="Adicionar diagnóstico">
                         <IconButton
                           size="small"
                           onClick={() => onAdd({ code: value.code, display: value.description })}
@@ -331,7 +331,7 @@ export const DiagnosesContainer: FC<DiagnosesContainerProps> = ({ aiSuggestedDia
           />
         )}
         {!aiSuggestionsLoading && (!aiSuggestedDiagnoses || aiSuggestedDiagnoses.length === 0) && (
-          <Typography color="secondary.light">No suggestions</Typography>
+          <Typography color="secondary.light">Nenhuma sugestão disponível</Typography>
         )}
       </AiSectionContainer>
     </Box>

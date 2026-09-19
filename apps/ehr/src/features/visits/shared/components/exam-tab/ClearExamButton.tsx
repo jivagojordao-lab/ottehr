@@ -10,8 +10,8 @@ export const ClearExamButton: FC = () => {
 
   return (
     <ClearChartSectionButton
-      label="Clear Exam"
-      sectionName="Exam"
+      label="Limpar Exame Físico"
+      sectionName="Exame Físico"
       disabled={!hasClearableExamData(observations) || isLoading}
       dataTestId={dataTestIds.examPage.clearExamButton}
       onClear={() => clearExamObservations(observations, deleteObservations, { includeNotes: true })}

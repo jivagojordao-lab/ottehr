@@ -181,9 +181,9 @@ export const ProgressNoteDetails: FC = () => {
     <InlineEditSection
       key="allergies"
       sectionName="allergies"
-      title="Allergies"
+      title="Alergias"
       iconKey="Allergies"
-      editLabel="Edit allergies"
+      editLabel="Editar alergias"
       editContent={<AllergiesBody />}
       disabled={inlineEditDisabled}
     >
@@ -192,9 +192,9 @@ export const ProgressNoteDetails: FC = () => {
     <InlineEditSection
       key="medications"
       sectionName="medications"
-      title="Medications"
+      title="Medicamentos em Uso"
       iconKey="Medications"
-      editLabel="Edit medications"
+      editLabel="Editar medicamentos"
       editContent={<MedicationsBody />}
       disabled={inlineEditDisabled}
     >
@@ -203,9 +203,9 @@ export const ProgressNoteDetails: FC = () => {
     <InlineEditSection
       key="medical-conditions"
       sectionName="medical-conditions"
-      title="Medical conditions"
+      title="Comorbidades"
       iconKey="Medical Conditions"
-      editLabel="Edit medical conditions"
+      editLabel="Editar comorbidades"
       editContent={<MedicalConditionsBody />}
       disabled={inlineEditDisabled}
     >
@@ -214,9 +214,9 @@ export const ProgressNoteDetails: FC = () => {
     <InlineEditSection
       key="surgical-history"
       sectionName="surgical-history"
-      title="Surgical history"
+      title="Histórico Cirúrgico"
       iconKey="Surgical History"
-      editLabel="Edit surgical history"
+      editLabel="Editar histórico cirúrgico"
       editContent={<SurgicalHistoryBody />}
       disabled={inlineEditDisabled}
     >
@@ -225,9 +225,9 @@ export const ProgressNoteDetails: FC = () => {
     <InlineEditSection
       key="hospitalization"
       sectionName="hospitalization"
-      title="Hospitalization"
+      title="Internações Prévias"
       iconKey="Hospitalization"
-      editLabel="Edit hospitalization"
+      editLabel="Editar internações prévias"
       editContent={<HospitalizationBody />}
       disabled={inlineEditDisabled}
     >
@@ -237,16 +237,16 @@ export const ProgressNoteDetails: FC = () => {
       <InlineEditSection
         key="in-house-medications"
         sectionName="in-house-medications"
-        title="In-House Medications"
+        title="Medicamentos na Clínica"
         iconKey="Med. Administration"
-        editLabel="Edit in-house medications"
+        editLabel="Editar medicamentos na clínica"
         editContent={<InHouseMedicationsInlineFlow />}
         disabled={inlineEditDisabled}
       >
         {showInHouseMedications ? (
           <InHouseMedicationsContainer medications={inHouseMedications} notes={inHouseMedicationNotes} />
         ) : (
-          <BlankSection message="No in-house medications" />
+          <BlankSection message="Nenhum medicamento administrado na clínica" />
         )}
       </InlineEditSection>
     ),
@@ -254,16 +254,16 @@ export const ProgressNoteDetails: FC = () => {
       <InlineEditSection
         key="immunizations"
         sectionName="immunizations"
-        title="Immunization"
+        title="Vacinas / Imunização"
         iconKey="Immunization"
-        editLabel="Edit immunizations"
+        editLabel="Editar vacinas"
         editContent={<ImmunizationInlineFlow />}
         disabled={inlineEditDisabled}
       >
         {showImmunization ? (
           <ImmunizationContainer orders={immunizationOrders} />
         ) : (
-          <BlankSection message="No immunizations" />
+          <BlankSection message="Nenhuma imunização registrada" />
         )}
       </InlineEditSection>
     ),
@@ -277,9 +277,9 @@ export const ProgressNoteDetails: FC = () => {
       <InlineEditSection
         key="chief-complaint"
         sectionName="chief-complaint"
-        title="Chief complaint"
+        title="Queixa Principal"
         iconKey="Chief Complaint"
-        editLabel="Edit chief complaint"
+        editLabel="Editar queixa principal"
         editContent={<ChiefComplaintBody />}
       >
         <ChiefComplaintContainer />
@@ -291,16 +291,16 @@ export const ProgressNoteDetails: FC = () => {
       <InlineEditSection
         key="hpi-moi"
         sectionName="hpi-moi"
-        title="HPI/MOI"
+        title="Anamnese (HMA)"
         iconKey="History"
-        editLabel="Edit HPI/MOI"
+        editLabel="Editar anamnese"
         editContent={<HistoryAndTemplatesBody />}
       >
         <HpiMoiContainer />
       </InlineEditSection>
     ),
     showLegacyReviewOfSystems && (
-      <NoteSectionCard key="legacy-review-of-systems" title="Review of systems" iconKey="Checklist">
+      <NoteSectionCard key="legacy-review-of-systems" title="Interrogatório Sintomatológico" iconKey="Checklist">
         <ReviewOfSystemsContainer />
       </NoteSectionCard>
     ),
@@ -308,9 +308,9 @@ export const ProgressNoteDetails: FC = () => {
       <InlineEditSection
         key="review-of-systems"
         sectionName="review-of-systems"
-        title="Review of Systems"
+        title="Interrogatório Sintomatológico"
         iconKey="Checklist"
-        editLabel="Edit review of systems"
+        editLabel="Editar interrogatório"
         editContent={<RosBody />}
       >
         <RosReviewContainer />
@@ -320,21 +320,21 @@ export const ProgressNoteDetails: FC = () => {
       <InlineEditSection
         key="screening"
         sectionName="screening"
-        title="Screening questions"
+        title="Perguntas de Triagem"
         iconKey="Screening Questions"
-        editLabel="Edit screening questions"
+        editLabel="Editar triagem"
         editContent={<ScreeningBody />}
       >
-        <AdditionalQuestionsContainer notes={screeningNotes} emptyMessage="No screening information" />
+        <AdditionalQuestionsContainer notes={screeningNotes} emptyMessage="Nenhuma resposta registrada" />
       </InlineEditSection>
     ),
     (showVitalsObservations || inlineEditEnabled) && (
       <InlineEditSection
         key="vitals"
         sectionName="vitals"
-        title="Vitals"
+        title="Sinais Vitais"
         iconKey="Vitals"
-        editLabel="Edit vitals"
+        editLabel="Editar sinais vitais"
         editContent={<PatientVitalsBody />}
       >
         <PatientVitalsContainer notes={vitalsNotes} encounterId={encounter?.id} />
@@ -344,9 +344,9 @@ export const ProgressNoteDetails: FC = () => {
     <InlineEditSection
       key="examination"
       sectionName="examination"
-      title="Examination"
+      title="Exame Físico"
       iconKey="Stethoscope"
-      editLabel="Edit examination"
+      editLabel="Editar exame físico"
       editContent={<ExamBody />}
       disabled={displayExamMigrationWarning && hasIncompatibleExamConfig}
     >
@@ -363,9 +363,9 @@ export const ProgressNoteDetails: FC = () => {
       <InlineEditSection
         key="in-house-labs"
         sectionName="in-house-labs"
-        title="In-House Labs"
+        title="Exames Rápidos (Point-of-Care)"
         iconKey="In-House Labs"
-        editLabel="Edit in-house lab orders"
+        editLabel="Editar exames rápidos"
         editContent={<InHouseLabsInlineFlow />}
       >
         {showInHouseLabsResultsContainer ? (
@@ -374,7 +374,7 @@ export const ProgressNoteDetails: FC = () => {
             resultsPending={inHouseLabResultsPending}
           />
         ) : (
-          <BlankSection message="No in-house lab orders" />
+          <BlankSection message="Nenhum exame rápido solicitado" />
         )}
       </InlineEditSection>
     ),
@@ -382,9 +382,9 @@ export const ProgressNoteDetails: FC = () => {
       <InlineEditSection
         key="external-labs"
         sectionName="external-labs"
-        title="External Labs"
+        title="Exames Laboratoriais"
         iconKey="External Labs"
-        editLabel="Edit external lab orders"
+        editLabel="Editar exames laboratoriais"
         editContent={<ExternalLabsInlineFlow />}
       >
         {showExternalLabsResultsContainer ? (
@@ -393,7 +393,7 @@ export const ProgressNoteDetails: FC = () => {
             resultsPending={externalLabResultsPending}
           />
         ) : (
-          <BlankSection message="No external lab orders" />
+          <BlankSection message="Nenhum exame laboratorial solicitado" />
         )}
       </InlineEditSection>
     ),
@@ -401,9 +401,9 @@ export const ProgressNoteDetails: FC = () => {
       <InlineEditSection
         key="radiology"
         sectionName="radiology"
-        title="Radiology"
+        title="Radiologia & Imagem"
         iconKey="Radiology"
-        editLabel="Edit radiology orders"
+        editLabel="Editar exames de imagem"
         editContent={<RadiologyInlineFlow />}
       >
         <RadiologyOrdersContainer radiologyOrders={radiologyOrders ?? []} />
@@ -413,12 +413,12 @@ export const ProgressNoteDetails: FC = () => {
       <InlineEditSection
         key="procedures"
         sectionName="procedures"
-        title="Procedures"
+        title="Procedimentos"
         iconKey="Procedures"
-        editLabel="Edit procedures"
+        editLabel="Editar procedimentos"
         editContent={<ProceduresInlineFlow />}
       >
-        {showProceduresContainer ? <ProceduresContainer /> : <BlankSection message="No procedures" />}
+        {showProceduresContainer ? <ProceduresContainer /> : <BlankSection message="Nenhum procedimento registrado" />}
       </InlineEditSection>
     ),
     // Staff-facing only: nursing orders are shown here for the signing provider but are
@@ -426,9 +426,9 @@ export const ProgressNoteDetails: FC = () => {
     <InlineEditSection
       key="nursing-orders"
       sectionName="nursing-orders"
-      title="Nursing Orders"
+      title="Ordens de Enfermagem"
       iconKey="Nursing Orders"
-      editLabel="Edit nursing orders"
+      editLabel="Editar ordens de enfermagem"
       editContent={<NursingOrdersInlineFlow />}
     >
       <NursingOrdersReviewContainer encounterId={encounter?.id} />
@@ -437,12 +437,12 @@ export const ProgressNoteDetails: FC = () => {
       <InlineEditSection
         key="prescriptions"
         sectionName="prescriptions"
-        title="Prescriptions"
+        title="Prescrições"
         iconKey="eRX"
-        editLabel="Edit prescriptions"
+        editLabel="Editar prescrições"
         editContent={<ERXInlineFlow />}
       >
-        {showPrescribedMedications ? <PrescribedMedicationsContainer /> : <BlankSection message="No prescriptions" />}
+        {showPrescribedMedications ? <PrescribedMedicationsContainer /> : <BlankSection message="Nenhuma prescrição registrada" />}
       </InlineEditSection>
     ),
     // Diagnoses, medical decision making and the billing codes are all documented on the
@@ -451,9 +451,9 @@ export const ProgressNoteDetails: FC = () => {
       <InlineEditSection
         key="assessment"
         sectionName="assessment"
-        title="Assessment"
+        title="Hipóteses Diagnósticas (CID-10)"
         iconKey="Prescription"
-        editLabel="Edit assessment"
+        editLabel="Editar diagnósticos"
         editContent={<AssessmentBody />}
       >
         <AssessmentGroupContainer />
@@ -463,15 +463,15 @@ export const ProgressNoteDetails: FC = () => {
       <InlineEditSection
         key="plan"
         sectionName="plan"
-        title="Plan"
+        title="Conduta & Plano Terapêutico"
         iconKey="Lab profile"
-        editLabel="Edit plan"
+        editLabel="Editar conduta"
         editContent={<PlanBody />}
       >
         {showPatientInstructions ? (
           <PatientInstructionsContainer />
         ) : (
-          <BlankSection message="No patient instructions" />
+          <BlankSection message="Nenhuma orientação registrada" />
         )}
       </InlineEditSection>
     ),
@@ -495,7 +495,7 @@ export const ProgressNoteDetails: FC = () => {
   return (
     <Stack spacing={2} data-testid={dataTestIds.progressNotePage.visitNoteCard}>
       <Typography variant="h5" color="primary.dark">
-        Visit Note
+        Evolução do Atendimento (Visit Note)
       </Typography>
       {FEATURE_FLAGS.SUPERVISOR_APPROVAL_ENABLED &&
         approvalStatus === 'waiting-for-approval' &&
@@ -528,10 +528,10 @@ export const ProgressNoteDetails: FC = () => {
               >
                 <ErrorOutlineIcon sx={{ color: otherColors.warningIcon }} />
                 <Typography color={otherColors.warningText} fontWeight={600}>
-                  Medical History should be confirmed by the provider
+                  Histórico médico deve ser confirmado pelo profissional assistente
                 </Typography>
                 <RoundedButton variant="contained" size="small" onClick={handleApprove} loading={isLoading}>
-                  Approve
+                  Aprovar
                 </RoundedButton>
               </Box>
 

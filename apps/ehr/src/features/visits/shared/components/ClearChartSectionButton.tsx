@@ -25,7 +25,7 @@ export const ClearChartSectionButton: FC<ClearChartSectionButtonProps> = ({
 }) => (
   <ConfirmationDialog
     title={label}
-    description={`Are you sure you want to clear all selected items of ${sectionName}? This action can't be undone.`}
+    description={`Tem certeza de que deseja limpar todos os itens selecionados de ${sectionName}? Esta ação não pode ser desfeita.`}
     showCloseButton
     response={onClear}
     actionButtons={{
@@ -33,7 +33,7 @@ export const ClearChartSectionButton: FC<ClearChartSectionButtonProps> = ({
       // (a debounced comment, another section's bulk save) while the dialog sits open, and
       // clearing on top of it would only clear the local copy.
       proceed: { text: label, color: 'error', disabled },
-      back: { text: 'Cancel' },
+      back: { text: 'Cancelar' },
       reverse: true,
     }}
   >

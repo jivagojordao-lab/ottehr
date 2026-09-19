@@ -25,7 +25,7 @@ export const ChiefComplaintSection: FC = () => {
                 textTransform: 'uppercase',
               }}
             >
-              Patient Provided
+              Informado pelo Paciente
             </Typography>
 
             <ReasonForVisitFieldReadOnly />
@@ -42,7 +42,7 @@ export const ChiefComplaintSection: FC = () => {
                 textTransform: 'uppercase',
               }}
             >
-              Confirmed by staff during visit
+              Confirmado pela Equipe na Triagem
             </Typography>
 
             {isReadOnly ? <ReasonForVisitFieldReadOnly valueSource="intake" /> : <ReasonForVisitField />}

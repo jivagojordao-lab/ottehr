@@ -197,10 +197,10 @@ export const AI_OBSERVATION_META_SYSTEM = 'ai-observation';
 export const PATIENT_VITALS_META_SYSTEM = 'patient-vitals-field';
 export const NOTHING_TO_EAT_OR_DRINK_ID = 'nothing-to-eat-or-drink'; // fhir url
 export const NOTHING_TO_EAT_OR_DRINK_FIELD = 'nothingToEatOrDrink'; // backend/frontend - disposition field & form field
-export const NOTHING_TO_EAT_OR_DRINK_LABEL = 'Nothing to eat or drink until evaluated in the Emergency Department.'; // frontend form label
+export const NOTHING_TO_EAT_OR_DRINK_LABEL = 'Nada por via oral (jejum) até avaliação no Serviço de Emergência.'; // frontend form label
 export const REFUSAL_OF_EMS_TRANSPORT_ID = 'refusal-of-ems-transport';
 export const REFUSAL_OF_EMS_TRANSPORT_FIELD = 'refusalOfEmsTransport';
-export const REFUSAL_OF_EMS_TRANSPORT_LABEL = 'Refusal of EMS Transport';
+export const REFUSAL_OF_EMS_TRANSPORT_LABEL = 'Recusa de Transporte por Ambulância / SAMU (Alta/Saída a Pedido)';
 export const PATIENT_INSTRUCTIONS_TEMPLATE_CODE = 'patient-instruction-template';
 export const IN_PERSON_NOTE_ID = 'css-note';
 
@@ -489,14 +489,14 @@ export interface PdfBulletPointItem {
 }
 
 const defaultNotes: Record<DispositionType, string> = {
-  ip: 'Please proceed to the In Person Office as advised.',
+  ip: 'Por favor, dirija-se à unidade presencial conforme orientado.',
   'ip-lab':
-    'Please proceed to the In Person Office for a lab as advised.\nIf symptoms do not improve, please go to the A. Emergency Department Office, B. Urgent Care Office.',
-  pcp: 'Please see your Primary Care Physician.',
-  ed: 'Please go to the Emergency Department immediately.',
-  'ip-oth': 'Please go to an In Person Office.',
-  'pcp-no-type': 'Please see your Primary Care Physician as discussed.',
-  another: 'Please proceed to the ____ Office as advised.',
+    'Por favor, dirija-se à unidade presencial para exames laboratoriais conforme orientado.\nSe os sintomas não melhorarem ou houver piora clínica, procure imediatamente o Pronto-Socorro / UPA.',
+  pcp: 'Favor comparecer em consulta com seu Médico de Família / Atenção Primária.',
+  ed: 'Por favor, dirija-se imediatamente ao Pronto-Socorro / Emergência (UPA/Hospital).',
+  'ip-oth': 'Por favor, dirija-se ao serviço presencial indicado.',
+  'pcp-no-type': 'Favor retornar para seguimento com seu médico assistente conforme discutido.',
+  another: 'Por favor, dirija-se à unidade indicada conforme orientado.',
   specialty: '',
 };
 
@@ -506,35 +506,35 @@ export const getDefaultNote = (dispositionType: DispositionType): string => {
 
 export const followUpInOptions = [
   {
-    label: '1 day',
+    label: '1 dia',
     value: 1,
   },
   {
-    label: '2 days',
+    label: '2 dias',
     value: 2,
   },
   {
-    label: '3 days',
+    label: '3 dias',
     value: 3,
   },
   {
-    label: '4 days',
+    label: '4 dias',
     value: 4,
   },
   {
-    label: '5 days',
+    label: '5 dias',
     value: 5,
   },
   {
-    label: '1 week',
+    label: '1 semana',
     value: 7,
   },
   {
-    label: '2 weeks',
+    label: '2 semanas',
     value: 14,
   },
   {
-    label: 'as needed',
+    label: 'Se necessário (SOS)',
     value: 0,
   },
 ];

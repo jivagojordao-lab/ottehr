@@ -45,8 +45,8 @@ export const DiagnosesField: FC<DiagnosesFieldProps> = (props) => {
       options={icdSearchOptions}
       noOptionsText={
         debouncedSearchTerm && icdSearchOptions.length === 0
-          ? 'Nothing found for this search criteria'
-          : 'Start typing to load results'
+          ? 'Nenhum diagnóstico encontrado'
+          : 'Digite o código ou nome da doença para buscar'
       }
       autoComplete
       includeInputInList
@@ -64,8 +64,8 @@ export const DiagnosesField: FC<DiagnosesFieldProps> = (props) => {
           data-testid={dataTestIds.diagnosisContainer.diagnosisDropdown}
           onChange={(e) => debouncedHandleInputChange(e.target.value)}
           size="small"
-          label={label || 'Search'}
-          placeholder={placeholder || 'Diagnoses'}
+          label={label || 'Buscar CID-10'}
+          placeholder={placeholder || 'Ex: J00, Gripe, I10...'}
           helperText={error ? error.message : null}
           error={!!error}
         />

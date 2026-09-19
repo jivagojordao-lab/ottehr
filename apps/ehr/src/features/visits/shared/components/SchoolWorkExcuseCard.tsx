@@ -66,7 +66,7 @@ export const SchoolWorkExcuseCard: FC<SchoolWorkExcuseCardProps> = ({ locationNa
       },
       {
         onError: () => {
-          enqueueSnackbar('An error has occurred while deleting excuse. Please try again.', {
+          enqueueSnackbar('Ocorreu um erro ao excluir o atestado. Por favor, tente novamente.', {
             variant: 'error',
           });
           // Rollback to previous state
@@ -86,17 +86,17 @@ export const SchoolWorkExcuseCard: FC<SchoolWorkExcuseCardProps> = ({ locationNa
   let title = '';
   switch (schoolWorkNoteChoice) {
     case 'School only':
-      title = 'School';
+      title = 'Escola';
       break;
     case 'Work only':
-      title = 'Work';
+      title = 'Trabalho';
       break;
     case 'Both school and work notes':
-      title = 'School & Work';
+      title = 'Escola e Trabalho';
       break;
     default:
       // case 'Neither'
-      title = 'Neither';
+      title = 'Nenhum';
       break;
   }
 
@@ -105,31 +105,31 @@ export const SchoolWorkExcuseCard: FC<SchoolWorkExcuseCardProps> = ({ locationNa
   return (
     <>
       <AccordionCard
-        label="School / Work Excuse"
+        label="Atestados Médicos (Trabalho / Escola)"
         collapsed={collapsed}
         onSwitch={() => setCollapsed((prevState) => !prevState)}
       >
         <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
           <Box>
-            <Typography display="inline">Patient requested excuse from:</Typography>&nbsp;
+            <Typography display="inline">Atestado solicitado pelo paciente para:</Typography>&nbsp;
             <Typography display="inline" fontWeight={500}>
               {title}
             </Typography>
           </Box>
           {numTemplatesUploaded !== 0 && (
             <>
-              <Typography>{`Attached template${numTemplatesUploaded === 2 ? 's' : ''}:`}</Typography>
+              <Typography>{`Modelo(s) anexado(s)${numTemplatesUploaded === 2 ? 's' : ''}:`}</Typography>
               <Grid container columnSpacing={3} sx={{ position: 'relative' }}>
                 {patientSchoolPresignedUrl && (
                   <Grid item xs={6}>
                     {/* TODO extension should match extension uploaded */}
-                    <ExcuseLink label={`School excuse note template${'.pdf'}`} to={patientSchoolPresignedUrl} />
+                    <ExcuseLink label={`Modelo de atestado escolar${'.pdf'}`} to={patientSchoolPresignedUrl} />
                   </Grid>
                 )}
                 {patientWorkPresignedUrl && (
                   <Grid item xs={6}>
                     {/* TODO extension should match extension uploaded */}
-                    <ExcuseLink label={`Work excuse note template${'.pdf'}`} to={patientWorkPresignedUrl} />
+                    <ExcuseLink label={`Modelo de atestado de trabalho${'.pdf'}`} to={patientWorkPresignedUrl} />
                   </Grid>
                 )}
               </Grid>
@@ -142,7 +142,7 @@ export const SchoolWorkExcuseCard: FC<SchoolWorkExcuseCardProps> = ({ locationNa
         <DoubleColumnContainer
           leftColumn={
             <ExcuseCard
-              label="School excuse"
+              label="Atestado Escolar"
               type="school"
               excuse={schoolExcuse}
               onDelete={onDelete}
@@ -154,7 +154,7 @@ export const SchoolWorkExcuseCard: FC<SchoolWorkExcuseCardProps> = ({ locationNa
           }
           rightColumn={
             <ExcuseCard
-              label="Work excuse"
+              label="Atestado de Trabalho"
               type="work"
               excuse={workExcuse}
               onDelete={onDelete}

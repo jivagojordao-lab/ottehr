@@ -10,7 +10,7 @@ type HistoryOfPresentIllnessFieldProps = {
 };
 
 export const HistoryOfPresentIllnessField: FC<HistoryOfPresentIllnessFieldProps> = ({
-  label = 'History of Present Illness',
+  label = 'História da Moléstia Atual (HMA)',
 }) => {
   const { data: chartDataFields } = useChartFields({
     requestedFields: {
@@ -68,7 +68,7 @@ export const HistoryOfPresentIllnessField: FC<HistoryOfPresentIllnessFieldProps>
 };
 
 export const HistoryOfPresentIllnessFieldReadOnly: FC<HistoryOfPresentIllnessFieldProps> = ({
-  label = 'History of Present Illness',
+  label = 'História da Moléstia Atual (HMA)',
 }) => {
   const { data: chartFields } = useChartFields({
     requestedFields: {

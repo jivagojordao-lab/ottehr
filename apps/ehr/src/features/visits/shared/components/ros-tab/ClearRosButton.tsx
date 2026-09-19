@@ -16,8 +16,8 @@ export const ClearRosButton: FC = () => {
 
   return (
     <ClearChartSectionButton
-      label="Clear ROS"
-      sectionName="Review of Systems"
+      label="Limpar Sintomas"
+      sectionName="Interrogatório Sintomatológico"
       disabled={selected.length === 0 || isLoading || isSelectionPending}
       dataTestId={dataTestIds.reviewOfSystemsPage.clearRosButton}
       // useRosObservations turns a false value with a resourceId into a delete, which is exactly

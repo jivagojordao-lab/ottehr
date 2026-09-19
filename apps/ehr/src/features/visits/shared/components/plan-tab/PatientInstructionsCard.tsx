@@ -33,7 +33,7 @@ export const PatientInstructionsCard: FC = () => {
       { text: instruction, title: instructionTitle },
       {
         onError: () => {
-          enqueueSnackbar('An error has occurred while saving patient instruction template. Please try again.', {
+          enqueueSnackbar('Ocorreu um erro ao salvar o modelo de orientação. Por favor, tente novamente.', {
             variant: 'error',
           });
         },
@@ -74,7 +74,7 @@ export const PatientInstructionsCard: FC = () => {
           }
         },
         onError: () => {
-          enqueueSnackbar('An error has occurred while adding patient instruction. Please try again.', {
+          enqueueSnackbar('Ocorreu um erro ao adicionar a orientação. Por favor, tente novamente.', {
             variant: 'error',
           });
           // Rollback to previous state
@@ -107,7 +107,7 @@ export const PatientInstructionsCard: FC = () => {
           // No need to update again, optimistic update already applied
         },
         onError: () => {
-          enqueueSnackbar('An error has occurred while deleting patient instruction. Please try again.', {
+          enqueueSnackbar('Ocorreu um erro ao excluir a orientação. Por favor, tente novamente.', {
             variant: 'error',
           });
           // Rollback to previous state
@@ -120,7 +120,7 @@ export const PatientInstructionsCard: FC = () => {
   return (
     <>
       <AccordionCard
-        label="Patient instructions"
+        label="Orientações ao Paciente"
         collapsed={collapsed}
         onSwitch={() => setCollapsed((prevState) => !prevState)}
       >
@@ -133,22 +133,22 @@ export const PatientInstructionsCard: FC = () => {
                     value={instructionTitle}
                     onChange={(e) => setInstructionTitle(e.target.value)}
                     size="small"
-                    label="Instruction title"
-                    placeholder="Instruction title"
+                    label="Título da orientação"
+                    placeholder="Ex: Cuidados em casa, Repouso, Dieta"
                     fullWidth
                   />
                   <TextField
                     value={instruction}
                     onChange={(e) => setInstruction(e.target.value)}
                     size="small"
-                    label="Instruction"
-                    placeholder="Enter a new instruction or select from My Quick Picks or Practice Quick Picks"
+                    label="Texto da orientação"
+                    placeholder="Digite uma orientação ou selecione dos Meus Modelos ou Modelos da Clínica"
                     multiline
                     fullWidth
                   />
                 </Box>
-                <RoundedButton onClick={() => setMyQuickPicksOpen(true)}>My Quick Picks</RoundedButton>
-                <RoundedButton onClick={() => setPracticeQuickPicksOpen(true)}>Practice Quick Picks</RoundedButton>
+                <RoundedButton onClick={() => setMyQuickPicksOpen(true)}>Meus Modelos</RoundedButton>
+                <RoundedButton onClick={() => setPracticeQuickPicksOpen(true)}>Modelos da Clínica</RoundedButton>
               </Box>
               <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
                 <RoundedButton
@@ -156,14 +156,14 @@ export const PatientInstructionsCard: FC = () => {
                   disabled={(!instruction.trim() && !instructionTitle.trim()) || isLoading}
                   startIcon={<AddIcon />}
                 >
-                  Add
+                  Adicionar
                 </RoundedButton>
                 <RoundedButton
                   onClick={onAddAndSave}
                   disabled={(!instruction.trim() && !instructionTitle.trim()) || isLoading}
                   startIcon={<DoneIcon />}
                 >
-                  Add & Save to My Quick Picks
+                  Adicionar e Salvar nos Meus Modelos
                 </RoundedButton>
               </Box>
             </>
@@ -190,7 +190,7 @@ export const PatientInstructionsCard: FC = () => {
           )}
 
           {instructionsWithoutEduDocs.length === 0 && isReadOnly && (
-            <Typography color="secondary.light">No patient instructions provided</Typography>
+            <Typography color="secondary.light">Nenhuma orientação fornecida</Typography>
           )}
         </Box>
       </AccordionCard>

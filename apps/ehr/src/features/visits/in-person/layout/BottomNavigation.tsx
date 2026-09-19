@@ -50,7 +50,7 @@ export const BottomNavigation = (): JSX.Element => {
       goToNext();
     } catch (error: any) {
       console.log(error.message);
-      enqueueSnackbar('An error occurred trying to complete intake. Please try again.', { variant: 'error' });
+      enqueueSnackbar('Ocorreu um erro ao tentar finalizar a triagem. Por favor, tente novamente.', { variant: 'error' });
     } finally {
       setNextButtonLoading(false);
     }
@@ -95,7 +95,7 @@ export const BottomNavigation = (): JSX.Element => {
             borderRight: `1px solid ${theme.palette.primary.main}`,
           }}
         >
-          Back
+          Voltar
         </Button>
         <LoadingButton
           disabled={isNavigationDisabled || isEncounterUpdatePending || (isLastPage && interactionMode === 'main')}

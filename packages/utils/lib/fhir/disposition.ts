@@ -1,34 +1,34 @@
 import { DispositionType } from '../types/api/chart-data/chart-data.types';
 
-const pcpLabel = 'Primary Care Physician';
+const pcpLabel = 'Médico de Família / Atenção Primária';
 
 export const mapDispositionTypeToLabel: Record<DispositionType, string> = {
-  ip: 'Ottehr IP Transfer',
-  'ip-lab': 'Ottehr IP Lab',
+  ip: 'Transferência Interna (Internação)',
+  'ip-lab': 'Coleta / Exame Interno',
   pcp: pcpLabel,
-  ed: 'ED Transfer',
-  'ip-oth': 'Non-Ottehr IP Transfer',
+  ed: 'Transferência para Emergência (UPA/Hospital)',
+  'ip-oth': 'Transferência Externa',
   'pcp-no-type': pcpLabel,
-  another: 'Transfer to Another Location',
-  specialty: 'Specialty Transfer',
+  another: 'Transferência para Outra Unidade',
+  specialty: 'Encaminhamento para Especialidade',
 };
 
-export const OTHER_SPECIALTY_TRANSFER_OPTION = 'Other';
+export const OTHER_SPECIALTY_TRANSFER_OPTION = 'Outro';
 
 export const specialtyTransferOptions = [
-  'Allergist',
-  'Cardiologist',
-  'Dermatology',
-  'Diagnostic Imaging',
-  'ENT',
-  'Family Medicine',
-  'Gastroenterology',
-  'General Surgery',
-  'Neurology',
-  'Ophthalmology',
-  'Orthopedics',
-  'Pediatrics',
-  'Physical Therapy',
+  'Alergologista',
+  'Cardiologista',
+  'Dermatologista',
+  'Diagnóstico por Imagem',
+  'Otorrinolaringologia',
+  'Medicina de Família e Comunidade',
+  'Gastroenterologia',
+  'Cirurgia Geral',
+  'Neurologia',
+  'Oftalmologia',
+  'Ortopedia',
+  'Pediatria',
+  'Fisioterapia',
   OTHER_SPECIALTY_TRANSFER_OPTION,
 ];
 
@@ -45,23 +45,23 @@ export const getSpecialtyTransferDisplay = (specialty?: string, specialtyOther?:
 
 export const dispositionCheckboxOptions = [
   {
-    label: 'Dentistry',
+    label: 'Odontologia',
     name: 'dentistry',
   },
   {
-    label: 'ENT',
+    label: 'Otorrinolaringologia',
     name: 'ent',
   },
   {
-    label: 'Ophthalmology',
+    label: 'Oftalmologia',
     name: 'ophthalmology',
   },
   {
-    label: 'Orthopedics',
+    label: 'Ortopedia',
     name: 'orthopedics',
   },
   {
-    label: 'Other',
+    label: 'Outro',
     name: 'other',
   },
   // {
