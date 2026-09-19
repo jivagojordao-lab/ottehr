@@ -2,7 +2,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Box, IconButton, Menu, MenuItem, useTheme } from '@mui/material';
 import { ReactElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppTab, useNavStore } from '../../state/nav.store';
+import { AppTab, APP_TAB_LABELS, useNavStore } from '../../state/nav.store';
 import { NavbarItems } from './Navbar';
 
 interface MobileMenuProps {
@@ -37,7 +37,7 @@ export default function MobileMenu({ navbarItems }: MobileMenuProps): ReactEleme
               setAnchorEl(null);
             }}
           >
-            {navbarItem}
+            {APP_TAB_LABELS[navbarItem] ?? navbarItem}
           </MenuItem>
         ))}
       </Menu>

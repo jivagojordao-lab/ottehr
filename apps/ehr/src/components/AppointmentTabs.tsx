@@ -157,8 +157,8 @@ export default function AppointmentTabs({
           justifyContent: 'center',
         }}
       >
-        <Typography sx={{ fontWeight: 'bold' }}>Please select an office, provider, or group</Typography>
-        <Typography>Please select an office, provider, or group to get appointments</Typography>
+        <Typography sx={{ fontWeight: 'bold' }}>Por favor, selecione uma unidade, profissional ou grupo</Typography>
+        <Typography>Selecione os filtros acima para carregar a lista de atendimentos</Typography>
       </Grid>
     </Grid>
   );
@@ -192,25 +192,25 @@ export default function AppointmentTabs({
           >
             <Tab
               data-testid={dataTestIds.dashboard.prebookedTab}
-              label={`Pre-booked${preBookedAppointments ? ` – ${preBookedAppointments?.length}` : ''}`}
+              label={`Agendados${preBookedAppointments ? ` – ${preBookedAppointments?.length}` : ''}`}
               value={ApptTab.prebooked}
               sx={{ textTransform: 'none', fontWeight: 500 }}
             />
             <Tab
               data-testid={dataTestIds.dashboard.inOfficeTab}
-              label={`Active${inOfficeAppointments ? ` – ${inOfficeAppointments?.length}` : ''}`}
+              label={`Na Clínica / Em Espera${inOfficeAppointments ? ` – ${inOfficeAppointments?.length}` : ''}`}
               value={ApptTab['in-office']}
               sx={{ textTransform: 'none', fontWeight: 500 }}
             />
             <Tab
               data-testid={dataTestIds.dashboard.dischargedTab}
-              label={`Discharged${completedAppointments ? ` – ${completedAppointments?.length}` : ''}`}
+              label={`Finalizados / Alta${completedAppointments ? ` – ${completedAppointments?.length}` : ''}`}
               value={ApptTab.completed}
               sx={{ textTransform: 'none', fontWeight: 500 }}
             />
             <Tab
               data-testid={dataTestIds.dashboard.cancelledTab}
-              label={`Cancelled${cancelledAppointments ? ` – ${cancelledAppointments?.length}` : ''}`}
+              label={`Cancelados${cancelledAppointments ? ` – ${cancelledAppointments?.length}` : ''}`}
               value={ApptTab.cancelled}
               sx={{ textTransform: 'none', fontWeight: 500 }}
             />

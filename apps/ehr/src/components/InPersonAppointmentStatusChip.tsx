@@ -115,6 +115,24 @@ export const IN_PERSON_CHIP_STATUS_MAP: {
   },
 };
 
+export const VISIT_STATUS_LABEL_BR: Record<string, string> = {
+  pending: 'Pendente',
+  arrived: 'Chegou',
+  ready: 'Pronto',
+  intake: 'Triagem',
+  'ready for provider': 'Aguardando Médico',
+  provider: 'Em Consulta',
+  discharged: 'Alta Concedida',
+  completed: 'Concluído',
+  'awaiting supervisor approval': 'Aguardando Supervisor',
+  cancelled: 'Cancelado',
+  canceled: 'Cancelado',
+  'no show': 'Não Compareceu',
+  'left not seen': 'Saiu Sem Atendimento',
+  'checked out': 'Check-out',
+  unknown: 'Desconhecido',
+};
+
 export function InPersonAppointmentStatusChip({
   status,
   count,
@@ -129,6 +147,8 @@ export function InPersonAppointmentStatusChip({
   if (!IN_PERSON_CHIP_STATUS_MAP[status]) {
     return <></>;
   }
+
+  const displayStatus = VISIT_STATUS_LABEL_BR[status] ?? status;
 
   return (
     <span
@@ -145,7 +165,7 @@ export function InPersonAppointmentStatusChip({
         verticalAlign: 'middle',
       }}
     >
-      {count ? `${status} - ${count}` : status}
+      {count ? `${displayStatus} - ${count}` : displayStatus}
     </span>
   );
 }

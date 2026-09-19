@@ -19,11 +19,11 @@ import { SelectInput } from './input/SelectInput';
 // keys are the appointment-type strings get-appointments uses:
 // `${'in-person' | 'virtual'}-${AppointmentType}`
 const ALL_VISIT_TYPE_LABELS = {
-  'in-person-walk-in': 'Walk-in In Person Visit',
-  'in-person-pre-booked': 'Pre-booked In Person Visit',
-  'in-person-post-telemed': 'Post Telemed Lab Only',
-  'virtual-walk-in': 'On-demand Telemed',
-  'virtual-pre-booked': 'Pre-booked Telemed',
+  'in-person-walk-in': 'Presencial (Demanda Espontânea)',
+  'in-person-pre-booked': 'Presencial (Agendado)',
+  'in-person-post-telemed': 'Pós-Telemedicina (Exames)',
+  'virtual-walk-in': 'Telemedicina Imediata',
+  'virtual-pre-booked': 'Telemedicina Agendada',
 } as const satisfies Partial<Record<`${'in-person' | 'virtual'}-${AppointmentType}`, string>>;
 type VisitTypeFilterKey = keyof typeof ALL_VISIT_TYPE_LABELS;
 
@@ -242,7 +242,7 @@ export default function AppointmentsFilters(): ReactElement {
             <Box sx={{ flex: 1, width: '100%' }}>
               <SelectInput
                 name="visitType"
-                label="Visit Type"
+                label="Tipo de Consulta"
                 options={Object.keys(visitTypeToLabel)}
                 getOptionLabel={(option) => {
                   return (visitTypeToLabel as Record<string, string>)[option];
@@ -265,7 +265,7 @@ export default function AppointmentsFilters(): ReactElement {
                 variant="contained"
               >
                 <AddIcon />
-                <Typography fontWeight="bold">Visit</Typography>
+                <Typography fontWeight="bold">Nova Consulta</Typography>
               </Button>
             </Link>
           </Stack>
@@ -273,7 +273,7 @@ export default function AppointmentsFilters(): ReactElement {
             <Box sx={{ flex: 1, width: '100%' }}>
               <LocationSelectInput
                 name="location"
-                label="Location"
+                label="Unidade"
                 size="medium"
                 dataTestId={dataTestIds.dashboard.locationSelect}
                 multiple
@@ -282,7 +282,7 @@ export default function AppointmentsFilters(): ReactElement {
             <Box sx={{ flex: 1, width: '100%' }}>
               <SelectInput
                 name="serviceCategory"
-                label="Service Category"
+                label="Especialidade"
                 options={serviceCategories.map((sc) => sc.code)}
                 getOptionLabel={(option) => serviceCategories.find((sc) => sc.code === option)?.display ?? 'Unknown'}
                 size="medium"
@@ -293,14 +293,14 @@ export default function AppointmentsFilters(): ReactElement {
               <DateRangeInput
                 dateFromName="dateFrom"
                 dateToName="dateTo"
-                label="Date"
+                label="Período"
                 size="medium"
                 dataTestId={dataTestIds.dashboard.dateFilter}
                 maxRangeDays={MAX_APPOINTMENT_SEARCH_RANGE_DAYS}
               />
             </Box>
             <Box sx={{ flex: 1, width: '100%' }}>
-              <EmployeeSelectInput name="provider" label="Provider" filter={PROVIDERS_FILTER} size="medium" multiple />
+              <EmployeeSelectInput name="provider" label="Profissional" filter={PROVIDERS_FILTER} size="medium" multiple />
             </Box>
           </Stack>
         </Stack>

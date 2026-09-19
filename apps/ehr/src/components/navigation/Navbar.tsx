@@ -8,7 +8,7 @@ import { adjustTopForBannerHeight } from 'src/helpers/misc.helper';
 import { BRANDING_CONFIG } from 'utils/lib/ottehr-config/branding';
 import { RoleType } from 'utils/lib/types/api/user.types';
 import useEvolveUser from '../../hooks/useEvolveUser';
-import { AppTab, useNavStore } from '../../state/nav.store';
+import { AppTab, APP_TAB_LABELS, useNavStore } from '../../state/nav.store';
 import MobileMenu from './MobileMenu';
 import { UserMenu } from './UserMenu';
 
@@ -150,7 +150,7 @@ export default function Navbar(): ReactElement | null {
                 (Object.keys(navbarItems) as AppTab[]).map((navbarItem, index) => (
                   <Tab
                     key={navbarItem}
-                    label={navbarItem}
+                    label={APP_TAB_LABELS[navbarItem] ?? navbarItem}
                     value={navbarItem}
                     id={`navbar-tab-${index}`}
                     aria-controls={`hello-${index}`} // `tabpanel-${index}`

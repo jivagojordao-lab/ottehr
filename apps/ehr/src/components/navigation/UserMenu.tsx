@@ -168,14 +168,14 @@ export const UserMenu: FC = () => {
         <Link to="/profile" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setAnchorElement(null)}>
           <MenuItem data-testid={dataTestIds.header.myProfileMenuItem}>
             <AccountCircleIcon fontSize="small" sx={{ mr: 1, color: otherColors.blackTransparent }} />
-            <Typography variant="body1">My Profile</Typography>
+            <Typography variant="body1">Meu Perfil</Typography>
           </MenuItem>
         </Link>
         <Divider sx={{ my: 1 }} />
         <Link to="/logout" style={{ textDecoration: 'none' }}>
           <MenuItem>
             <Typography variant="body1" color="primary" sx={{ fontWeight: 'bold' }}>
-              Log out
+              Sair
             </Typography>
           </MenuItem>
         </Link>

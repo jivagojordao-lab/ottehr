@@ -27,48 +27,48 @@ export default function AppointmentTableHeader({ tab, table }: AppointmentTableH
         <TableCell sx={{ width: '40px', p: 0 }}></TableCell>
         <TableCell sx={{ width: TYPE_WIDTH_MIN }}>
           <Typography variant="subtitle2" sx={{ fontSize: '14px', fontWeight: 600 }}>
-            {tab !== ApptTab.prebooked ? 'Type & Status' : 'Type'}
+            {tab !== ApptTab.prebooked ? 'Tipo & Status' : 'Tipo'}
           </Typography>
         </TableCell>
         <TableCell sx={{ width: TIME_WIDTH_MIN }}>
           <Typography variant="subtitle2" sx={{ fontSize: '14px', fontWeight: 600 }}>
-            Time
+            Horário
           </Typography>
         </TableCell>
         <TableCell sx={{ width: PATIENT_AND_REASON_WIDTH_MIN }}>
           <Typography variant="subtitle2" sx={{ fontSize: '14px', fontWeight: 600 }}>
-            Patient & Reason
+            Paciente & Motivo
           </Typography>
         </TableCell>
         {(tab === ApptTab['in-office'] || tab === ApptTab.completed) && (
           <TableCell sx={{ width: ROOM_WIDTH_MIN }}>
             <Typography variant="subtitle2" sx={{ fontSize: '14px', fontWeight: 600 }}>
-              Room
+              Sala
             </Typography>
           </TableCell>
         )}
         <TableCell sx={{ width: tab === ApptTab.prebooked ? PROVIDER_WIDTH_MIN : INTAKE_AND_PROVIDER_WIDTH_MIN }}>
           <Typography variant="subtitle2" sx={{ fontSize: '14px', fontWeight: 600, whiteSpace: 'nowrap' }}>
-            {tab === ApptTab.prebooked ? 'Provider' : 'Intake & Provider'}
+            {tab === ApptTab.prebooked ? 'Profissional' : 'Triagem & Médico'}
           </Typography>
         </TableCell>
         {((tab === ApptTab['in-office'] && table === 'in-exam') || tab === ApptTab.completed) && (
           <TableCell sx={{ width: VITALS_ICON_WIDTH_MIN }}>
             <Typography variant="subtitle2" sx={{ fontSize: '14px', fontWeight: 600 }}>
-              Vitals
+              Sinais Vitais
             </Typography>
           </TableCell>
         )}
         <TableCell sx={{ width: VISIT_ICONS_WIDTH_MIN }}>
           <Typography variant="subtitle2" sx={{ fontSize: '14px', fontWeight: 600, whiteSpace: 'nowrap' }}>
             {tab === ApptTab.completed || (tab === ApptTab['in-office'] && table === 'in-exam')
-              ? 'Orders'
-              : 'Visit Comp.'}
+              ? 'Prescrições / Pedidos'
+              : 'Etapas'}
           </Typography>
         </TableCell>
         <TableCell sx={{ width: NOTES_WIDTH_MIN }}>
           <Typography variant="subtitle2" sx={{ fontSize: '14px', fontWeight: 600 }}>
-            Notes
+            Observações
           </Typography>
         </TableCell>
         <TableCell sx={{ width: CHAT_WIDTH_MIN }}>
@@ -78,12 +78,12 @@ export default function AppointmentTableHeader({ tab, table }: AppointmentTableH
         </TableCell>
         <TableCell sx={{ width: CHAT_WIDTH_MIN }}>
           <Typography variant="subtitle2" sx={{ fontSize: '14px', fontWeight: 600, textAlign: 'center' }}>
-            Go to
+            Acessar
           </Typography>
         </TableCell>
         <TableCell sx={{ width: ACTION_WIDTH_MIN }}>
           <Typography variant="subtitle2" sx={{ fontSize: '14px', fontWeight: 600, textAlign: 'center' }}>
-            Actions
+            Ações
           </Typography>
         </TableCell>
       </TableRow>

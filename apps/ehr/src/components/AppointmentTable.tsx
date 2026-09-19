@@ -125,7 +125,7 @@ export default function AppointmentTable({
                           ></ArrowDropDownCircleOutlinedIcon>
                         </IconButton>
                         <Typography variant="subtitle2" sx={{ fontSize: '14px', fontWeight: 600 }}>
-                          Waiting Room (
+                          Sala de Espera (
                           {
                             appointments.filter((appointmentTemp) => {
                               return appointmentTemp.status === 'arrived' || appointmentTemp.status === 'ready';
@@ -201,7 +201,7 @@ export default function AppointmentTable({
                         ></ArrowDropDownCircleOutlinedIcon>
                       </IconButton>
                       <Typography variant="subtitle2" sx={{ fontSize: '14px', fontWeight: 600 }}>
-                        Exam Rooms (
+                        Consultórios (
                         {
                           appointments.filter((appointmentTemp) => {
                             return appointmentTemp.status !== 'arrived' && appointmentTemp.status !== 'ready';

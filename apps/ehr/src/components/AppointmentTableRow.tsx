@@ -694,7 +694,7 @@ export default function AppointmentTableRow({
     ) {
       return (
         <GoToButton
-          text="Progress Note"
+          text="Prontuário"
           loading={progressNoteButtonLoading}
           onClick={handleProgressNoteButton}
           dataTestId={dataTestIds.dashboard.progressNoteButton}
@@ -716,7 +716,7 @@ export default function AppointmentTableRow({
     }
 
     return renderActionButton(
-      'Review & Sign',
+      'Revisar & Assinar',
       handleReviewAndSignButton,
       dataTestIds.dashboard.reviewAndSignButton,
       reviewAndSignButtonLoading
@@ -757,7 +757,7 @@ export default function AppointmentTableRow({
     ) {
       return (
         <GoToButton
-          text="Approve"
+          text="Aprovar"
           loading={approveButtonLoading || isSignLoading}
           onClick={handleApprove}
           dataTestId={dataTestIds.dashboard.approveButton}
@@ -775,7 +775,7 @@ export default function AppointmentTableRow({
             color: theme.palette.text.secondary,
           }}
         >
-          <Typography align="center">Approved</Typography>
+          <Typography align="center">Aprovado</Typography>
           <Typography align="center">{mdyStringFromISOString(appointment.approvalDate)}</Typography>
         </Box>
       );
@@ -798,7 +798,7 @@ export default function AppointmentTableRow({
             fontWeight: 500,
           }}
         >
-          Arrived
+          Chegou
         </LoadingButton>
       );
     }
@@ -1100,7 +1100,7 @@ export default function AppointmentTableRow({
       <TableCell sx={{ verticalAlign: 'center' }}>
         <Stack direction={'row'} spacing={1} alignItems="center" justifyContent="center" sx={{ width: '100%' }}>
           <GoToButton
-            text="Visit Details"
+            text="Detalhes"
             onClick={() => navigate(getInPersonVisitDetailsUrl(appointment.id))}
             dataTestId={dataTestIds.dashboard.visitDetailsButton}
           >
