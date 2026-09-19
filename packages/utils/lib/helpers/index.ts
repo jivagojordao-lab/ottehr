@@ -27,3 +27,4 @@ export * from './vitals';
 export * from './em-codes';
 export * from './practice-managed-questionnaires';
 export * from './brazilValidation';
+export * from './cid10Catalog';

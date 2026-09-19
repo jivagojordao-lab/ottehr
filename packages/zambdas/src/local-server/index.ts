@@ -41,6 +41,21 @@ function registerRoutes(): void {
     res.json({ ok: true, service: 'ottehr-br-api' });
   });
 
+  // Terminology endpoint para CID-10 brasileiro (desacoplado da nuvem do Oystehr)
+  app.post(['/terminology/icd-10/search', '/v1/terminology/icd-10/search', '/local/terminology/icd-10/search'], async (req: Request, res: Response) => {
+    try {
+      const { searchCID10 } = await import('utils/lib/helpers/cid10Catalog');
+      const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+      const query = body.query || body.search || '';
+      const limit = Number(body.limit) || 50;
+      const codes = searchCID10(query, limit);
+      res.json({ codes });
+    } catch (err) {
+      console.error('Erro na rota de busca de CID-10:', err);
+      res.json({ codes: [] });
+    }
+  });
+
   Object.entries({ ...zambdasSpec.zambdas, ...billingZambdasSpec.zambdas }).forEach(([_key, spec]) => {
     const executeOrExecutePublic = spec.type === 'http_auth' ? 'execute' : 'execute-public';
     const paths = [

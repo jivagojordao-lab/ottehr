@@ -78,8 +78,8 @@ export const PatientVitalsBody: FC = () => {
         <UnsavedDraftWarning
           message={
             vitalsDraft.hasNavigatedAway
-              ? 'Your previously entered data has been restored. Click the clear button on any vital card to discard it.'
-              : 'You have vitals in progress. Your draft will be saved.'
+              ? 'Os dados inseridos anteriormente foram restaurados. Clique no botão de limpar para descartar.'
+              : 'Você possui sinais vitais em preenchimento. Seu rascunho será preservado.'
           }
           onClearAll={vitals.clearAllDrafts}
         />
@@ -135,7 +135,7 @@ export const PatientVitalsBody: FC = () => {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <InfoOutlinedIcon sx={{ color: 'text.secondary', fontSize: 20, flexShrink: 0 }} />
             <Typography variant="body2" color="text.secondary">
-              To save multiple vitals at once, fill in the forms above and click the button "Add All Vitals"
+              Para registrar múltiplos sinais vitais de uma só vez, preencha os campos e clique em "Salvar Todos os Sinais Vitais"
             </Typography>
           </Box>
           <RoundedButton
@@ -147,7 +147,7 @@ export const PatientVitalsBody: FC = () => {
             sx={{ px: 4, py: 1.5, fontSize: '16px', flexShrink: 0 }}
             data-testid={dataTestIds.vitalsPage.addAllVitalsButton}
           >
-            Add All Vitals
+            Salvar Todos os Sinais Vitais
           </RoundedButton>
         </Box>
       )}

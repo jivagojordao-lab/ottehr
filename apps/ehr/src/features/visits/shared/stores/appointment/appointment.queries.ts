@@ -22,6 +22,7 @@ import { CODE_SYSTEM_NDC } from 'utils/lib/helpers/rcm/constants';
 import { AISuggestionNotesInput } from 'utils/lib/types/api/ai-suggestions-notes';
 import { BillingSuggestionInput, CommunicationDTO } from 'utils/lib/types/api/chart-data/chart-data.types';
 import { Icd10SearchRequestParams, Icd10SearchResponse } from 'utils/lib/types/api/icd-10-search/icd-10-search.types';
+import { searchCID10 } from 'utils/lib/helpers/cid10Catalog';
 import { CPTSearchRequestParams, IcdSearchResponse } from 'utils/lib/types/api/icd-search/icd-search.types';
 import {
   INVENTORY_MEDICATION_TYPE_CODE,
@@ -611,15 +612,27 @@ export const useICD10SearchNew = ({
     queryKey: ['icd-10-search', search],
 
     queryFn: async () => {
+      // No Ottehr Brasil ou ambiente local, utiliza o catálogo nacional de CID-10 em português
+      if (import.meta.env.VITE_APP_IS_LOCAL === 'true') {
+        const codes = searchCID10(search);
+        return { codes };
+      }
+
       if (!oystehr) return undefined;
-      const { codes } = await oystehr.terminology.searchIcd10({
-        query: search,
-        searchType: 'all',
-        includeSynonyms: true,
-        specialty: ['urgent-care'],
-        limit: 100,
-      });
-      return { codes };
+      try {
+        const { codes } = await oystehr.terminology.searchIcd10({
+          query: search,
+          searchType: 'all',
+          includeSynonyms: true,
+          specialty: ['urgent-care'],
+          limit: 100,
+        });
+        return { codes };
+      } catch (err) {
+        console.warn('Fallback para o catálogo nacional de CID-10:', err);
+        const codes = searchCID10(search);
+        return { codes };
+      }
     },
 
     enabled: Boolean(oystehr && search),
