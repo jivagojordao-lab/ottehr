@@ -7,12 +7,14 @@ import { Link, useLocation } from 'react-router-dom';
 import { adjustTopForBannerHeight } from 'src/helpers/misc.helper';
 import { BRANDING_CONFIG } from 'utils/lib/ottehr-config/branding';
 import { RoleType } from 'utils/lib/types/api/user.types';
+import { CLINIC_BRANDING } from '../../constants/clinicBranding';
 import useEvolveUser from '../../hooks/useEvolveUser';
 import { AppTab, APP_TAB_LABELS, useNavStore } from '../../state/nav.store';
+import { ClinicLogo } from './ClinicLogo';
 import MobileMenu from './MobileMenu';
 import { UserMenu } from './UserMenu';
 
-const ORGANIZATION_NAME_SHORT = import.meta.env.VITE_APP_ORGANIZATION_NAME_SHORT || 'Ottehr Brasil';
+const ORGANIZATION_NAME_SHORT = CLINIC_BRANDING.name;
 
 export type NavbarItems = {
   [key in AppTab]?: { urls: string[] };
@@ -122,16 +124,8 @@ export default function Navbar(): ReactElement | null {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters variant="dense">
-          <Link to="/">
-            <img
-              src={logo}
-              alt={`${BRANDING_CONFIG.projectName} logo`}
-              style={{
-                marginRight: 20,
-                marginTop: 10,
-                width: 158,
-              }}
-            />
+          <Link to="/" style={{ textDecoration: 'none', marginRight: 24, display: 'flex', alignItems: 'center' }}>
+            <ClinicLogo />
           </Link>
           {isMobile ? (
             <MobileMenu navbarItems={navbarItems}></MobileMenu>

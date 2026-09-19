@@ -1,18 +1,20 @@
+import { CLINIC_BRANDING } from '../../constants/clinicBranding';
+
 export const palette = {
   background: {
     default: '#F9FAFB',
     paper: '#FFFFFF',
   },
   primary: {
-    main: '#2169F5',
-    light: '#2169F5',
-    dark: '#0F347C',
+    main: CLINIC_BRANDING.primaryColor || '#1877F2',
+    light: '#4B98F5',
+    dark: CLINIC_BRANDING.primaryHover || '#0D5BBD',
     contrast: '#FFFFFF',
   },
   secondary: {
     main: '#FFCD75',
     light: '#0000009A',
-    dark: '#377DCE',
+    dark: '#145CBF',
     contrast: '#FFFFFF',
   },
   error: {
@@ -28,9 +30,9 @@ export const palette = {
     contrast: '#FFFFFF',
   },
   info: {
-    main: '#0288D1',
-    light: '#E6F3FE',
-    dark: '#01579B',
+    main: CLINIC_BRANDING.primaryColor || '#1877F2',
+    light: '#E8F2FD',
+    dark: CLINIC_BRANDING.primaryHover || '#0D5BBD',
     contrast: '#FFFFFF',
   },
   success: {
@@ -44,7 +46,7 @@ export const palette = {
 export const otherColors = {
   apptHover: '#F4F6F8',
   blackTransparent: 'rgba(0, 0, 0, 0.5)',
-  cardBackground: 'rgba(33, 105, 245, 0.04)',
+  cardBackground: 'rgba(24, 119, 242, 0.04)',
   cardChip: '#7CB342',
   closeCross: '#773602CC',
   consentBorder: 'rgba(77, 21, 183, 0.5)',

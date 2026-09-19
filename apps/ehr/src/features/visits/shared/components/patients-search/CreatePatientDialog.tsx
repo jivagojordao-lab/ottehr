@@ -233,7 +233,7 @@ export const CreatePatientDialog: FC<CreatePatientDialogProps> = ({ open, onClos
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <PersonAddAlt1Icon color="primary" />
           <Typography variant="h6" component="div" fontWeight={600}>
-            Cadastrar Novo Paciente (Ottehr Brasil)
+            Cadastrar Novo Paciente
           </Typography>
         </Box>
         <IconButton aria-label="close" onClick={handleClose} sx={{ color: (theme) => theme.palette.grey[500] }}>

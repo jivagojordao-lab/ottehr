@@ -1,9 +1,10 @@
 import { Container, Typography } from '@mui/material';
 import { ReactElement, useState } from 'react';
 import { CPT_TOOLTIP_PROPS, TooltipWrapper } from 'src/components/WithTooltip';
+import { CLINIC_BRANDING } from 'src/constants/clinicBranding';
 import { Sidebar, SidebarItem } from '../components/navigation/Sidebar';
 
-const ORGANIZATION_NAME_LONG = import.meta.env.VITE_APP_ORGANIZATION_NAME_LONG || 'Ottehr Saúde Brasil';
+const ORGANIZATION_NAME_LONG = CLINIC_BRANDING.name;
 
 interface PageContainerProps {
   sidebarItems?: SidebarItem[][];
@@ -23,7 +24,7 @@ export default function PageContainer({
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   if (title != null || tabTitle != null) {
-    document.title = `${tabTitle != null ? tabTitle : title} | ${ORGANIZATION_NAME_LONG} EHR`;
+    document.title = `${tabTitle != null ? tabTitle : title} | ${ORGANIZATION_NAME_LONG}`;
   }
 
   const container = (

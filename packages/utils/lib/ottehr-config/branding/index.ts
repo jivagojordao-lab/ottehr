@@ -1,18 +1,18 @@
 import type { BrandingConfig, LogoConfig } from 'config-types';
 
 const BRANDING_DATA: BrandingConfig = {
-  projectName: 'Ottehr',
-  projectDomain: 'ottehr.com',
+  projectName: 'Alliance Centro Médico',
+  projectDomain: 'alliancecentromedico.com.br',
   email: {
     logoURL: '',
     palette: {
       deemphasizedText: '#00000061',
-      headerText: '#0F347C',
+      headerText: '#1877F2',
       bodyText: '#000000DE',
       footerText: '#212130',
-      buttonColor: '#295F75',
+      buttonColor: '#1877F2',
     },
-    sender: 'support@ottehr.com',
+    sender: 'contato@alliancecentromedico.com.br',
   },
   logo: {
     default: '',
@@ -20,11 +20,11 @@ const BRANDING_DATA: BrandingConfig = {
     pdf: '',
   },
   intake: {
-    primaryIconAlt: 'Ottehr icon',
+    primaryIconAlt: 'Alliance Centro Médico',
     welcomeTitleBreak: false,
     primaryIconSize: 90,
     appBar: {
-      backgroundColor: '#0a2243',
+      backgroundColor: '#1877F2',
       logoHeight: '39px',
       logoutButtonTextColor: '#FFFFFF',
     },
