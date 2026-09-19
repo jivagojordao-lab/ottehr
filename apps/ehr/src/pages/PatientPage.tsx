@@ -5,6 +5,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import FaxOutlinedIcon from '@mui/icons-material/FaxOutlined';
 import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
+import LocalPharmacyIcon from '@mui/icons-material/LocalPharmacy';
 import MergeIcon from '@mui/icons-material/MergeType';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
@@ -34,6 +35,7 @@ import { PatientRadiologyTab } from 'src/components/PatientRadiologyTab';
 import { FaxVisitOption, SendFaxDialog, useSendFax } from 'src/features/fax';
 import { PatientNotesButton } from 'src/features/patient-notes/components/PatientNotesButton';
 import { ROUTER_PATH } from 'src/features/visits/in-person/routing/routesInPerson';
+import { MemedPrescriptionDialog } from 'src/features/visits/shared/components/memed/MemedPrescriptionDialog';
 import { PatientAvatar } from 'src/features/visits/shared/components/patient/info/Avatar';
 import Contacts from 'src/features/visits/shared/components/patient/info/Contacts';
 import { FullNameDisplay } from 'src/features/visits/shared/components/patient/info/FullNameDisplay';
@@ -72,6 +74,7 @@ export default function PatientPage(): JSX.Element {
     !isLegacyPatientFollowupsEnabled && defaultTab === 'followups' ? 'encounters' : defaultTab || 'encounters'
   );
   const [showAccountSettingsDialog, setShowAccountSettingsDialog] = useState(false);
+  const [showMemedDialog, setShowMemedDialog] = useState(false);
   const [mergePatientIds, setMergePatientIds] = useState<[string, string] | null>(null);
   const [medicalRecordMenuAnchor, setMedicalRecordMenuAnchor] = useState<HTMLElement | null>(null);
   // Which of the patient-record fax entry points is open; the source it sends is derived from it.
@@ -352,6 +355,13 @@ export default function PatientPage(): JSX.Element {
                     <Inventory2OutlinedIcon />
                   </GoToButton>
                   <GoToButton
+                    text="Prescrição Memed"
+                    backgroundColor="#e8f5e9"
+                    onClick={() => setShowMemedDialog(true)}
+                  >
+                    <LocalPharmacyIcon sx={{ color: '#2e7d32' }} />
+                  </GoToButton>
+                  <GoToButton
                     text="Action Logs"
                     backgroundColor={otherColors.lightBlue}
                     onClick={() => navigate(`/patient/${id}/action-logs`)}
@@ -555,6 +565,13 @@ export default function PatientPage(): JSX.Element {
                   }}
                 />
               ) : null}
+              {showMemedDialog && (
+                <MemedPrescriptionDialog
+                  open={showMemedDialog}
+                  onClose={() => setShowMemedDialog(false)}
+                  patient={patient}
+                />
+              )}
             </>
           )}
         </Stack>

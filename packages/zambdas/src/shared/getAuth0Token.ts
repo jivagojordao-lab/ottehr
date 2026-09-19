@@ -5,6 +5,11 @@ export async function getAuth0Token(secrets: Secrets | null): Promise<string> {
   const AUTH0_SECRET = getSecret(SecretsKeys.AUTH0_SECRET, secrets);
   const AUTH0_AUDIENCE = getSecret(SecretsKeys.AUTH0_AUDIENCE, secrets);
 
+  if (AUTH0_ENDPOINT.includes('localhost') || AUTH0_ENDPOINT.includes('127.0.0.1')) {
+    console.log('Ambiente local detectado: usando token de desenvolvimento local para Zambdas');
+    return 'local-m2m-token-for-dev';
+  }
+
   console.group(`Fetch from ${AUTH0_ENDPOINT}`);
   return await fetch(AUTH0_ENDPOINT, {
     method: 'POST',

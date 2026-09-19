@@ -26,3 +26,4 @@ export * from './visit-note';
 export * from './vitals';
 export * from './em-codes';
 export * from './practice-managed-questionnaires';
+export * from './brazilValidation';

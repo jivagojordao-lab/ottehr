@@ -64,14 +64,14 @@ export const useEditPatientInformationMutation = () => {
     }: {
       originalPatientData: Patient;
       updatedPatientData: Patient;
-      fieldsToUpdate?: ('name' | 'birthDate' | 'gender' | 'address' | 'telecom' | 'contact')[];
+      fieldsToUpdate?: ('name' | 'birthDate' | 'gender' | 'address' | 'telecom' | 'contact' | 'identifier')[];
     }) => {
       if (!oystehr) {
         throw new Error('Oystehr not found');
       }
 
       if (!fieldsToUpdate || fieldsToUpdate.length === 0) {
-        fieldsToUpdate = ['name', 'birthDate', 'address', 'telecom', 'contact'];
+        fieldsToUpdate = ['name', 'birthDate', 'address', 'telecom', 'contact', 'identifier'];
       }
       const fieldsSet = [...new Set(fieldsToUpdate)];
 

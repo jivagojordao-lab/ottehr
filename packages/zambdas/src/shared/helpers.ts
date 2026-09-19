@@ -19,7 +19,7 @@ import { DateTime } from 'luxon';
 import { BILLING_RESOURCE_TAG, PRIVATE_EXTENSION_BASE_URL, PUBLIC_EXTENSION_BASE_URL } from 'utils/lib/fhir/constants';
 import { undefinedIfEmptyArray } from 'utils/lib/fhir/helpers';
 import { pickFirstValueFromAnswerItem } from 'utils/lib/helpers/paperwork/paperwork';
-import { getSecret, Secrets, SecretsKeys } from 'utils/lib/secrets';
+import { getOptionalSecret, getSecret, Secrets, SecretsKeys } from 'utils/lib/secrets';
 import { TELEMED_VIDEO_ROOM_CODE, TIMEZONES } from 'utils/lib/types/constants';
 import { EncounterVirtualServiceExtension } from 'utils/lib/types/data/oystehr-api.types.ts/telemed.types';
 import { findQuestionnaireResponseItemLinkId } from 'utils/lib/types/data/paperwork/paperwork.types';
@@ -41,6 +41,9 @@ export const fhirApiUrlFromAuth0Audience = (auth0Audience: string): string => {
     case 'https://api.zapehr.com':
       return 'https://fhir-api.zapehr.com';
     default:
+      if (auth0Audience.includes('localhost') || auth0Audience.includes('127.0.0.1')) {
+        return 'http://localhost:8103/fhir/R4';
+      }
       throw `Unexpected auth0 audience value, could not map to a projectApiUrl. auth0Audience was: ${auth0Audience}`;
   }
 };
@@ -59,6 +62,9 @@ export const projectApiUrlFromAuth0Audience = (auth0Audience: string): string =>
     case 'https://api.zapehr.com':
       return 'https://project-api.zapehr.com/v1';
     default:
+      if (auth0Audience.includes('localhost') || auth0Audience.includes('127.0.0.1')) {
+        return 'http://localhost:3000';
+      }
       throw `Unexpected auth0 audience value, could not map to a projectApiUrl. auth0Audience was: ${auth0Audience}`;
   }
 };
@@ -68,11 +74,17 @@ export function createClinicalOystehrClient(
   secrets: Secrets | null,
   overrides?: Partial<OystehrConfig>
 ): Oystehr {
+  const customFhirApiUrl = getOptionalSecret(SecretsKeys.FHIR_API, secrets) || process.env.FHIR_API_URL;
+  const customProjectApiUrl = getOptionalSecret(SecretsKeys.PROJECT_API, secrets) || process.env.PROJECT_API_URL;
+
+  const fhirApiUrl = customFhirApiUrl || fhirApiUrlFromAuth0Audience(getSecret(SecretsKeys.AUTH0_AUDIENCE, secrets));
+  const projectApiUrl = customProjectApiUrl || projectApiUrlFromAuth0Audience(getSecret(SecretsKeys.AUTH0_AUDIENCE, secrets));
+
   return new Oystehr({
     accessToken: token,
     services: {
-      fhirApiUrl: fhirApiUrlFromAuth0Audience(getSecret(SecretsKeys.AUTH0_AUDIENCE, secrets)),
-      projectApiUrl: projectApiUrlFromAuth0Audience(getSecret(SecretsKeys.AUTH0_AUDIENCE, secrets)),
+      fhirApiUrl,
+      projectApiUrl,
     },
     ...overrides,
     ignoreTags: [...(overrides?.ignoreTags ?? []), BILLING_RESOURCE_TAG],

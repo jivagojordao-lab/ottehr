@@ -16,6 +16,7 @@ export interface PartialSearchOptionsState {
 }
 
 export interface SearchOptionsFilters {
+  cpf: string;
   givenNames: string;
   lastName: string;
   dob: string;

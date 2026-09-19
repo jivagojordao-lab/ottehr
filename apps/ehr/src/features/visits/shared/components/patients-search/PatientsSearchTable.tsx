@@ -63,7 +63,7 @@ export const PatientsSearchTable: React.FC<{
   if (!searchResult?.patients.length && !arePatientsLoading) {
     return (
       <Box sx={{ textAlign: 'center', p: 3 }}>
-        <Typography variant="body1">Set up search filter and press Search to find patients</Typography>
+        <Typography variant="body1">Preencha os filtros acima e clique em Pesquisar para localizar pacientes</Typography>
       </Box>
     );
   }
@@ -72,7 +72,7 @@ export const PatientsSearchTable: React.FC<{
     <>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, p: 2 }}>
         <StyledTabs value={activeTab} onChange={(_, newValue) => setActiveTab(newValue)}>
-          <Tab value="allPatients" label="All Patients" />
+          <Tab value="allPatients" label="Todos os Pacientes" />
         </StyledTabs>
       </Box>
 
@@ -87,7 +87,7 @@ export const PatientsSearchTable: React.FC<{
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell width={COLUMN_CONFIG.pid.width}>PID</TableCell>
+              <TableCell width={COLUMN_CONFIG.pid.width}>Identificador / CPF</TableCell>
               <TableCell width={COLUMN_CONFIG.name.width}>
                 <TableSortLabel
                   active={searchOptions.sort.field === 'name'}
@@ -101,7 +101,7 @@ export const PatientsSearchTable: React.FC<{
                     },
                   }}
                 >
-                  Name
+                  Nome do Paciente
                 </TableSortLabel>
               </TableCell>
               <TableCell width={COLUMN_CONFIG.dob.width}>
@@ -117,13 +117,13 @@ export const PatientsSearchTable: React.FC<{
                     },
                   }}
                 >
-                  DOB
+                  Data de Nasc.
                 </TableSortLabel>
               </TableCell>
-              <TableCell width={COLUMN_CONFIG.email.width}>Email</TableCell>
-              <TableCell width={COLUMN_CONFIG.phone.width}>Phone</TableCell>
-              <TableCell width={COLUMN_CONFIG.address.width}>Address</TableCell>
-              <TableCell width={COLUMN_CONFIG.lastVisit.width}>Last Visit</TableCell>
+              <TableCell width={COLUMN_CONFIG.email.width}>E-mail</TableCell>
+              <TableCell width={COLUMN_CONFIG.phone.width}>Telefone</TableCell>
+              <TableCell width={COLUMN_CONFIG.address.width}>Endereço</TableCell>
+              <TableCell width={COLUMN_CONFIG.lastVisit.width}>Última Consulta</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

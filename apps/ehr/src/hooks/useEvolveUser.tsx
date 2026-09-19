@@ -79,6 +79,9 @@ export default function useEvolveUser(): EvolveUser | undefined {
   );
 
   useEffect(() => {
+    if (import.meta.env.VITE_APP_IS_LOCAL === 'true') {
+      return;
+    }
     if (user && oystehr && profile && !isPractitionerLastLoginBeingUpdated && !_practitionerLoginUpdateStarted) {
       _practitionerLoginUpdateStarted = true;
 
@@ -174,6 +177,17 @@ const useGetProfile = (): UseQueryResult<Practitioner | null, Error> => {
     queryKey: ['get-practitioner-profile'],
 
     queryFn: async (): Promise<Practitioner | null> => {
+      if (import.meta.env.VITE_APP_IS_LOCAL === 'true') {
+        const mockPractitioner: Practitioner = {
+          resourceType: 'Practitioner',
+          id: 'local-admin-practitioner',
+          name: [{ given: ['Dr.'], family: 'Brasil' }],
+          telecom: [{ system: 'phone', value: '+5511999999999' }],
+          identifier: [{ system: 'http://hl7.org/fhir/sid/us-npi', value: '1234567890' }],
+        };
+        useEvolveUserStore.setState({ profile: mockPractitioner });
+        return mockPractitioner;
+      }
       try {
         if (!user?.profile) {
           useEvolveUserStore.setState({ profile: undefined });

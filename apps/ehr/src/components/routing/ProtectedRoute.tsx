@@ -9,6 +9,10 @@ interface ProtectedRouteProps {
 export const ProtectedRoute: FC<ProtectedRouteProps> = (props: ProtectedRouteProps) => {
   const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
 
+  if (import.meta.env.VITE_APP_IS_LOCAL === 'true') {
+    return props.showWhenAuthenticated;
+  }
+
   if (!isAuthenticated && isLoading) {
     return <LoadingScreen />;
   }

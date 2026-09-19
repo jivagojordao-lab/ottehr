@@ -50,9 +50,21 @@ export default ({ mode }: { mode: string }): UserConfig => {
     publicDir: 'public',
     plugins: plugins,
     server: {
+      allowedHosts: true,
       open: !process.env.VITE_NO_OPEN,
       host: '0.0.0.0',
       port: env.PORT ? parseInt(env.PORT) : undefined,
+      proxy: {
+        '/fhir/R4': {
+          target: 'http://localhost:8103',
+          changeOrigin: true,
+        },
+        '/local-api': {
+          target: 'http://localhost:3000',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/local-api/, ''),
+        },
+      },
       https:
         tlsCertExists && tlsKeyExists
           ? {

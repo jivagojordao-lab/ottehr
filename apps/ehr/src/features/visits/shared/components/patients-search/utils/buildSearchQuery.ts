@@ -49,6 +49,13 @@ export const buildSearchQuery = (filter: Partial<SearchOptionsFilters>): SearchP
   if (filter.dob) params.push({ name: 'birthdate', value: filter.dob });
   if (filter.email) params.push({ name: 'email', value: filter.email });
 
+  if (filter.cpf) {
+    const cleanCpf = filter.cpf.replace(/\D/g, '');
+    if (cleanCpf) {
+      params.push({ name: 'identifier', value: `https://saude.gov.br/fhir/sid/cpf|${cleanCpf}` });
+    }
+  }
+
   if (filter.pid) {
     const pidValue = filter.pid.trim();
     if (pidValue) {

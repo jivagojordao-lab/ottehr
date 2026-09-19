@@ -4,6 +4,10 @@ import { useEffect, useState } from 'react';
 let _token: string | undefined = undefined;
 
 export function useAuthToken(): string | undefined {
+  if (import.meta.env.VITE_APP_IS_LOCAL === 'true') {
+    return 'local-dev-token';
+  }
+
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [token, setToken] = useState<string | undefined>(_token);
 

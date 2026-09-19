@@ -29,18 +29,30 @@ export function useApiClients(): ApiClientsState {
 
   useEffect(() => {
     if (!oystehrZambda || oystehrZambda.config.accessToken !== token) {
+      const getAbsoluteUrl = (url?: string, fallback = ''): string => {
+        const target = url || fallback;
+        if (target.startsWith('http://') || target.startsWith('https://')) return target;
+        if (typeof window !== 'undefined' && window.location?.origin) {
+          return `${window.location.origin}${target.startsWith('/') ? target : `/${target}`}`;
+        }
+        return `http://localhost:3000${target.startsWith('/') ? target : `/${target}`}`;
+      };
+
+      const fhirApiUrl = getAbsoluteUrl(import.meta.env.VITE_APP_FHIR_API_URL, '/fhir/R4');
+      const zambdaApiUrl = getAbsoluteUrl(import.meta.env.VITE_APP_PROJECT_API_ZAMBDA_URL, '/local-api');
+
       const zambdaConfig: ConstructorParameters<typeof Oystehr>[0] = {
         accessToken: token,
-        fhirApiUrl: import.meta.env.VITE_APP_FHIR_API_URL,
-        projectApiUrl: import.meta.env.VITE_APP_PROJECT_API_ZAMBDA_URL,
-        projectId: import.meta.env.VITE_APP_PROJECT_ID,
+        fhirApiUrl,
+        projectApiUrl: zambdaApiUrl,
+        projectId: import.meta.env.VITE_APP_PROJECT_ID || 'ottehr-brasil',
         retry: {
           retries: 0,
         },
       };
       if (import.meta.env.VITE_APP_IS_LOCAL === 'true') {
         zambdaConfig.services = {
-          zambdaApiUrl: import.meta.env.VITE_APP_PROJECT_API_ZAMBDA_URL,
+          zambdaApiUrl,
         };
       }
       useApiClientsStore.setState({

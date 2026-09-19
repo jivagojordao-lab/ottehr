@@ -1,20 +1,43 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="./public/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta name="description" content="The production-ready, open-source EHR" />
-    <link rel="apple-touch-icon" href="./public/logo192.png" />
-    <link rel="manifest" href="./public/manifest.json" />
-    <title>%VITE_APP_NAME%</title>
-    <script src="https://js.stripe.com/clover/stripe.js" async></script>
+    <meta name="description" content="Ottehr Brasil EHR" />
+    <title>Ottehr Brasil</title>
+    <script>
+      window.addEventListener('error', function(e) {
+        var box = document.getElementById('debug-error');
+        if (!box) {
+          box = document.createElement('div');
+          box.id = 'debug-error';
+          box.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#d32f2f;color:#fff;padding:16px;z-index:999999;font-family:monospace;font-size:14px;white-space:pre-wrap;box-shadow:0 4px 10px rgba(0,0,0,0.3);';
+          document.body.appendChild(box);
+        }
+        box.innerHTML = '<b>[Erro JavaScript no Navegador]</b>\n' + e.message + '\nArquivo: ' + e.filename + ':' + e.lineno + (e.error && e.error.stack ? '\n\nStack:\n' + e.error.stack : '');
+      });
+      window.addEventListener('unhandledrejection', function(e) {
+        var box = document.getElementById('debug-error');
+        if (!box) {
+          box = document.createElement('div');
+          box.id = 'debug-error';
+          box.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#c2185b;color:#fff;padding:16px;z-index:999999;font-family:monospace;font-size:14px;white-space:pre-wrap;box-shadow:0 4px 10px rgba(0,0,0,0.3);';
+          document.body.appendChild(box);
+        }
+        box.innerHTML = '<b>[Promise Rejeitada no Navegador]</b>\n' + (e.reason && e.reason.stack ? e.reason.stack : e.reason);
+      });
+    </script>
   </head>
 
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root">
+      <div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#555;">
+        <h2>Carregando Ottehr Brasil...</h2>
+      </div>
+    </div>
     <script type="module" src="./src/index.tsx"></script>
   </body>
 </html>

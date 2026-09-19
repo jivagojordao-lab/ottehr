@@ -24,6 +24,7 @@ import { useEditPatientInformationMutation } from 'src/features/visits/shared/st
 import { FHIR_EXTENSION } from 'utils/lib/fhir/constants';
 import { standardizePhoneNumber } from 'utils/lib/helpers/helpers';
 import { AllStatesToVirtualLocationLabels } from 'utils/lib/types/common';
+import { cleanDigits, fetchAddressByCEP, formatCEP, formatCPF, validateCPF } from 'utils/lib/helpers/brazilValidation';
 import { EMAIL_REGEX, ZIP_REGEX } from '../../constants';
 import DateSearch from '../DateSearch';
 import { RoundedButton } from '../RoundedButton';
@@ -34,6 +35,7 @@ interface EditPatientDialogProps {
 }
 
 interface FormInputs {
+  cpf?: string;
   firstName?: string;
   middleName?: string;
   lastName?: string;
@@ -76,9 +78,25 @@ const createPatientResourcePatchData = (patient: Patient, data: FormInputs): Pat
       given: [data.preferredName],
     });
   }
-  // if (data.suffix && data.suffix.length > 0) {
-  //   patientData.name![0].suffix?.push(data.suffix);
-  // }
+
+  // CPF brasileiro
+  if (data.cpf) {
+    const cleanCpf = cleanDigits(data.cpf);
+    if (cleanCpf) {
+      const otherIdentifiers = (patient.identifier || []).filter(
+        (id) =>
+          id.system !== 'https://saude.gov.br/fhir/sid/cpf' &&
+          id.system !== 'https://rnds.saude.gov.br/fhir/r4/NamingSystem/cpf'
+      );
+      patientData.identifier = [
+        ...otherIdentifiers,
+        {
+          system: 'https://saude.gov.br/fhir/sid/cpf',
+          value: cleanCpf,
+        },
+      ];
+    }
+  }
 
   // patient's Phones
   if (data.primaryPhoneNumber) {
@@ -222,7 +240,13 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
     setValue('middleName', nameEntryOfficial?.given?.[1]);
     setValue('lastName', nameEntryOfficial?.family);
     setValue('preferredName', nameEntryNickname?.given?.[0]);
-    // setValue('suffix', nameEntry?.suffix?.[0]);
+
+    const cpfIdentifier = patient?.identifier?.find(
+      (id) =>
+        id.system === 'https://saude.gov.br/fhir/sid/cpf' ||
+        id.system === 'https://rnds.saude.gov.br/fhir/r4/NamingSystem/cpf'
+    )?.value;
+    setValue('cpf', cpfIdentifier ? formatCPF(cpfIdentifier) : '');
 
     const telecomEntry = patient?.telecom || [];
     const phoneNumbers = telecomEntry.filter((element) => element?.system?.toLowerCase() === 'phone');
@@ -347,6 +371,32 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
               variant="outlined"
               fullWidth
               error={!!formState.errors.preferredName}
+            />
+          </FormControl>
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <Controller
+              name={'cpf'}
+              control={control}
+              render={({ field: { value } }) => (
+                <TextField
+                  id="patient-cpf"
+                  label="CPF"
+                  placeholder="000.000.000-00"
+                  variant="outlined"
+                  fullWidth
+                  value={value || ''}
+                  error={Boolean(value && cleanDigits(value).length === 11 && !validateCPF(cleanDigits(value)))}
+                  helperText={
+                    value && cleanDigits(value).length === 11 && !validateCPF(cleanDigits(value))
+                      ? 'CPF inválido (módulo 11)'
+                      : 'Identificação nacional brasileira'
+                  }
+                  onChange={(event) => {
+                    const formatted = formatCPF(event.target.value);
+                    setValue('cpf', formatted);
+                  }}
+                />
+              )}
             />
           </FormControl>
           {/* <FormControl fullWidth sx={{ mt: 2 }}>

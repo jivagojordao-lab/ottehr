@@ -1,5 +1,5 @@
 import './index.css';
-import { Auth0Provider } from '@auth0/auth0-react';
+import { Auth0Context, Auth0Provider } from '@auth0/auth0-react';
 import { ErrorBoundary } from '@sentry/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StrictMode } from 'react';
@@ -44,46 +44,86 @@ const queryClient = new QueryClient({
   },
 });
 
+const isLocal = import.meta.env.VITE_APP_IS_LOCAL === 'true';
+
+const mockAuth0Context = {
+  isAuthenticated: true,
+  isLoading: false,
+  user: {
+    sub: 'auth0|local-admin',
+    name: 'Dr. Brasil (Admin)',
+    email: 'admin@ottehr.com.br',
+    nickname: 'admin',
+    picture: '',
+  },
+  loginWithRedirect: async () => {},
+  loginWithPopup: async () => {},
+  logout: async () => {
+    window.location.href = '/';
+  },
+  getAccessTokenSilently: async () => 'local-dev-token',
+  getAccessTokenWithPopup: async () => 'local-dev-token',
+  getIdTokenClaims: async () => ({
+    __raw: 'local-raw-token',
+    sub: 'auth0|local-admin',
+    name: 'Dr. Brasil (Admin)',
+    email: 'admin@ottehr.com.br',
+  }),
+  handleRedirectCallback: async () => ({ appState: {} }),
+  checkSession: async () => {},
+  error: undefined,
+};
+
+const appContent = (
+  <ErrorBoundary
+    onError={(error, errorInfo) => {
+      console.log(String(error), errorInfo);
+      // Handle chunk loading failures from deployments
+      const errorString = String(error);
+      if (
+        errorString.includes('Failed to fetch dynamically imported module') ||
+        errorString.includes('Importing a module script failed') ||
+        errorString.includes('error loading dynamically imported module') ||
+        // Safari/WebKit wording once a missing chunk is answered with 200 text/html by the
+        // SPA fallback rather than a 404. Without this the reload never fires in Safari.
+        errorString.includes('is not a valid JavaScript MIME type') ||
+        errorString.includes('Failed to fetch')
+      ) {
+        if (canReloadForChunkError()) {
+          console.log('Chunk loading error detected, reloading page...');
+          location.reload();
+        } else {
+          console.log('Chunk loading error persisted across a reload, showing error UI.');
+        }
+      }
+    }}
+    fallback={<p>An error has occurred</p>}
+  >
+    <App />
+  </ErrorBoundary>
+);
+
 root.render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <Auth0Provider
-        domain={import.meta.env.VITE_APP_OYSTEHR_APPLICATION_DOMAIN || ''}
-        clientId={import.meta.env.VITE_APP_OYSTEHR_APPLICATION_CLIENT_ID || ''}
-        authorizationParams={{
-          audience: import.meta.env.VITE_APP_OYSTEHR_APPLICATION_AUDIENCE,
-          redirect_uri: AUTH0_REDIRECT_URI,
-          connection: import.meta.env.VITE_APP_OYSTEHR_CONNECTION_NAME,
-        }}
-        cacheLocation="localstorage"
-      >
-        <ErrorBoundary
-          onError={(error, errorInfo) => {
-            console.log(String(error), errorInfo);
-            // Handle chunk loading failures from deployments
-            const errorString = String(error);
-            if (
-              errorString.includes('Failed to fetch dynamically imported module') ||
-              errorString.includes('Importing a module script failed') ||
-              errorString.includes('error loading dynamically imported module') ||
-              // Safari/WebKit wording once a missing chunk is answered with 200 text/html by the
-              // SPA fallback rather than a 404. Without this the reload never fires in Safari.
-              errorString.includes('is not a valid JavaScript MIME type') ||
-              errorString.includes('Failed to fetch')
-            ) {
-              if (canReloadForChunkError()) {
-                console.log('Chunk loading error detected, reloading page...');
-                location.reload();
-              } else {
-                console.log('Chunk loading error persisted across a reload, showing error UI.');
-              }
-            }
+      {isLocal ? (
+        <Auth0Context.Provider value={mockAuth0Context as any}>
+          {appContent}
+        </Auth0Context.Provider>
+      ) : (
+        <Auth0Provider
+          domain={import.meta.env.VITE_APP_OYSTEHR_APPLICATION_DOMAIN || ''}
+          clientId={import.meta.env.VITE_APP_OYSTEHR_APPLICATION_CLIENT_ID || ''}
+          authorizationParams={{
+            audience: import.meta.env.VITE_APP_OYSTEHR_APPLICATION_AUDIENCE,
+            redirect_uri: AUTH0_REDIRECT_URI,
+            connection: import.meta.env.VITE_APP_OYSTEHR_CONNECTION_NAME,
           }}
-          fallback={<p>An error has occurred</p>}
+          cacheLocation="localstorage"
         >
-          <App />
-        </ErrorBoundary>
-      </Auth0Provider>
+          {appContent}
+        </Auth0Provider>
+      )}
     </QueryClientProvider>
   </StrictMode>
 );
