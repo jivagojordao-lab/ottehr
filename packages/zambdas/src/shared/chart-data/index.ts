@@ -343,15 +343,19 @@ export function makeMedicationDTO(medication: MedicationStatement): MedicationDT
 export function makePrescribedMedicationDTO(medRequest: MedicationRequest): PrescribedMedicationDTO {
   return {
     resourceId: medRequest.id,
-    name: medRequest.medicationCodeableConcept?.coding?.find(
-      (coding) => coding.system === MEDICATION_DISPENSABLE_DRUG_ID
-    )?.display,
-    instructions: medRequest.dosageInstruction?.[0]?.patientInstruction,
+    name:
+      medRequest.medicationCodeableConcept?.coding?.find(
+        (coding) => coding.system === MEDICATION_DISPENSABLE_DRUG_ID
+      )?.display ?? medRequest.medicationCodeableConcept?.text,
+    instructions:
+      medRequest.dosageInstruction?.[0]?.patientInstruction ?? medRequest.dosageInstruction?.[0]?.text,
     added: medRequest.meta?.lastUpdated,
     provider: medRequest.requester?.reference?.split('/')?.[1],
     status: medRequest.status,
     prescriptionId: medRequest.identifier?.find(
-      (identifier) => identifier.system === 'https://identifiers.fhir.oystehr.com/erx-prescription-id'
+      (identifier) =>
+        identifier.system === 'https://identifiers.fhir.oystehr.com/erx-prescription-id' ||
+        identifier.system === 'https://memed.com.br/prescricao'
     )?.value,
     encounterId: medRequest.encounter?.reference?.split('/')?.[1],
     isRenewal: getBooleanExtensionValue(medRequest, FHIR_EXTENSION.MedicationRequest.isRenewal.url),

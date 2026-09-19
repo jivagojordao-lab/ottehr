@@ -1,6 +1,8 @@
 import AddIcon from '@mui/icons-material/Add';
+import LocalPharmacyIcon from '@mui/icons-material/LocalPharmacy';
 import { LoadingButton } from '@mui/lab';
 import {
+  Box,
   Chip,
   CircularProgress,
   Paper,
@@ -30,8 +32,9 @@ import { formatDateToMDYWithTime } from 'utils/lib/utils/date';
 import { RoundedButton } from '../../../../../components/RoundedButton';
 import { useChartFields } from '../../hooks/useChartFields';
 import { useGetAppointmentAccessibility } from '../../hooks/useGetAppointmentAccessibility';
-import { useAppointmentData } from '../../stores/appointment/appointment.store';
+import { useAppointmentData, useChartData } from '../../stores/appointment/appointment.store';
 import { ERX, ERXStatus } from '../ERX';
+import { MemedPrescriptionDialog } from '../memed/MemedPrescriptionDialog';
 import { PreferredPharmacy } from '../PreferredPharmacy';
 
 const getPractitionerName = (practitioner?: Practitioner): string | undefined => {
@@ -123,7 +126,8 @@ interface ERxContainerProps {
 }
 
 export const ERxContainer: FC<ERxContainerProps> = ({ showHeader = true }) => {
-  const { appointment, patient } = useAppointmentData();
+  const { appointment, patient, encounter } = useAppointmentData();
+  const { chartData } = useChartData();
   const userTimezone = DateTime.local().zoneName;
   const appointmentStart = useMemo(
     () => formatDateToMDYWithTime(appointment?.start, userTimezone),
@@ -148,6 +152,7 @@ export const ERxContainer: FC<ERxContainerProps> = ({ showHeader = true }) => {
     refetchInterval: 10000,
   });
 
+  const [isMemedOpen, setIsMemedOpen] = useState(false);
   const [isERXOpen, setIsERXOpen] = useState(false);
   const [erxStatus, setERXStatus] = useState(ERXStatus.INITIAL);
   const [openTooltip, setOpenTooltip] = useState(false);
@@ -158,14 +163,14 @@ export const ERxContainer: FC<ERxContainerProps> = ({ showHeader = true }) => {
 
   const cancelPrescription = async (medRequestId: string, patientId: string): Promise<void> => {
     if (!oystehr) {
-      enqueueSnackbar('An error occurred. Please try again.', { variant: 'error' });
+      enqueueSnackbar('Ocorreu um erro. Tente novamente.', { variant: 'error' });
       return;
     }
     setCancellationLoading((prevState) => [...prevState, medRequestId]);
     try {
       await oystehr.erx.cancelPrescription({ medicationRequestId: medRequestId, patientId });
     } catch (error) {
-      enqueueSnackbar('An error occurred while cancelling prescription. Please try again.', { variant: 'error' });
+      enqueueSnackbar('Erro ao cancelar prescrição. Tente novamente.', { variant: 'error' });
       console.error(`Error cancelling prescription: ${error}`);
     } finally {
       await refetch();
@@ -181,63 +186,113 @@ export const ERxContainer: FC<ERxContainerProps> = ({ showHeader = true }) => {
     setOpenTooltip(true);
   };
 
-  const handleSetup = (): void => {
-    window.open('https://docs.oystehr.com/ottehr/setup/prescriptions/', '_blank');
-  };
-
   const onNewOrderClick = async (): Promise<void> => {
-    // await oystehr?.erx.unenrollPractitioner({ practitionerId: user!.profileResource!.id! });
     setIsERXOpen(true);
   };
 
   return (
     <>
       <Stack gap={1}>
-        <Stack direction="row" justifyContent="space-between">
+        <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={1.5}>
           <Stack direction="row" gap={1} alignItems="center">
-            {showHeader && <PageTitle label="eRX" showIntakeNotesButton={false} />}
+            {showHeader && <PageTitle label="Prescrições & Medicamentos (Memed / eRx)" showIntakeNotesButton={false} />}
             {(isLoading || isFetching || cancellationLoading.length > 0) && <CircularProgress size={16} />}
           </Stack>
-          <Tooltip
-            placement="top"
-            title="You don't have the necessary role to access ERX. Please contact your administrator."
-            open={openTooltip && !isReadOnly && !user?.hasRole([RoleType.Provider])}
-            onClose={handleCloseTooltip}
-            onOpen={handleOpenTooltip}
-          >
-            <Stack>
-              {isERXOpen && erxStatus !== ERXStatus.LOADING ? (
-                <RoundedButton
-                  disabled={isReadOnly || !user?.hasRole([RoleType.Provider])}
-                  variant="contained"
-                  onClick={() => {
-                    setIsERXOpen(false);
-                  }}
-                >
-                  Close eRX
-                </RoundedButton>
-              ) : (
-                <RoundedButton
-                  disabled={
-                    isReadOnly ||
-                    erxStatus === ERXStatus.LOADING ||
-                    !user?.hasRole([RoleType.Provider]) ||
-                    !erxConfigData?.configured
-                  }
-                  variant="contained"
-                  onClick={() => onNewOrderClick()}
-                  startIcon={erxStatus === ERXStatus.LOADING ? <CircularProgress size={16} /> : <AddIcon />}
-                >
-                  {erxStatus === ERXStatus.LOADING ? 'Loading eRx' : 'Open eRx'}
-                </RoundedButton>
-              )}
-            </Stack>
-          </Tooltip>
+          <Stack direction="row" gap={1.5} alignItems="center" flexWrap="wrap">
+            <RoundedButton
+              disabled={isReadOnly}
+              variant="contained"
+              onClick={() => setIsMemedOpen(true)}
+              startIcon={<LocalPharmacyIcon />}
+              sx={{
+                bgcolor: '#2e7d32',
+                color: '#fff',
+                fontWeight: 700,
+                '&:hover': {
+                  bgcolor: '#1b5e20',
+                },
+              }}
+            >
+              Prescrição Digital Memed (ICP-Brasil)
+            </RoundedButton>
+
+            {erxConfigData?.configured && (
+              <Tooltip
+                placement="top"
+                title="Você não possui permissão para acessar o eRx. Contate o administrador."
+                open={openTooltip && !isReadOnly && !user?.hasRole([RoleType.Provider])}
+                onClose={handleCloseTooltip}
+                onOpen={handleOpenTooltip}
+              >
+                <Stack>
+                  {isERXOpen && erxStatus !== ERXStatus.LOADING ? (
+                    <RoundedButton
+                      disabled={isReadOnly || !user?.hasRole([RoleType.Provider])}
+                      variant="outlined"
+                      onClick={() => {
+                        setIsERXOpen(false);
+                      }}
+                    >
+                      Fechar eRx
+                    </RoundedButton>
+                  ) : (
+                    <RoundedButton
+                      disabled={
+                        isReadOnly ||
+                        erxStatus === ERXStatus.LOADING ||
+                        !user?.hasRole([RoleType.Provider])
+                      }
+                      variant="outlined"
+                      onClick={() => onNewOrderClick()}
+                      startIcon={erxStatus === ERXStatus.LOADING ? <CircularProgress size={16} /> : <AddIcon />}
+                    >
+                      {erxStatus === ERXStatus.LOADING ? 'Carregando eRx' : 'Abrir eRx'}
+                    </RoundedButton>
+                  )}
+                </Stack>
+              </Tooltip>
+            )}
+          </Stack>
         </Stack>
 
         {chartFields?.preferredPharmacies && <PreferredPharmacy data={chartFields?.preferredPharmacies} />}
 
-        {!erxConfigData?.configured && !isErxConfigLoading && <CompleteConfiguration handleSetup={handleSetup} />}
+        {!erxConfigData?.configured && !isErxConfigLoading && (
+          <Paper
+            elevation={0}
+            sx={{
+              p: 2,
+              mb: 1.5,
+              bgcolor: '#f1f8e9',
+              border: '1px solid #c5e1a5',
+              borderRadius: 2,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: 2,
+            }}
+          >
+            <Box>
+              <Typography variant="subtitle2" fontWeight={700} color="#2e7d32">
+                Prescrição Eletrônica Integrada Memed (Padrão CFM & ICP-Brasil)
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Emita receitas médicas digitais com bulário Anvisa atualizado, pedidos de exames e atestados com assinatura digital ICP-Brasil válida em farmácias de todo o Brasil.
+              </Typography>
+            </Box>
+            <RoundedButton
+              variant="contained"
+              size="small"
+              startIcon={<LocalPharmacyIcon />}
+              onClick={() => setIsMemedOpen(true)}
+              sx={{ bgcolor: '#2e7d32', color: '#fff', '&:hover': { bgcolor: '#1b5e20' } }}
+            >
+              Nova Receita Memed
+            </RoundedButton>
+          </Paper>
+        )}
+
         {isERXOpen && (
           <ERX
             onStatusChanged={(status) => {
@@ -262,15 +317,15 @@ export const ERxContainer: FC<ERxContainerProps> = ({ showHeader = true }) => {
                 }}
               >
                 <TableRow>
-                  <TableCell>Medication</TableCell>
-                  <TableCell>Patient instructions (SIG)</TableCell>
+                  <TableCell>Medicamento</TableCell>
+                  <TableCell>Posologia / Instruções</TableCell>
                   {/*<TableCell>Dx</TableCell>*/}
-                  <TableCell>Visit</TableCell>
-                  <TableCell>Provider</TableCell>
-                  <TableCell>Order added</TableCell>
+                  <TableCell>Consulta</TableCell>
+                  <TableCell>Profissional</TableCell>
+                  <TableCell>Data / Hora</TableCell>
                   {/*<TableCell>Pharmacy</TableCell>*/}
                   <TableCell>Status</TableCell>
-                  {!isReadOnly && <TableCell>Action</TableCell>}
+                  {!isReadOnly && <TableCell>Ações</TableCell>}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -281,7 +336,7 @@ export const ERxContainer: FC<ERxContainerProps> = ({ showHeader = true }) => {
                       <TableCell>
                         <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap">
                           <Typography variant="body2">{row.name}</Typography>
-                          {row.isRenewal && <Chip label="Refill" size="small" color="primary" variant="outlined" />}
+                          {row.isRenewal && <Chip label="Renovação" size="small" color="primary" variant="outlined" />}
                         </Stack>
                       </TableCell>
                       <TableCell>{row.instructions}</TableCell>
@@ -325,7 +380,7 @@ export const ERxContainer: FC<ERxContainerProps> = ({ showHeader = true }) => {
                               cancellationLoading.includes(row.resourceId!)
                             }
                           >
-                            Cancel
+                            Cancelar
                           </LoadingButton>
                         </TableCell>
                       )}
@@ -337,6 +392,17 @@ export const ERxContainer: FC<ERxContainerProps> = ({ showHeader = true }) => {
           </TableContainer>
         )}
       </Stack>
+
+      <MemedPrescriptionDialog
+        open={isMemedOpen}
+        onClose={() => setIsMemedOpen(false)}
+        patient={patient}
+        encounterId={encounter?.id || appointment?.id}
+        diagnoses={chartData?.diagnosis}
+        onPrescriptionSaved={async () => {
+          await refetch();
+        }}
+      />
     </>
   );
 };

@@ -28,17 +28,22 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { DocumentReference, Patient } from 'fhir/r4b';
+import { DocumentReference, MedicationRequest, Patient } from 'fhir/r4b';
 import { enqueueSnackbar } from 'notistack';
 import { FC, useEffect, useRef, useState } from 'react';
 import { useApiClients } from 'src/hooks/useAppClients';
 import useEvolveUser from 'src/hooks/useEvolveUser';
 import { cleanDigits, formatCPF } from 'utils/lib/helpers/brazilValidation';
+import { ERX_MEDICATION_META_TAG_CODE } from 'utils/lib/fhir/constants';
+import { DiagnosisDTO } from 'utils/lib/types/api/chart-data/chart-data.types';
 
 interface MemedPrescriptionDialogProps {
   open: boolean;
   onClose: () => void;
   patient?: Patient;
+  encounterId?: string;
+  diagnoses?: DiagnosisDTO[];
+  onPrescriptionSaved?: () => void;
 }
 
 declare global {
@@ -48,7 +53,14 @@ declare global {
   }
 }
 
-export const MemedPrescriptionDialog: FC<MemedPrescriptionDialogProps> = ({ open, onClose, patient }) => {
+export const MemedPrescriptionDialog: FC<MemedPrescriptionDialogProps> = ({
+  open,
+  onClose,
+  patient,
+  encounterId,
+  diagnoses,
+  onPrescriptionSaved,
+}) => {
   const { oystehr } = useApiClients();
   const currentUser = useEvolveUser();
 
@@ -153,6 +165,14 @@ export const MemedPrescriptionDialog: FC<MemedPrescriptionDialogProps> = ({ open
       const prescriptionId = data?.id || `MEMED-${Date.now()}`;
       const pdfUrl = data?.pdfUrl || `https://sandbox.memed.com.br/receita/${prescriptionId}`;
 
+      const diagnosisSummary = (diagnoses || [])
+        .map((d) => `${d.code ? `[${d.code}] ` : ''}${d.display}${d.isPrimary ? ' (Principal)' : ''}`)
+        .join(', ');
+
+      const description = `Prescrição digital emitida via Memed - Dr(a). ${doctorName} (CRM ${doctorCrm}/${doctorUf})${
+        diagnosisSummary ? ` | Diagnósticos (CID-10): ${diagnosisSummary}` : ''
+      }`;
+
       const docRef: DocumentReference = {
         resourceType: 'DocumentReference',
         status: 'current',
@@ -172,7 +192,7 @@ export const MemedPrescriptionDialog: FC<MemedPrescriptionDialogProps> = ({ open
           display: patientName,
         },
         date: new Date().toISOString(),
-        description: `Prescrição digital emitida via Memed - Dr(a). ${doctorName} (CRM ${doctorCrm}/${doctorUf})`,
+        description,
         identifier: [
           {
             system: 'https://memed.com.br/prescricao',
@@ -188,11 +208,76 @@ export const MemedPrescriptionDialog: FC<MemedPrescriptionDialogProps> = ({ open
             },
           },
         ],
+        context: {
+          encounter: encounterId ? [{ reference: `Encounter/${encounterId}` }] : undefined,
+          related: (diagnoses || [])
+            .filter((d) => d.resourceId)
+            .map((d) => ({
+              reference: `Condition/${d.resourceId}`,
+              display: `${d.code ? `[${d.code}] ` : ''}${d.display}`.trim(),
+            })),
+        },
       };
 
       await oystehr.fhir.create<DocumentReference>(docRef);
+
+      // In simulator / local mode, save each simulated medication to Medplum FHIR linked to CID-10
+      if (activeTab === 'simulator' && simulatedMeds.length > 0) {
+        for (const med of simulatedMeds) {
+          try {
+            await oystehr.fhir.create<MedicationRequest>({
+              resourceType: 'MedicationRequest',
+              status: 'active',
+              intent: 'order',
+              meta: {
+                tag: [{ system: 'http://ottehr.com/fhir/tag', code: ERX_MEDICATION_META_TAG_CODE }],
+              },
+              medicationCodeableConcept: {
+                text: med.nome,
+                coding: [
+                  {
+                    system: 'https://memed.com.br/medicamento',
+                    display: med.nome,
+                  },
+                ],
+              },
+              subject: {
+                reference: `Patient/${patient.id}`,
+                display: patientName,
+              },
+              encounter: encounterId ? { reference: `Encounter/${encounterId}` } : undefined,
+              requester: currentUser?.profileResource?.id
+                ? {
+                    reference: `Practitioner/${currentUser.profileResource.id}`,
+                    display: doctorName,
+                  }
+                : undefined,
+              dosageInstruction: [
+                {
+                  text: med.posologia,
+                  patientInstruction: med.posologia,
+                },
+              ],
+              reasonCode: (diagnoses || []).map((d) => ({
+                coding: [
+                  {
+                    system: 'http://hl7.org/fhir/sid/icd-10',
+                    code: d.code,
+                    display: d.display,
+                  },
+                ],
+                text: `${d.code ? `[${d.code}] ` : ''}${d.display}`.trim(),
+              })),
+            });
+          } catch (medErr) {
+            console.warn('Erro ao registrar item de medicamento no FHIR:', medErr);
+          }
+        }
+      }
+
       setPrescriptionSuccess(pdfUrl);
       enqueueSnackbar('Prescrição Memed gravada com sucesso no Medplum FHIR!', { variant: 'success' });
+      onPrescriptionSaved?.();
     } catch (e: any) {
       console.error('Erro ao salvar receita no Medplum:', e);
       enqueueSnackbar('Erro ao registrar prescrição no prontuário.', { variant: 'error' });
@@ -265,6 +350,26 @@ export const MemedPrescriptionDialog: FC<MemedPrescriptionDialogProps> = ({ open
               </Typography>
             </Grid>
           </Grid>
+
+          {diagnoses && diagnoses.length > 0 && (
+            <Box sx={{ mt: 1.5, pt: 1.5, borderTop: '1px dashed #c0d3e5' }}>
+              <Typography variant="caption" color="text.secondary" fontWeight={700} sx={{ display: 'block', mb: 0.8 }}>
+                DIAGNÓSTICOS ASSOCIADOS À CONSULTA (CID-10):
+              </Typography>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                {diagnoses.map((diag, index) => (
+                  <Chip
+                    key={diag.resourceId || diag.code || index}
+                    size="small"
+                    color={diag.isPrimary ? 'primary' : 'default'}
+                    variant={diag.isPrimary ? 'filled' : 'outlined'}
+                    label={`${diag.code ? `${diag.code} - ` : ''}${diag.display}${diag.isPrimary ? ' (Principal)' : ''}`}
+                    sx={{ fontWeight: diag.isPrimary ? 600 : 400 }}
+                  />
+                ))}
+              </Box>
+            </Box>
+          )}
         </Paper>
 
         {prescriptionSuccess && (

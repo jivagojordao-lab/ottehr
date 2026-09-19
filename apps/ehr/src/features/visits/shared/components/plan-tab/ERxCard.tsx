@@ -8,7 +8,7 @@ export const ERxCard: FC = () => {
 
   return (
     <>
-      <AccordionCard label="eRX" collapsed={collapsed} onSwitch={() => setCollapsed((prevState) => !prevState)}>
+      <AccordionCard label="Prescrições Digitais (Memed / eRx)" collapsed={collapsed} onSwitch={() => setCollapsed((prevState) => !prevState)}>
         <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
           <ERxContainer showHeader={false} />
         </Box>

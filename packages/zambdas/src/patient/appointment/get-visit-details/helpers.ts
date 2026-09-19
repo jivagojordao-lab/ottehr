@@ -96,10 +96,12 @@ export async function getMedications(oystehr: Oystehr, encounterId?: string): Pr
 function makePrescribedMedicationDTO(medRequest: MedicationRequest): PrescribedMedication {
   return {
     resourceId: medRequest.id,
-    name: medRequest.medicationCodeableConcept?.coding?.find(
-      (coding) => coding.system === MEDICATION_DISPENSABLE_DRUG_ID
-    )?.display,
-    instructions: medRequest.dosageInstruction?.[0]?.patientInstruction,
+    name:
+      medRequest.medicationCodeableConcept?.coding?.find(
+        (coding) => coding.system === MEDICATION_DISPENSABLE_DRUG_ID
+      )?.display ?? medRequest.medicationCodeableConcept?.text,
+    instructions:
+      medRequest.dosageInstruction?.[0]?.patientInstruction ?? medRequest.dosageInstruction?.[0]?.text,
   };
 }
 

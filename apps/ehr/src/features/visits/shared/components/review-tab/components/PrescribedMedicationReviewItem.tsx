@@ -9,7 +9,7 @@ export const PrescribedMedicationReviewItem: FC<{ medication: PrescribedMedicati
     <>
       <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap" mb={0.5}>
         <Typography fontWeight={500}>{medication.name}</Typography>
-        {medication.isRenewal && <Chip label="Refill" size="small" color="primary" variant="outlined" />}
+        {medication.isRenewal && <Chip label="Renovação" size="small" color="primary" variant="outlined" />}
       </Stack>
       <Typography>{medication.instructions}</Typography>
     </>
