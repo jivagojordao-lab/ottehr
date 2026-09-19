@@ -1,0 +1,43 @@
+{
+    # Email para certificados SSL automáticos Let's Encrypt / ZeroSSL
+    email {\@ottehr.com.br}
+}
+
+{\} {
+    encode gzip zstd
+
+    # Cabecalhos de Seguranca
+    header {
+        X-Content-Type-Options nosniff
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy strict-origin-when-cross-origin
+    }
+
+    # Medplum FHIR R4 API
+    handle /fhir/R4/* {
+        reverse_proxy medplum:8103 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Forwarded-Proto {scheme}
+        }
+    }
+
+    # Ottehr Brasil Local API & Zambdas (CID-10, Usuarios, Memed, etc)
+    handle /local-api/* {
+        uri strip_prefix /local-api
+        reverse_proxy local-server:3000 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Forwarded-Proto {scheme}
+        }
+    }
+
+    # Frontend SPA (EHR Web App)
+    handle {
+        root * /srv/ehr
+        try_files {path} /index.html
+        file_server
+    }
+}

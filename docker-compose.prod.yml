@@ -1,0 +1,92 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ottehr-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: medplum
+      POSTGRES_USER: medplum
+      POSTGRES_PASSWORD: \
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medplum -d medplum"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: ottehr-redis
+    restart: unless-stopped
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  medplum:
+    image: medplum/medplum-server:latest
+    container_name: ottehr-medplum
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      MEDPLUM_BASE_URL: https://\/fhir/R4
+      MEDPLUM_DATABASE_HOST: postgres
+      MEDPLUM_DATABASE_PORT: 5432
+      MEDPLUM_DATABASE_NAME: medplum
+      MEDPLUM_DATABASE_USER: medplum
+      MEDPLUM_DATABASE_PASSWORD: \
+      MEDPLUM_REDIS_HOST: redis
+      MEDPLUM_REDIS_PORT: 6379
+    volumes:
+      - ./medplum.config.json:/usr/src/medplum/packages/server/medplum.config.json
+      - medplumdata:/var/lib/medplum/data
+
+  local-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.local-server
+    container_name: ottehr-local-api
+    restart: unless-stopped
+    depends_on:
+      - medplum
+    environment:
+      PORT: 3000
+      MEDPLUM_FHIR_URL: http://medplum:8103/fhir/R4
+      MEMED_API_KEY: \
+      MEMED_SECRET_KEY: \
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: ottehr-caddy
+    restart: unless-stopped
+    depends_on:
+      - medplum
+      - local-server
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      APP_DOMAIN: \
+      ACME_EMAIL: \
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./apps/ehr/dist:/srv/ehr:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  pgdata:
+  redisdata:
+  medplumdata:
+  caddy_data:
+  caddy_config:
