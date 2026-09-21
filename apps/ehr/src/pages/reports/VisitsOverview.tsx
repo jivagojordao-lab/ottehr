@@ -170,21 +170,21 @@ export default function VisitsOverview(): React.ReactElement {
     (filter: string): string => {
       switch (filter) {
         case 'today':
-          return 'Today';
+          return 'Hoje';
         case 'yesterday':
-          return 'Yesterday';
+          return 'Ontem';
         case 'last7days':
-          return 'Last 7 days';
+          return 'Últimos 7 dias';
         case 'last30days':
-          return 'Last 30 days';
+          return 'Últimos 30 dias';
         case 'custom':
-          return `Custom date (${DateTime.fromISO(customDate).toFormat('MMM dd, yyyy')})`;
+          return `Data personalizada (${DateTime.fromISO(customDate).toFormat('dd/MM/yyyy')})`;
         case 'customRange':
-          return `Custom range (${DateTime.fromISO(customStartDate).toFormat('MMM dd')} - ${DateTime.fromISO(
+          return `Intervalo personalizado (${DateTime.fromISO(customStartDate).toFormat('dd/MM')} - ${DateTime.fromISO(
             customEndDate
-          ).toFormat('MMM dd, yyyy')})`;
+          ).toFormat('dd/MM/yyyy')})`;
         default:
-          return 'Today';
+          return 'Hoje';
       }
     },
     [customDate, customStartDate, customEndDate]
@@ -332,26 +332,26 @@ export default function VisitsOverview(): React.ReactElement {
     () => [
       {
         field: 'practitionerName',
-        headerName: 'Provider Name',
+        headerName: 'Nome do Profissional',
         width: 200,
         sortable: true,
       },
       {
         field: 'role',
-        headerName: 'Role',
+        headerName: 'Função / Cargo',
         width: 150,
         sortable: true,
       },
       {
         field: 'inPerson',
-        headerName: 'In-Person',
+        headerName: 'Presencial',
         width: 120,
         sortable: true,
         type: 'number',
       },
       {
         field: 'telemed',
-        headerName: 'Telemed',
+        headerName: 'Telemedicina',
         width: 120,
         sortable: true,
         type: 'number',
@@ -384,26 +384,26 @@ export default function VisitsOverview(): React.ReactElement {
     () => [
       {
         field: 'location',
-        headerName: 'Location',
+        headerName: 'Unidade',
         width: 200,
         sortable: true,
       },
       {
         field: 'serviceCategory',
-        headerName: 'Service Category',
+        headerName: 'Categoria de Serviço',
         width: 150,
         sortable: true,
       },
       {
         field: 'inPerson',
-        headerName: 'In-Person',
+        headerName: 'Presencial',
         width: 120,
         sortable: true,
         type: 'number',
       },
       {
         field: 'telemed',
-        headerName: 'Telemed',
+        headerName: 'Telemedicina',
         width: 120,
         sortable: true,
         type: 'number',
@@ -442,26 +442,26 @@ export default function VisitsOverview(): React.ReactElement {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <AssessmentIcon sx={{ fontSize: 32, color: 'primary.main' }} />
             <Typography variant="h4" component="h1" color="primary.dark" fontWeight={600}>
-              Visits Overview Report
+              Relatório de Visão Geral de Atendimentos
             </Typography>
           </Box>
         </Box>
 
         <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-          Overview of appointments by type for {getDateRangeLabel(dateFilter).toLowerCase()}.
+          Visão geral de atendimentos por tipo para {getDateRangeLabel(dateFilter).toLowerCase()}.
         </Typography>
 
         {/* Date Filter */}
         <Box sx={{ mb: 3, display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
           <FormControl size="small" sx={{ minWidth: 200 }}>
-            <InputLabel>Date Range</InputLabel>
-            <Select value={dateFilter} label="Date Range" onChange={handleDateFilterChange} disabled={loading}>
-              <MenuItem value="today">Today</MenuItem>
-              <MenuItem value="yesterday">Yesterday</MenuItem>
-              <MenuItem value="last7days">Last 7 days</MenuItem>
-              <MenuItem value="last30days">Last 30 days</MenuItem>
-              <MenuItem value="custom">Custom Date</MenuItem>
-              <MenuItem value="customRange">Custom Date Range</MenuItem>
+            <InputLabel>Período</InputLabel>
+            <Select value={dateFilter} label="Período" onChange={handleDateFilterChange} disabled={loading}>
+              <MenuItem value="today">Hoje</MenuItem>
+              <MenuItem value="yesterday">Ontem</MenuItem>
+              <MenuItem value="last7days">Últimos 7 dias</MenuItem>
+              <MenuItem value="last30days">Últimos 30 dias</MenuItem>
+              <MenuItem value="custom">Data Personalizada</MenuItem>
+              <MenuItem value="customRange">Intervalo Personalizado</MenuItem>
             </Select>
           </FormControl>
 
@@ -484,7 +484,7 @@ export default function VisitsOverview(): React.ReactElement {
               <TextField
                 type="date"
                 size="small"
-                label="Start Date"
+                label="Data Inicial"
                 value={customStartDate}
                 onChange={handleCustomStartDateChange}
                 disabled={loading}
@@ -496,7 +496,7 @@ export default function VisitsOverview(): React.ReactElement {
               <TextField
                 type="date"
                 size="small"
-                label="End Date"
+                label="Data Final"
                 value={customEndDate}
                 onChange={handleCustomEndDateChange}
                 disabled={loading}
@@ -509,7 +509,7 @@ export default function VisitsOverview(): React.ReactElement {
           )}
 
           <Button variant="outlined" onClick={() => void fetchReport(dateFilter)} disabled={loading}>
-            Refresh
+            Atualizar
           </Button>
         </Box>
 
@@ -533,7 +533,7 @@ export default function VisitsOverview(): React.ReactElement {
               <Card>
                 <CardContent>
                   <Typography variant="h6" color="primary.main" gutterBottom>
-                    Total Appointments
+                    Total de Atendimentos
                   </Typography>
                   <Typography variant="h3" fontWeight="bold" sx={{ mb: 1 }}>
                     {reportData.totalAppointments}
@@ -556,7 +556,7 @@ export default function VisitsOverview(): React.ReactElement {
                         {typeData.count}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {typeData.percentage}% of total appointments
+                        {typeData.percentage}% do total de atendimentos
                       </Typography>
                     </CardContent>
                   </Card>
@@ -568,7 +568,7 @@ export default function VisitsOverview(): React.ReactElement {
               <Card sx={{ mb: 4 }}>
                 <CardContent>
                   <Typography variant="h6" sx={{ mb: 3 }}>
-                    Daily Visits by Type
+                    Atendimentos Diários por Tipo
                   </Typography>
                   <Box sx={{ height: 400 }}>
                     <Line data={chartData} options={chartOptions} />
@@ -582,7 +582,7 @@ export default function VisitsOverview(): React.ReactElement {
               <Card sx={{ mb: 4 }}>
                 <CardContent>
                   <Typography variant="h6" sx={{ mb: 3 }}>
-                    Visits by Location
+                    Atendimentos por Unidade
                   </Typography>
                   <Box sx={{ height: 400 }}>
                     <Bar data={locationChartData} options={locationChartOptions} />
@@ -596,7 +596,7 @@ export default function VisitsOverview(): React.ReactElement {
               <Card sx={{ mb: 4 }}>
                 <CardContent>
                   <Typography variant="h6" sx={{ mb: 3 }}>
-                    Visits by Provider
+                    Atendimentos por Profissional
                   </Typography>
                   <Box sx={{ height: 400, width: '100%' }}>
                     <DataGrid
@@ -634,7 +634,7 @@ export default function VisitsOverview(): React.ReactElement {
               <Card sx={{ mb: 4 }}>
                 <CardContent>
                   <Typography variant="h6" sx={{ mb: 3 }}>
-                    Visits by Type
+                    Atendimentos por Categoria e Tipo
                   </Typography>
                   <Box sx={{ height: 400, width: '100%' }}>
                     <DataGrid
@@ -672,10 +672,10 @@ export default function VisitsOverview(): React.ReactElement {
             {statisticsData.length === 0 && (
               <Box sx={{ textAlign: 'center', py: 8 }}>
                 <Typography variant="h6" color="text.secondary">
-                  No appointments found for the selected period
+                  Nenhum atendimento encontrado para o período selecionado
                 </Typography>
                 <Typography variant="body2" color="text.disabled" sx={{ mt: 2 }}>
-                  Try selecting a different date range or check back later.
+                  Tente selecionar outro intervalo de datas ou retorne mais tarde.
                 </Typography>
               </Box>
             )}

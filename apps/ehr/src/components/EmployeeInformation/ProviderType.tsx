@@ -8,7 +8,7 @@ const providerTypeOptions = [
   { code: 'DO', label: 'DO' },
   { code: 'PA', label: 'PA' },
   { code: 'NP', label: 'NP' },
-  { code: 'other', label: 'Other' },
+  { code: 'other', label: 'Outro' },
 ];
 
 export function ProviderTypeField({
@@ -37,10 +37,10 @@ export function ProviderTypeField({
             renderInput={(params) => (
               <TextField
                 {...params}
-                label="Credentials"
+                label="Qualificação / Titulação"
                 data-testid={dataTestIds.employeesPage.providerDetailsCredentialsDropdown}
                 error={!!error}
-                helperText={error ? 'Please select credentials' : null}
+                helperText={error ? 'Selecione a qualificação' : null}
                 FormHelperTextProps={{
                   sx: { ml: 0, mt: 1 },
                 }}
@@ -65,7 +65,7 @@ export function ProviderTypeField({
           rules={{
             validate: (value, formValues) => {
               if (formValues.providerType === 'other' && !value) {
-                return 'Please specify credentials';
+                return 'Por favor, especifique a qualificação';
               }
               return true;
             },
@@ -75,7 +75,7 @@ export function ProviderTypeField({
               {...field}
               fullWidth
               margin="normal"
-              label="Specify credentials"
+              label="Especificar qualificação"
               required
               error={error?.message !== undefined}
               helperText={error?.message ?? ''}

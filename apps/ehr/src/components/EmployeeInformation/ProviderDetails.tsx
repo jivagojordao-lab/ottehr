@@ -19,10 +19,10 @@ export function ProviderDetails({
   return (
     <FormControl sx={{ width: '100%' }}>
       <Stack direction="row" alignItems="center" gap={2} sx={{ mb: 2 }}>
-        <Typography sx={{ ...theme.typography.h4, color: theme.palette.primary.dark }}>Provider details</Typography>
+        <Typography sx={{ ...theme.typography.h4, color: theme.palette.primary.dark }}>Detalhes do profissional</Typography>
         {seenPatientRecently && (
           <Chip
-            label="BEEN SEEN LAST 30 MINS"
+            label="ATENDIDO NOS ÚLTIMOS 30 MIN"
             size="small"
             data-testid={dataTestIds.employeesPage.seenPatientRecentlyChip}
             sx={{
@@ -48,14 +48,14 @@ export function ProviderDetails({
                 if (value) {
                   return isNPIValidWithChecksum(value)
                     ? true
-                    : 'NPI must be a valid 10-digit number with a correct check digit';
+                    : 'NPI/Registro deve ser um número válido de 10 dígitos com dígito verificador correto';
                 }
                 return true;
               },
             }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <TextField
-                label="NPI"
+                label="NPI / Registro"
                 data-testid={dataTestIds.employeesPage.providerDetailsNPI}
                 required={roles.includes(RoleType.Provider)}
                 value={value || ''}

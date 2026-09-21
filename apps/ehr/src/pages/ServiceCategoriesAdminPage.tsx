@@ -94,16 +94,16 @@ const ServiceCategoryDialog: FC<{
 
   const handleSave = useCallback(async () => {
     const missing: string[] = [];
-    if (!value.name.trim()) missing.push('name');
-    if (!value.abbreviation?.trim()) missing.push('abbreviation');
-    if (!value.code.trim()) missing.push('code');
-    if (value.config.durationMinutes < 1) missing.push('duration');
+    if (!value.name.trim()) missing.push('nome');
+    if (!value.abbreviation?.trim()) missing.push('sigla');
+    if (!value.code.trim()) missing.push('código');
+    if (value.config.durationMinutes < 1) missing.push('duração');
     if (missing.length > 0) {
-      enqueueSnackbar(`Missing required field(s): ${missing.join(', ')}`, { variant: 'warning' });
+      enqueueSnackbar(`Preencha os campos obrigatórios: ${missing.join(', ')}`, { variant: 'warning' });
       return;
     }
     if (codeIsTaken) {
-      enqueueSnackbar(`A service with the code "${value.code}" already exists. Choose a different code.`, {
+      enqueueSnackbar(`Já existe um serviço com o código "${value.code}". Escolha um código diferente.`, {
         variant: 'warning',
       });
       return;
@@ -128,32 +128,32 @@ const ServiceCategoryDialog: FC<{
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>
         <Typography variant="h4" component="span" color="primary.dark">
-          {initial?.id ? 'Edit Service' : 'New Service'}
+          {initial?.id ? 'Editar Categoria de Serviço' : 'Nova Categoria de Serviço'}
         </Typography>
       </DialogTitle>
       <DialogContent>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
           <TextField
-            label="Display Name"
+            label="Nome de Exibição"
             value={value.name}
             onChange={(e) => setValue((v) => ({ ...v, name: e.target.value }))}
             required
             size="small"
             fullWidth
-            helperText="Shown to patients — e.g., 'Urgent Care', 'Workers Comp'"
+            helperText="Exibido aos pacientes — ex.: 'Pronto Atendimento', 'Medicina do Trabalho'"
           />
           <TextField
-            label="Abbreviation/Short Name (2-3 symbols)"
+            label="Sigla / Nome Curto (2-3 caracteres)"
             value={value.abbreviation ?? ''}
             onChange={(e) => setValue((v) => ({ ...v, abbreviation: e.target.value }))}
             required
             size="small"
             fullWidth
             error={!value.abbreviation?.trim()}
-            helperText="Shown on the Tracking Board and patients' visits list - e.g., 'UC', 'WC'"
+            helperText="Exibido no painel de acompanhamento e lista de atendimentos — ex.: 'PA', 'MT'"
           />
           <TextField
-            label="Code"
+            label="Código"
             value={value.code}
             onChange={(e) =>
               setValue((v) => ({
@@ -167,12 +167,12 @@ const ServiceCategoryDialog: FC<{
             error={codeIsTaken}
             helperText={
               codeIsTaken
-                ? `A service with the code "${value.code}" already exists. Choose a different code.`
-                : "URL-safe identifier — e.g., 'urgent-care', 'workers-comp'"
+                ? `Já existe um serviço com o código "${value.code}". Escolha um código diferente.`
+                : "Identificador seguro para URL — ex.: 'pronto-atendimento', 'medicina-do-trabalho'"
             }
           />
           <TextField
-            label="Duration (minutes)"
+            label="Duração (minutos)"
             type="number"
             value={value.config.durationMinutes === 0 ? '' : value.config.durationMinutes}
             onChange={(e) => {
@@ -184,7 +184,7 @@ const ServiceCategoryDialog: FC<{
               }));
             }}
             error={value.config.durationMinutes < 1}
-            helperText={value.config.durationMinutes < 1 ? 'Must be at least 1 minute' : undefined}
+            helperText={value.config.durationMinutes < 1 ? 'Deve ser de pelo menos 1 minuto' : undefined}
             size="small"
             fullWidth
           />
@@ -192,13 +192,13 @@ const ServiceCategoryDialog: FC<{
             // The slot generator's no-explicit-cadence fallback depends on
             // duration — shared helper so the picker's "Default (X min)"
             // label always matches what the admin will actually get.
-            const defaultLabel = `Default (${getDefaultCadenceMinutes(value.config.durationMinutes)} min)`;
+            const defaultLabel = `Padrão (${getDefaultCadenceMinutes(value.config.durationMinutes)} min)`;
             return (
               <FormControl size="small" fullWidth>
-                <InputLabel shrink>Cadence (start interval)</InputLabel>
+                <InputLabel shrink>Intervalo de início (Cadência)</InputLabel>
                 <Select
                   value={value.config.cadenceMinutes ?? ''}
-                  input={<OutlinedInput notched label="Cadence (start interval)" />}
+                  input={<OutlinedInput notched label="Intervalo de início (Cadência)" />}
                   onChange={(e) => {
                     const raw = e.target.value;
                     const parsed = raw === '' ? undefined : Number(raw);
@@ -222,11 +222,11 @@ const ServiceCategoryDialog: FC<{
             );
           })()}
           <FormControl size="small" fullWidth>
-            <InputLabel>Service Modes</InputLabel>
+            <InputLabel>Modalidades de Atendimento</InputLabel>
             <Select
               multiple
               value={value.config.serviceModes}
-              input={<OutlinedInput label="Service Modes" />}
+              input={<OutlinedInput label="Modalidades de Atendimento" />}
               onChange={(e) =>
                 setValue((v) => ({
                   ...v,
@@ -239,25 +239,25 @@ const ServiceCategoryDialog: FC<{
                 }))
               }
               renderValue={(selected) =>
-                (selected as string[]).map((s) => (s === 'in-person' ? 'In-Person' : 'Virtual')).join(', ')
+                (selected as string[]).map((s) => (s === 'in-person' ? 'Presencial' : 'Telemedicina')).join(', ')
               }
             >
               <MenuItem value="in-person">
                 <Checkbox checked={value.config.serviceModes.includes('in-person')} />
-                <ListItemText primary="In-Person" />
+                <ListItemText primary="Presencial" />
               </MenuItem>
               <MenuItem value="virtual">
                 <Checkbox checked={value.config.serviceModes.includes('virtual')} />
-                <ListItemText primary="Virtual" />
+                <ListItemText primary="Telemedicina" />
               </MenuItem>
             </Select>
           </FormControl>
           <FormControl size="small" fullWidth>
-            <InputLabel>Booking Flows</InputLabel>
+            <InputLabel>Tipos de Agendamento</InputLabel>
             <Select
               multiple
               value={value.config.visitTypes}
-              input={<OutlinedInput label="Booking Flows" />}
+              input={<OutlinedInput label="Tipos de Agendamento" />}
               onChange={(e) =>
                 setValue((v) => ({
                   ...v,
@@ -270,40 +270,40 @@ const ServiceCategoryDialog: FC<{
                 }))
               }
               renderValue={(selected) =>
-                (selected as string[]).map((s) => (s === 'prebook' ? 'Prebook' : 'Walk-in')).join(', ')
+                (selected as string[]).map((s) => (s === 'prebook' ? 'Agendado' : 'Demanda Espontânea')).join(', ')
               }
             >
               <MenuItem value="prebook">
                 <Checkbox checked={value.config.visitTypes.includes('prebook')} />
-                <ListItemText primary="Prebook" />
+                <ListItemText primary="Agendado" />
               </MenuItem>
               <MenuItem value="walk-in">
                 <Checkbox checked={value.config.visitTypes.includes('walk-in')} />
-                <ListItemText primary="Walk-in" />
+                <ListItemText primary="Demanda Espontânea" />
               </MenuItem>
             </Select>
           </FormControl>
           <TextField
-            label="Reasons for Visit"
+            label="Motivos do Atendimento / Consulta"
             multiline
             minRows={4}
             value={reasonsText}
             onChange={(e) => setReasonsText(e.target.value)}
             size="small"
             fullWidth
-            helperText="One reason per line. Shown to patient during booking."
+            helperText="Um motivo por linha. Exibido ao paciente durante o agendamento."
           />
           <FormControlLabel
             control={
               <Switch checked={value.active} onChange={(e) => setValue((v) => ({ ...v, active: e.target.checked }))} />
             }
-            label={value.active ? 'Active' : 'Inactive'}
+            label={value.active ? 'Ativo' : 'Inativo'}
           />
         </Box>
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2 }}>
         <Button onClick={onClose} disabled={saving}>
-          Cancel
+          Cancelar
         </Button>
         <Button
           variant="contained"
@@ -311,7 +311,7 @@ const ServiceCategoryDialog: FC<{
           disabled={saving || codeIsTaken}
           startIcon={saving ? <CircularProgress size={16} /> : null}
         >
-          Save
+          Salvar
         </Button>
       </DialogActions>
     </Dialog>
@@ -339,10 +339,10 @@ export const ServiceCategoriesAdminPage: FC = () => {
       try {
         if (value.id) {
           await updateServiceCategory(oystehrZambda, value);
-          enqueueSnackbar('Service category updated', { variant: 'success' });
+          enqueueSnackbar('Categoria de serviço atualizada', { variant: 'success' });
         } else {
           await createServiceCategory(oystehrZambda, value);
-          enqueueSnackbar('Service category created', { variant: 'success' });
+          enqueueSnackbar('Categoria de serviço criada', { variant: 'success' });
         }
         void queryClient.invalidateQueries({ queryKey: QUERY_KEY });
         setDialogOpen(false);
@@ -355,7 +355,7 @@ export const ServiceCategoriesAdminPage: FC = () => {
         // the common ones before falling back to the generic message.
         const friendly = (err as any)?.response?.data?.message ?? (err as any)?.body?.message ?? (err as any)?.message;
         const isCodeTakenError = typeof friendly === 'string' && friendly.startsWith('A service with the code');
-        enqueueSnackbar(isCodeTakenError ? friendly : 'Failed to save service category', { variant: 'error' });
+        enqueueSnackbar(isCodeTakenError ? friendly : 'Falha ao salvar categoria de serviço', { variant: 'error' });
       }
     },
     [oystehrZambda, queryClient]
@@ -364,15 +364,15 @@ export const ServiceCategoriesAdminPage: FC = () => {
   const handleDeactivate = useCallback(
     async (id: string) => {
       if (!oystehrZambda) return;
-      if (!window.confirm('Deactivate this service category? Existing appointments stay intact; new bookings stop.'))
+      if (!window.confirm('Desativar esta categoria de serviço? Agendamentos existentes permanecem intactos; novos agendamentos serão bloqueados.'))
         return;
       try {
         await deleteServiceCategory(oystehrZambda, id);
         void queryClient.invalidateQueries({ queryKey: QUERY_KEY });
-        enqueueSnackbar('Service category deactivated', { variant: 'success' });
+        enqueueSnackbar('Categoria de serviço desativada', { variant: 'success' });
       } catch (err) {
         console.error('Failed to deactivate service category:', err);
-        enqueueSnackbar('Failed to deactivate service category', { variant: 'error' });
+        enqueueSnackbar('Falha ao desativar categoria de serviço', { variant: 'error' });
       }
     },
     [oystehrZambda, queryClient]
@@ -413,13 +413,13 @@ export const ServiceCategoriesAdminPage: FC = () => {
             setDialogOpen(true);
           }}
         >
-          New Service
+          Adicionar Serviço
         </Button>
       </AdminHeaderActionSlot>
 
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        Services are the appointment types patients can book. Add a service here, then attach it to a provider's
-        schedule from their employee page or to a group from the group admin page.
+        Serviços são os tipos de consulta que os pacientes podem agendar. Adicione um serviço aqui e vincule-o à
+        agenda de um profissional em sua página de colaborador ou a um grupo na página de administração de grupos.
       </Typography>
 
       {isLoading ? (
@@ -429,8 +429,8 @@ export const ServiceCategoriesAdminPage: FC = () => {
       ) : serviceCategories.length === 0 ? (
         <Paper sx={{ p: 4, textAlign: 'center' }}>
           <Typography variant="body1" color="text.secondary">
-            No services defined in FHIR yet. Click "New Service" to create one, or rely on the deployment's default{' '}
-            <code>BOOKING_CONFIG</code> until you're ready to manage these at runtime.
+            Nenhum serviço definido no FHIR ainda. Clique em "Adicionar Serviço" para criar um, ou utilize a configuração
+            padrão da plataforma.
           </Typography>
         </Paper>
       ) : (
@@ -438,22 +438,22 @@ export const ServiceCategoriesAdminPage: FC = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: 600 }}>Name</TableCell>
-                <TableCell sx={{ fontWeight: 600 }}>Abbreviation</TableCell>
-                <TableCell sx={{ fontWeight: 600 }}>Code</TableCell>
+                <TableCell sx={{ fontWeight: 600 }}>Nome</TableCell>
+                <TableCell sx={{ fontWeight: 600 }}>Sigla</TableCell>
+                <TableCell sx={{ fontWeight: 600 }}>Código</TableCell>
                 <TableCell sx={{ fontWeight: 600 }} align="center">
-                  Duration
+                  Duração
                 </TableCell>
                 <TableCell sx={{ fontWeight: 600 }} align="center">
-                  Cadence
+                  Cadência
                 </TableCell>
-                <TableCell sx={{ fontWeight: 600 }}>Service Modes</TableCell>
-                <TableCell sx={{ fontWeight: 600 }}>Booking Flows</TableCell>
+                <TableCell sx={{ fontWeight: 600 }}>Modalidades</TableCell>
+                <TableCell sx={{ fontWeight: 600 }}>Tipos de Agendamento</TableCell>
                 <TableCell sx={{ fontWeight: 600 }} align="center">
                   Status
                 </TableCell>
                 <TableCell sx={{ fontWeight: 600 }} align="right">
-                  Actions
+                  Ações
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -474,35 +474,45 @@ export const ServiceCategoriesAdminPage: FC = () => {
                   <TableCell sx={{ fontFamily: 'monospace' }}>{sc.code}</TableCell>
                   <TableCell align="center">{sc.systemManaged ? '—' : `${sc.config.durationMinutes} min`}</TableCell>
                   <TableCell align="center">
-                    {sc.systemManaged ? '—' : sc.config.cadenceMinutes ? `${sc.config.cadenceMinutes} min` : 'default'}
+                    {sc.systemManaged ? '—' : sc.config.cadenceMinutes ? `${sc.config.cadenceMinutes} min` : 'padrão'}
                   </TableCell>
                   <TableCell>
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
                       {sc.config.serviceModes.map((m) => (
-                        <Chip key={m} label={m} size="small" sx={{ textTransform: 'capitalize' }} />
+                        <Chip
+                          key={m}
+                          label={m === 'in-person' ? 'Presencial' : 'Telemedicina'}
+                          size="small"
+                          sx={{ textTransform: 'capitalize' }}
+                        />
                       ))}
                     </Box>
                   </TableCell>
                   <TableCell>
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
                       {sc.config.visitTypes.map((t) => (
-                        <Chip key={t} label={t} size="small" sx={{ textTransform: 'capitalize' }} />
+                        <Chip
+                          key={t}
+                          label={t === 'prebook' ? 'Agendado' : 'Demanda Espontânea'}
+                          size="small"
+                          sx={{ textTransform: 'capitalize' }}
+                        />
                       ))}
                     </Box>
                   </TableCell>
                   <TableCell align="center">
                     {sc.systemManaged ? (
-                      <Tooltip title="Defined in compiled config; not editable from this page.">
-                        <Chip label="System" size="small" />
+                      <Tooltip title="Definido na configuração compilada; não editável nesta página.">
+                        <Chip label="Sistema" size="small" />
                       </Tooltip>
                     ) : (
-                      <BooleanStateChip state={sc.active} label={sc.active ? 'Active' : 'Inactive'} />
+                      <BooleanStateChip state={sc.active} label={sc.active ? 'Ativo' : 'Inativo'} />
                     )}
                   </TableCell>
                   <TableCell align="right" onClick={(e) => e.stopPropagation()}>
                     {!sc.systemManaged && (
                       <>
-                        <Tooltip title="Edit">
+                        <Tooltip title="Editar">
                           <IconButton
                             size="small"
                             onClick={() => {
@@ -514,7 +524,7 @@ export const ServiceCategoriesAdminPage: FC = () => {
                           </IconButton>
                         </Tooltip>
                         {sc.active && (
-                          <Tooltip title="Deactivate">
+                          <Tooltip title="Desativar">
                             <IconButton size="small" color="error" onClick={() => sc.id && handleDeactivate(sc.id)}>
                               <DeleteIcon fontSize="small" />
                             </IconButton>

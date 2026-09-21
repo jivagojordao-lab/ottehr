@@ -100,7 +100,7 @@ export default function ProgressNoteAdminPage(): ReactElement {
   return (
     <Box>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        Settings for how providers complete and sign progress notes
+        Configurações de como os profissionais preenchem e assinam as notas de evolução
       </Typography>
 
       {isPending ? (
@@ -108,21 +108,21 @@ export default function ProgressNoteAdminPage(): ReactElement {
           <CircularProgress />
         </Box>
       ) : isError ? (
-        <Alert severity="error">Failed to load the current progress note settings.</Alert>
+        <Alert severity="error">Falha ao carregar as configurações atuais da nota de evolução.</Alert>
       ) : (
         <Paper component="form" onSubmit={handleSubmit(onSubmit)} sx={{ p: 3 }}>
           <Stack spacing={3}>
             <Box>
               <Typography variant="subtitle1" sx={{ mb: 0.5 }}>
-                Assessment
+                Avaliação
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Standard content used when Medical Decision Making is pre-filled for a new note.
+                Conteúdo padrão utilizado quando a Tomada de Decisão Médica (TDM) é pré-preenchida para uma nova nota.
               </Typography>
               <ConfigTextAreaField
                 control={control}
                 name="medicalDecisionDefaultText"
-                label="Default Medical Decision Making content"
+                label="Conteúdo padrão da Tomada de Decisão Médica (TDM)"
                 minRows={4}
               />
             </Box>
@@ -131,10 +131,10 @@ export default function ProgressNoteAdminPage(): ReactElement {
 
             <Box>
               <Typography variant="subtitle1" sx={{ mb: 0.5 }}>
-                Disposition
+                Desfecho / Encaminhamento
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Default content displayed when a disposition option is selected
+                Conteúdo padrão exibido quando uma opção de desfecho é selecionada
               </Typography>
               <Stack spacing={2}>
                 <ConfigTextAreaField
@@ -164,7 +164,7 @@ export default function ProgressNoteAdminPage(): ReactElement {
                 render={({ field: { value, onChange } }) => (
                   <FormControlLabel
                     control={<Switch checked={value} onChange={(_event, checked) => onChange(checked)} />}
-                    label="MDM required for sign and close"
+                    label="TDM obrigatória para assinar e fechar"
                   />
                 )}
               />
@@ -174,20 +174,20 @@ export default function ProgressNoteAdminPage(): ReactElement {
 
             <Box>
               <Typography variant="subtitle1" sx={{ mb: 0.5 }}>
-                Vitals
+                Sinais Vitais
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Order of the unit input fields when a vital is entered (e.g. weight, height, temperature)
+                Ordem dos campos de unidade de medida quando um sinal vital é inserido (ex.: peso, altura, temperatura)
               </Typography>
               <Controller
                 name="vitalsUnitInputOrder"
                 control={control}
                 render={({ field: { value, onChange } }) => (
                   <FormControl fullWidth>
-                    <InputLabel id="vitals-unit-input-order-label">Vital measurement unit input order</InputLabel>
+                    <InputLabel id="vitals-unit-input-order-label">Ordem das unidades de medida dos sinais vitais</InputLabel>
                     <Select
                       labelId="vitals-unit-input-order-label"
-                      label="Vital measurement unit input order"
+                      label="Ordem das unidades de medida dos sinais vitais"
                       value={value}
                       onChange={(event) => onChange(event.target.value)}
                     >
@@ -209,18 +209,16 @@ export default function ProgressNoteAdminPage(): ReactElement {
                 <Divider />
                 <Box>
                   <Typography variant="subtitle1" sx={{ mb: 0.5 }}>
-                    Note review at signing
+                    Revisão da nota ao assinar
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                    Requirements checked against the note when a provider opens Review &amp; Sign. Anything not met is
-                    shown to the provider as an informational warning — it never blocks signing. Write it as
-                    instructions to a reviewer, e.g. &quot;Confirm at least 4 ROS systems are documented with at least
-                    one item each&quot;. Leave blank to turn the review off.
+                    Requisitos verificados na nota quando um profissional abre Revisar e Assinar. Qualquer pendência é
+                    exibida ao profissional como aviso informativo — nunca bloqueia a assinatura. Deixe em branco para desativar.
                   </Typography>
                   <ConfigTextAreaField
                     control={control}
                     name="signReviewPrompt"
-                    label="Note review requirements"
+                    label="Requisitos de revisão da nota"
                     minRows={4}
                   />
                 </Box>
@@ -231,7 +229,7 @@ export default function ProgressNoteAdminPage(): ReactElement {
 
             <Stack direction="row" spacing={1}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting} disabled={!isDirty}>
-                Save
+                Salvar
               </LoadingButton>
               <LoadingButton
                 type="button"
@@ -239,7 +237,7 @@ export default function ProgressNoteAdminPage(): ReactElement {
                 disabled={isSubmitting || !isDirty}
                 onClick={() => reset({ ...DEFAULT_PROGRESS_NOTE_CONFIG, ...data })}
               >
-                Discard changes
+                Descartar alterações
               </LoadingButton>
             </Stack>
           </Stack>

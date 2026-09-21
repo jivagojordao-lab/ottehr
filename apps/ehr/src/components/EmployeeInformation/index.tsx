@@ -187,12 +187,12 @@ export default function EmployeeInformationForm({
     let isError = false;
 
     if (data.roles.length < 1) {
-      setError('roles', { message: 'Roles are required' });
+      setError('roles', { message: 'Funções são obrigatórias' });
       isError = true;
     }
 
     if (data.addressLine2 && !data.addressLine1) {
-      setError('addressLine2', { message: 'Address line 2 cannot be filled without address line 1' });
+      setError('addressLine2', { message: 'Complemento não pode ser preenchido sem o Endereço' });
       isError = true;
     }
 
@@ -224,9 +224,9 @@ export default function EmployeeInformationForm({
         addressZip: data.addressZip,
       });
       await getUserAndUpdatePage();
-      const successMessage = `User ${data.firstName} ${data.lastName} was updated successfully.`;
+      const successMessage = `Colaborador ${data.firstName} ${data.lastName} atualizado com sucesso.`;
       if (evolveUser?.id === user.id) {
-        enqueueSnackbar(`${successMessage} The page will be refreshed in 3 seconds.`, {
+        enqueueSnackbar(`${successMessage} A página será recarregada em 3 segundos.`, {
           variant: 'success',
         });
         // wait 3 seconds for the snackbar to be seen before reloading
@@ -236,7 +236,7 @@ export default function EmployeeInformationForm({
       enqueueSnackbar(successMessage, { variant: 'success' });
     } catch (error) {
       console.log(`Failed to update user: ${error}`);
-      enqueueSnackbar('An error has occurred while updating user. Please try again.', {
+      enqueueSnackbar('Ocorreu um erro ao atualizar o colaborador. Tente novamente.', {
         variant: 'error',
       });
       setErrors((prev) => ({ ...prev, submit: true }));
@@ -336,7 +336,7 @@ export default function EmployeeInformationForm({
 
         {errors.submit && (
           <Typography color="error" variant="body2" mt={1}>
-            Failed to update user. Please try again.
+            Falha ao atualizar o colaborador. Tente novamente.
           </Typography>
         )}
 
@@ -371,7 +371,7 @@ export default function EmployeeInformationForm({
               fontWeight: 'bold',
             }}
           >
-            Cancel
+            Cancelar
           </Button>
         </Grid>
       </form>

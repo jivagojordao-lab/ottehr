@@ -37,9 +37,9 @@ export const AssignTaskDialog: React.FC<Props> = ({ task, handleClose, refetchDa
       handleConfirm={handleConfirm}
       disabled={!assignee}
       description={''}
-      title={'Assign Task'}
-      confirmText={'Assign'}
-      closeButtonText="Cancel"
+      title={'Atribuir Tarefa'}
+      confirmText={'Atribuir'}
+      closeButtonText="Cancelar"
       ContentComponent={
         <FormProvider {...methods}>
           <Stack minWidth="500px" spacing={1}>
@@ -55,7 +55,7 @@ export const AssignTaskDialog: React.FC<Props> = ({ task, handleClose, refetchDa
             <Typography variant="body2" display="inline">
               {task.subtitle}
             </Typography>
-            <EmployeeSelectInput name="assignee" label="Assignee" />
+            <EmployeeSelectInput name="assignee" label="Responsável" />
           </Stack>
         </FormProvider>
       }

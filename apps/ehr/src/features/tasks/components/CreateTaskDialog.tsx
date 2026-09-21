@@ -180,16 +180,16 @@ export const CreateTaskDialog: React.FC<Props> = ({ open, handleClose }) => {
       handleConfirm={handleConfirm}
       disabled={!formValue.category || !formValue.taskTitle || !formValue.location}
       description={''}
-      title={'New Task'}
-      confirmText={'Create new task'}
-      closeButtonText="Cancel"
+      title={'Nova Tarefa'}
+      confirmText={'Criar Nova Tarefa'}
+      closeButtonText="Cancelar"
       ContentComponent={
         <FormProvider {...methods}>
           <Stack minWidth="500px" spacing={1} paddingTop="8px">
-            <PatientSelectInput name="patient" label="Patient" />
+            <PatientSelectInput name="patient" label="Paciente" />
             <SelectInput
               name="appointment"
-              label="Visit"
+              label="Atendimento / Consulta"
               options={appointmentsLoading ? [] : appointmentOptions.map((appointment) => appointment.id)}
               getOptionLabel={(option) => appointmentOptions.find((opt) => opt.id === option)?.label ?? option}
               loading={appointmentsLoading}
@@ -197,24 +197,24 @@ export const CreateTaskDialog: React.FC<Props> = ({ open, handleClose }) => {
             />
             <SelectInput
               name="category"
-              label="Category"
+              label="Categoria"
               options={Object.values(MANUAL_TASK.category)}
               getOptionLabel={(option) => TASK_CATEGORY_LABEL[option]}
               required
             />
             <SelectInput
               name="order"
-              label="Order"
+              label="Pedido / Solicitação"
               options={orderOptions.map((order) => order.id)}
               getOptionLabel={(option) => orderOptions.find((opt) => opt.id === option)?.label ?? ''}
               loading={ordersLoading}
               disabled={!formValue.appointment || !formValue.category}
             />
-            <TextInput name="taskTitle" label="Title" required />
-            <TextInput name="taskDetails" label="Task details" />
+            <TextInput name="taskTitle" label="Título da Tarefa" required />
+            <TextInput name="taskDetails" label="Detalhes da tarefa" />
             <Stack direction="row" spacing={1}>
-              <EmployeeSelectInput name="assignee" label="Assign task to" />
-              <LocationSelectInput name="location" label="Location" type="in-person" required />
+              <EmployeeSelectInput name="assignee" label="Atribuir tarefa a" />
+              <LocationSelectInput name="location" label="Unidade" type="in-person" required />
             </Stack>
           </Stack>
         </FormProvider>

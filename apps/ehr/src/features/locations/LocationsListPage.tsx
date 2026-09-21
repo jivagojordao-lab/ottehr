@@ -93,7 +93,7 @@ export default function LocationsListPage(): ReactElement {
       >
         <TextField
           size="small"
-          label="Search name or ID"
+          label="Buscar por nome ou ID"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           sx={{ minWidth: 260 }}
@@ -106,20 +106,20 @@ export default function LocationsListPage(): ReactElement {
           onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
           sx={{ minWidth: 160 }}
         >
-          <MenuItem value="all">All</MenuItem>
-          <MenuItem value="active">Active only</MenuItem>
-          <MenuItem value="inactive">Inactive only</MenuItem>
+          <MenuItem value="all">Todos</MenuItem>
+          <MenuItem value="active">Apenas ativos</MenuItem>
+          <MenuItem value="inactive">Apenas inativos</MenuItem>
         </TextField>
         <Button variant="contained" startIcon={<AddIcon />} onClick={() => setAddOpen(true)} sx={{ ml: 'auto' }}>
-          Add location
+          Adicionar Unidade
         </Button>
       </Box>
       <TableContainer sx={{ overflow: 'auto' }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Address</TableCell>
+              <TableCell>Nome</TableCell>
+              <TableCell>Endereço</TableCell>
               <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
@@ -141,7 +141,7 @@ export default function LocationsListPage(): ReactElement {
                 <TableCell>
                   <BooleanStateChip
                     state={location.status === 'active'}
-                    label={location.status === 'active' ? 'Active' : 'Inactive'}
+                    label={location.status === 'active' ? 'Ativo' : 'Inativo'}
                   />
                 </TableCell>
               </TableRow>
@@ -149,7 +149,7 @@ export default function LocationsListPage(): ReactElement {
             {filtered.length === 0 && (
               <TableRow>
                 <TableCell colSpan={3}>
-                  <Typography color="text.secondary">No locations match the current filters.</Typography>
+                  <Typography color="text.secondary">Nenhuma unidade encontrada com os filtros atuais.</Typography>
                 </TableCell>
               </TableRow>
             )}
@@ -158,11 +158,11 @@ export default function LocationsListPage(): ReactElement {
       </TableContainer>
 
       <Dialog open={addOpen} onClose={() => setAddOpen(false)} fullWidth maxWidth="sm">
-        <DialogTitle>Add location</DialogTitle>
+        <DialogTitle>Adicionar Unidade</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
-            label="Name"
+            label="Nome da Unidade"
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             onKeyDown={(e) => {
@@ -175,19 +175,18 @@ export default function LocationsListPage(): ReactElement {
             sx={{ mt: 1 }}
           />
           <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
-            Creates an active, in-person location with a slug derived from the name — configure address, modes, and the
-            rest on the next page.
+            Cria uma unidade presencial ativa com base no nome informado — configure o endereço, modalidades e demais opções na próxima página.
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setAddOpen(false)}>Cancel</Button>
+          <Button onClick={() => setAddOpen(false)}>Cancelar</Button>
           <LoadingButton
             variant="contained"
             onClick={handleCreate}
             loading={createMutation.isPending}
             disabled={!newName.trim()}
           >
-            Create
+            Criar Unidade
           </LoadingButton>
         </DialogActions>
       </Dialog>

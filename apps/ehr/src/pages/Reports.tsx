@@ -141,7 +141,7 @@ function SavedReportTile({
     >
       {canManage && (
         <Box sx={{ position: 'absolute', top: 4, right: 4, zIndex: 2, display: 'flex' }}>
-          <Tooltip title="Edit">
+          <Tooltip title="Editar">
             <IconButton
               size="small"
               onClick={(e) => {
@@ -152,7 +152,7 @@ function SavedReportTile({
               <EditIcon fontSize="small" />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Delete">
+          <Tooltip title="Excluir">
             <IconButton
               size="small"
               onClick={(e) => {
@@ -229,59 +229,59 @@ interface ReportTileConfig {
 
 const REPORT_TILES: ReportTileConfig[] = [
   {
-    title: 'Incomplete Encounters',
-    description: 'View and manage encounters that are missing required information or documentation',
+    title: 'Consultas Incompletas',
+    description: 'Visualize e gerencie atendimentos pendentes de documentação ou requisitos',
     icon: <AssignmentLateIcon />,
     path: '/reports/incomplete-encounters',
   },
   {
-    title: 'Complete Encounters',
-    description: 'View encounters that have been completed',
+    title: 'Consultas Concluídas',
+    description: 'Visualize atendimentos que já foram finalizados',
     icon: <AssignmentTurnedInIcon />,
     path: '/reports/complete-encounters',
   },
   {
-    title: 'AI-Assisted Encounters',
-    description: 'View encounters with AI-generated documentation and assistant interactions',
+    title: 'Consultas com Suporte de IA',
+    description: 'Visualize atendimentos com documentação e assistência por inteligência artificial',
     icon: <PsychologyIcon />,
     path: '/reports/ai-assisted-encounters',
     adminOnly: true,
   },
   {
-    title: 'Ad-Hoc Report',
-    description: 'Describe a report in plain language and the AI generates it over the encounters dataset',
+    title: 'Relatório Personalizado',
+    description: 'Descreva um relatório em linguagem natural e a IA gerará os dados sobre os atendimentos',
     icon: <AutoAwesomeIcon />,
     path: '/reports/ad-hoc',
     requiredRoles: AD_HOC_REPORT_EDIT_ROLES,
   },
   {
-    title: 'Daily Payments',
-    description: 'Review daily payment reports and transaction summaries',
+    title: 'Recebimentos Diários',
+    description: 'Revise relatórios diários de pagamentos e resumos de transações',
     icon: <AttachMoneyIcon />,
     path: '/reports/daily-payments',
   },
   {
-    title: 'Practice KPIs',
-    description: 'View location-level performance metrics for in-person visits',
+    title: 'Indicadores da Clínica (KPIs)',
+    description: 'Visualize métricas de desempenho e produtividade para atendimentos presenciais',
     icon: <InsightsIcon />,
     path: '/reports/practice-kpis',
     adminOnly: true,
   },
   {
-    title: 'Visits Overview',
-    description: 'View appointment statistics and charts showing visit types (in-person vs telemed)',
+    title: 'Visão Geral de Atendimentos',
+    description: 'Estatísticas de consultas e gráficos comparando atendimentos presenciais e telemedicina',
     icon: <AssessmentIcon />,
     path: '/reports/visits-overview',
   },
   {
-    title: 'Recent Patients',
-    description: 'View list of recent patients with contact information and visit details',
+    title: 'Pacientes Recentes',
+    description: 'Lista de pacientes recentes com dados de contato e histórico de atendimentos',
     icon: <PeopleIcon />,
     path: '/reports/recent-patients',
   },
   {
-    title: 'Mailed Statements',
-    description: 'View patient statements sent by mail',
+    title: 'Extratos & Faturas Enviadas',
+    description: 'Visualize extratos e notificações de cobrança enviados aos pacientes',
     icon: <MailOutlineIcon />,
     path: '/reports/mailed-statements',
     adminOnly: true,
@@ -335,10 +335,10 @@ export default function Reports(): React.ReactElement {
     try {
       await deleteAdHocReport(oystehrZambda, { reportId: deleteTarget.id });
       setSavedReports((prev) => prev.filter((r) => r.id !== deleteTarget.id));
-      enqueueSnackbar(`Deleted “${deleteTarget.name}”.`, { variant: 'success' });
+      enqueueSnackbar(`Relatório “${deleteTarget.name}” excluído.`, { variant: 'success' });
       setDeleteTarget(null);
     } catch (e) {
-      enqueueSnackbar(e instanceof Error ? e.message : 'Could not delete the report.', { variant: 'error' });
+      enqueueSnackbar(e instanceof Error ? e.message : 'Não foi possível excluir o relatório.', { variant: 'error' });
     } finally {
       setBusy(false);
     }
@@ -354,11 +354,11 @@ export default function Reports(): React.ReactElement {
         reportId: id,
         definition: { ...definition, name: renameValue.trim(), description: descriptionValue.trim() || undefined },
       });
-      enqueueSnackbar('Report updated.', { variant: 'success' });
+      enqueueSnackbar('Relatório atualizado com sucesso.', { variant: 'success' });
       setRenameTarget(null);
       void refreshSaved();
     } catch (e) {
-      enqueueSnackbar(e instanceof Error ? e.message : 'Could not update the report.', { variant: 'error' });
+      enqueueSnackbar(e instanceof Error ? e.message : 'Não foi possível atualizar o relatório.', { variant: 'error' });
     } finally {
       setBusy(false);
     }
@@ -370,10 +370,10 @@ export default function Reports(): React.ReactElement {
         <Box>
           <Box sx={{ mb: 4 }}>
             <Typography variant="h4" component="h1" gutterBottom color="primary.dark" fontWeight={600}>
-              Reports
+              Relatórios
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              Select a report to view detailed information and analytics
+              Selecione um relatório para visualizar informações detalhadas e métricas
             </Typography>
           </Box>
 
@@ -396,14 +396,14 @@ export default function Reports(): React.ReactElement {
           {canViewAdHoc && (loadingSaved || savedReports.length > 0 || savedError) && (
             <Box sx={{ mt: 5 }}>
               <Typography variant="h5" component="h2" gutterBottom color="primary.dark" fontWeight={600}>
-                Saved reports
+                Relatórios Salvos
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                Saved ad-hoc reports re-fetch fresh data for their criteria each time you open them.
+                Relatórios personalizados salvos buscam dados atualizados a cada abertura.
               </Typography>
               {savedError && (
                 <Typography variant="body2" color="error" sx={{ mb: 2 }}>
-                  Saved reports could not be loaded. Refresh the page to try again.
+                  Não foi possível carregar os relatórios salvos. Atualize a página para tentar novamente.
                 </Typography>
               )}
               {loadingSaved && savedReports.length === 0 ? (
@@ -437,18 +437,18 @@ export default function Reports(): React.ReactElement {
           maxWidth="xs"
           fullWidth
         >
-          <DialogTitle>Delete saved report</DialogTitle>
+          <DialogTitle>Excluir relatório salvo</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Delete “{deleteTarget?.name}”? This removes the tile for everyone. The underlying data is unaffected.
+              Excluir “{deleteTarget?.name}”? Esta ação remove o relatório para todos. Os dados subjacentes permanecem inalterados.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setDeleteTarget(null)} disabled={busy}>
-              Cancel
+              Cancelar
             </Button>
             <Button color="error" variant="contained" onClick={() => void handleDelete()} disabled={busy}>
-              {busy ? <CircularProgress size={18} /> : 'Delete'}
+              {busy ? <CircularProgress size={18} /> : 'Excluir'}
             </Button>
           </DialogActions>
         </Dialog>
@@ -459,13 +459,13 @@ export default function Reports(): React.ReactElement {
           maxWidth="xs"
           fullWidth
         >
-          <DialogTitle>Edit report</DialogTitle>
+          <DialogTitle>Editar relatório</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
               fullWidth
               size="small"
-              label="Report name"
+              label="Nome do relatório"
               value={renameValue}
               onChange={(e) => setRenameValue(e.target.value)}
               onKeyDown={(e) => {
@@ -481,8 +481,8 @@ export default function Reports(): React.ReactElement {
               size="small"
               multiline
               minRows={2}
-              label="Description (optional)"
-              placeholder="A sentence or two describing what this report shows."
+              label="Descrição (opcional)"
+              placeholder="Uma frase ou duas descrevendo o que este relatório exibe."
               value={descriptionValue}
               onChange={(e) => setDescriptionValue(e.target.value)}
               sx={{ mt: 2 }}
@@ -490,10 +490,10 @@ export default function Reports(): React.ReactElement {
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setRenameTarget(null)} disabled={busy}>
-              Cancel
+              Cancelar
             </Button>
             <Button variant="contained" onClick={() => void handleSaveEdit()} disabled={busy || !renameValue.trim()}>
-              {busy ? <CircularProgress size={18} /> : 'Save'}
+              {busy ? <CircularProgress size={18} /> : 'Salvar'}
             </Button>
           </DialogActions>
         </Dialog>

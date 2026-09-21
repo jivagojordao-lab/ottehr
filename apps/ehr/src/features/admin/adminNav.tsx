@@ -83,28 +83,28 @@ export interface AdminNavGroup {
 
 export const adminNavGroups: AdminNavGroup[] = [
   {
-    label: 'Practice',
+    label: 'Clínica',
     items: [
       {
-        label: 'Locations',
+        label: 'Unidades',
         path: '/admin/locations',
         icon: <ApartmentOutlinedIcon />,
         render: () => <LocationsListPage />,
       },
       {
-        label: 'Services',
+        label: 'Serviços',
         path: '/admin/services',
         icon: <MedicalInformationOutlinedIcon />,
         render: () => <ServiceCategoriesAdminPage />,
       },
       {
-        label: 'Schedules',
+        label: 'Agendas',
         path: '/admin/schedules',
         icon: <CalendarMonthOutlinedIcon />,
         render: () => <SchedulesPage />,
       },
       {
-        label: 'Provider groups',
+        label: 'Grupos de Profissionais',
         path: '/admin/provider-groups',
         icon: <Groups2OutlinedIcon />,
         render: () => <ProviderGroupsPage />,
@@ -112,10 +112,10 @@ export const adminNavGroups: AdminNavGroup[] = [
     ],
   },
   {
-    label: 'People',
+    label: 'Equipe',
     items: [
       {
-        label: 'Employees',
+        label: 'Colaboradores',
         path: '/admin/employees',
         icon: <AccountCircleOutlinedIcon />,
         render: () => <EmployeesPage />,
@@ -123,34 +123,34 @@ export const adminNavGroups: AdminNavGroup[] = [
     ],
   },
   {
-    label: 'Clinical',
+    label: 'Clínico',
     items: [
       {
-        label: 'Global Templates',
+        label: 'Modelos Globais',
         path: '/admin/global-templates',
         icon: <HistoryEduOutlinedIcon />,
         render: () => <GlobalTemplatesAdminPage />,
       },
       {
-        label: 'Quick Picks',
+        label: 'Seleção Rápida',
         path: '/admin/quick-picks',
         icon: <BookmarkBorderOutlinedIcon />,
         render: () => <QuickPicksAdminPage />,
       },
       {
-        label: 'In-House Labs',
+        label: 'Exames Internos',
         path: '/admin/in-house-labs',
         icon: <InHouseLabsIcon />,
         render: () => <InHouseLabAdminPage />,
       },
       {
-        label: 'Lab Sets',
+        label: 'Painéis de Exames',
         path: '/admin/lab-sets',
         icon: <ListOutlinedIcon />,
         render: () => <LabSetsAdminPage />,
       },
       {
-        label: 'In-House Medications',
+        label: 'Medicamentos Internos',
         path: '/admin/medications',
         icon: <MedicationOutlinedIcon />,
         render: () => <MedicationsConfigurationPage />,
@@ -158,40 +158,40 @@ export const adminNavGroups: AdminNavGroup[] = [
     ],
   },
   {
-    label: 'Billing',
+    label: 'Faturamento',
     items: [
       {
-        label: 'Insurance',
+        label: 'Convênios',
         path: '/admin/billing/insurance',
         icon: <InsuranceIcon />,
         render: (ctx) => <InsuranceConfiguration insuranceTab={ctx.insuranceTab} />,
       },
       {
-        label: 'Fee Schedules',
+        label: 'Tabelas de Honorários',
         path: '/admin/billing/fee-schedules',
         icon: <FeeSchedulesIcon />,
         render: () => <ChargeItemList />,
       },
       {
-        label: 'Charge Masters',
+        label: 'Tabela de Preços',
         path: '/admin/billing/charge-masters',
         icon: <PaidOutlinedIcon />,
         render: () => <ChargeItemList mode="charge-master" />,
       },
       {
-        label: 'Employers',
+        label: 'Empresas Conveniadas',
         path: '/admin/billing/employers',
         icon: <BusinessCenterOutlinedIcon />,
         render: () => <EmployersTab />,
       },
       {
-        label: 'Invoicing',
+        label: 'Faturamento',
         path: '/admin/billing/invoicing',
         icon: <ReceiptLongOutlinedIcon />,
         render: () => <Invoicing />,
       },
       {
-        label: 'E&M Codes',
+        label: 'Códigos E&M',
         path: '/admin/billing/em-codes',
         icon: <PinOutlinedIcon />,
         render: () => <EMCodesAdminPage />,
@@ -199,24 +199,24 @@ export const adminNavGroups: AdminNavGroup[] = [
     ],
   },
   {
-    label: 'Patient',
+    label: 'Paciente',
     items: [
       {
-        label: 'Patient Instructions',
+        label: 'Instruções ao Paciente',
         path: '/admin/patient-education',
         icon: <ArticleOutlinedIcon />,
         render: () => <PatientEducationAdminPage />,
       },
       {
-        label: 'Label Printing',
-        title: 'Configure Print Settings',
+        label: 'Impressão de Etiquetas',
+        title: 'Configuração de Impressão',
         path: '/admin/label-printing-config',
         icon: <PrintOutlinedIcon />,
         centered: true,
         render: () => <AdminPrintingConfig />,
       },
       {
-        label: 'Docs Folders',
+        label: 'Pastas de Documentos',
         path: '/admin/docs-folders',
         icon: <FolderCopyOutlinedIcon />,
         render: () => <AdminCustomFoldersPage />,
@@ -224,10 +224,10 @@ export const adminNavGroups: AdminNavGroup[] = [
     ],
   },
   {
-    label: 'Communications',
+    label: 'Comunicação & Cobrança',
     items: [
       {
-        label: FEATURE_FLAGS.OTTEHR_BILLING_INVOICING_ENABLED ? 'Patient Invoicing — Candid' : 'Patient Invoicing',
+        label: FEATURE_FLAGS.OTTEHR_BILLING_INVOICING_ENABLED ? 'Faturamento de Pacientes — Candid' : 'Faturamento de Pacientes',
         path: '/admin/outreach/patient-invoices',
         icon: <EmailOutlinedIcon />,
         render: () => <InvoiceablePatients source="candid" />,
@@ -236,8 +236,8 @@ export const adminNavGroups: AdminNavGroup[] = [
         ? [
             {
               label: FEATURE_FLAGS.OTTEHR_BILLING_INVOICING_ENABLED
-                ? 'Patient Invoicing — Ottehr Billing'
-                : 'Patient Invoicing',
+                ? 'Faturamento de Pacientes — Ottehr Billing'
+                : 'Faturamento de Pacientes',
               path: '/admin/outreach/patient-invoices-billing',
               icon: <EmailOutlinedIcon />,
               render: () => <InvoiceablePatients source="ottehr-billing" />,
@@ -245,15 +245,15 @@ export const adminNavGroups: AdminNavGroup[] = [
           ]
         : []),
       {
-        label: 'Automated Outreach',
-        title: 'Patient Outreach, Collections and Automation',
+        label: 'Notificações Automáticas',
+        title: 'Notificações de Pacientes, Cobrança e Automação',
         beta: true,
         path: '/admin/outreach/patient-outreach',
         icon: <SendOutlinedIcon />,
         render: (ctx) => <ScheduledPatientOutreach outreachTab={ctx.outreachDetailTab} />,
       },
       {
-        label: 'Action Logs',
+        label: 'Histórico de Ações',
         path: '/admin/action-logs',
         icon: <FaxOutlinedIcon />,
         allowedRoles: GLOBAL_ACTION_LOG_VIEWER_ROLES,
@@ -262,30 +262,30 @@ export const adminNavGroups: AdminNavGroup[] = [
     ],
   },
   {
-    label: 'General',
+    label: 'Geral',
     items: [
       {
-        label: 'Support Dialog',
+        label: 'Ajuda / Suporte',
         path: '/admin/support-dialog',
         icon: <SupportAgentOutlinedIcon />,
         centered: true,
         render: () => <SupportDialogAdminPage />,
       },
       {
-        label: 'Progress Note',
+        label: 'Prontuário',
         path: '/admin/progress-note',
         icon: <ProgressNoteIcon />,
         centered: true,
         render: () => <ProgressNoteAdminPage />,
       },
       {
-        label: 'Questionnaires',
+        label: 'Questionários',
         path: '/admin/questionnaires',
         icon: <ListAltIcon />,
         render: () => <QuestionnaireAdminPage />,
       },
       {
-        label: 'Paperwork Flows',
+        label: 'Fluxos de Documentação',
         path: '/admin/paperwork-flows',
         icon: <AccountTreeOutlinedIcon />,
         render: () => <PaperworkFlowsAdminPage />,

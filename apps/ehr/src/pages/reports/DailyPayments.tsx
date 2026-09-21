@@ -277,26 +277,26 @@ export default function DailyPayments(): React.ReactElement {
   const getDateRangeLabel = (filter: string): string => {
     switch (filter) {
       case 'today':
-        return 'Today';
+        return 'Hoje';
       case 'yesterday':
-        return 'Yesterday';
+        return 'Ontem';
       case 'last7days':
-        return 'Last 7 days';
+        return 'Últimos 7 dias';
       case 'last30days':
-        return 'Last 30 days';
+        return 'Últimos 30 dias';
       case 'custom':
-        return `Custom date (${DateTime.fromISO(customDate).toFormat('MMM dd, yyyy')})`;
+        return `Data personalizada (${DateTime.fromISO(customDate).toFormat('dd/MM/yyyy')})`;
       case 'customRange':
-        return `Custom range (${DateTime.fromISO(customStartDate).toFormat('MMM dd')} - ${DateTime.fromISO(
+        return `Intervalo personalizado (${DateTime.fromISO(customStartDate).toFormat('dd/MM')} - ${DateTime.fromISO(
           customEndDate
-        ).toFormat('MMM dd, yyyy')})`;
+        ).toFormat('dd/MM/yyyy')})`;
       default:
-        return 'Today';
+        return 'Hoje';
     }
   };
 
-  // Extract all individual payments from payment methods
-  const allPayments = useMemo((): PaymentItem[] => {
+  // Extract all individual payments from all payment methods
+  const allPayments = useMemo(() => {
     if (!reportData) return [];
 
     const payments: PaymentItem[] = [];
@@ -322,16 +322,16 @@ export default function DailyPayments(): React.ReactElement {
   const paymentColumns: GridColDef[] = [
     {
       field: 'createdDate',
-      headerName: 'Date',
+      headerName: 'Data',
       width: 160,
       valueFormatter: (params) => {
         if (!params.value) return 'N/A';
-        return DateTime.fromISO(params.value as string).toFormat('MM/dd/yyyy HH:mm');
+        return DateTime.fromISO(params.value as string).toFormat('dd/MM/yyyy HH:mm');
       },
     },
     {
       field: 'amount',
-      headerName: 'Amount',
+      headerName: 'Valor',
       width: 120,
       align: 'right',
       headerAlign: 'right',
@@ -339,10 +339,10 @@ export default function DailyPayments(): React.ReactElement {
     },
     {
       field: 'paymentMethod',
-      headerName: 'Payment Method',
+      headerName: 'Forma de Pagamento',
       width: 200,
       renderCell: (params) => (
-        <Chip label={params.value || 'Unknown'} size="small" variant="outlined" sx={{ maxWidth: '180px' }} />
+        <Chip label={params.value || 'Desconhecido'} size="small" variant="outlined" sx={{ maxWidth: '180px' }} />
       ),
     },
   ];
@@ -357,26 +357,26 @@ export default function DailyPayments(): React.ReactElement {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <AttachMoneyIcon sx={{ fontSize: 32, color: 'primary.main' }} />
             <Typography variant="h4" component="h1" color="primary.dark" fontWeight={600}>
-              Daily Payments Report
+              Relatório de Recebimentos Diários
             </Typography>
           </Box>
         </Box>
 
         <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-          Review daily payment reports and transaction summaries for {getDateRangeLabel(dateFilter).toLowerCase()}.
+          Revise os relatórios diários de pagamentos e resumos de transações para {getDateRangeLabel(dateFilter).toLowerCase()}.
         </Typography>
 
         {/* Date Filter */}
         <Box sx={{ mb: 3, display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
           <FormControl size="small" sx={{ minWidth: 200 }}>
-            <InputLabel>Date Range</InputLabel>
-            <Select value={dateFilter} label="Date Range" onChange={handleDateFilterChange}>
-              <MenuItem value="today">Today</MenuItem>
-              <MenuItem value="yesterday">Yesterday</MenuItem>
-              <MenuItem value="last7days">Last 7 days</MenuItem>
-              <MenuItem value="last30days">Last 30 days</MenuItem>
-              <MenuItem value="custom">Custom Date</MenuItem>
-              <MenuItem value="customRange">Custom Date Range</MenuItem>
+            <InputLabel>Período</InputLabel>
+            <Select value={dateFilter} label="Período" onChange={handleDateFilterChange}>
+              <MenuItem value="today">Hoje</MenuItem>
+              <MenuItem value="yesterday">Ontem</MenuItem>
+              <MenuItem value="last7days">Últimos 7 dias</MenuItem>
+              <MenuItem value="last30days">Últimos 30 dias</MenuItem>
+              <MenuItem value="custom">Data Personalizada</MenuItem>
+              <MenuItem value="customRange">Intervalo Personalizado</MenuItem>
             </Select>
           </FormControl>
 
@@ -398,7 +398,7 @@ export default function DailyPayments(): React.ReactElement {
               <TextField
                 type="date"
                 size="small"
-                label="Start Date"
+                label="Data Inicial"
                 value={customStartDate}
                 onChange={handleCustomStartDateChange}
                 sx={{ minWidth: 160 }}
@@ -409,7 +409,7 @@ export default function DailyPayments(): React.ReactElement {
               <TextField
                 type="date"
                 size="small"
-                label="End Date"
+                label="Data Final"
                 value={customEndDate}
                 onChange={handleCustomEndDateChange}
                 sx={{ minWidth: 160 }}
@@ -421,14 +421,14 @@ export default function DailyPayments(): React.ReactElement {
           )}
 
           <FormControl size="small" sx={{ minWidth: 200 }}>
-            <InputLabel>Location</InputLabel>
+            <InputLabel>Unidade</InputLabel>
             <Select
               value={selectedLocationId}
-              label="Location"
+              label="Unidade"
               onChange={handleLocationFilterChange}
               disabled={loadingLocations}
             >
-              <MenuItem value="all">All Locations</MenuItem>
+              <MenuItem value="all">Todas as Unidades</MenuItem>
               {locations
                 .filter((loc) => loc.name)
                 .map((location) => (
@@ -440,7 +440,7 @@ export default function DailyPayments(): React.ReactElement {
           </FormControl>
 
           <Button variant="outlined" onClick={() => void fetchReport(dateFilter)} disabled={loading}>
-            Refresh
+            Atualizar
           </Button>
         </Box>
 
@@ -463,13 +463,13 @@ export default function DailyPayments(): React.ReactElement {
               <Card>
                 <CardContent>
                   <Typography variant="h6" color="primary.main" gutterBottom>
-                    Total Payments
+                    Total de Recebimentos
                   </Typography>
                   <Typography variant="h4" fontWeight="bold">
                     {formatCurrency(reportData.totalAmount)}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {reportData.totalTransactions} transactions
+                    {reportData.totalTransactions} transações
                   </Typography>
                 </CardContent>
               </Card>
@@ -477,13 +477,13 @@ export default function DailyPayments(): React.ReactElement {
               <Card>
                 <CardContent>
                   <Typography variant="h6" color="primary.main" gutterBottom>
-                    Payment Methods
+                    Formas de Pagamento
                   </Typography>
                   <Typography variant="h4" fontWeight="bold">
                     {reportData.paymentMethods.length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Different methods used
+                    Métodos distintos utilizados
                   </Typography>
                 </CardContent>
               </Card>
@@ -492,7 +492,7 @@ export default function DailyPayments(): React.ReactElement {
             {/* Payment Method Summaries */}
             <Box sx={{ mb: 4 }}>
               <Typography variant="h6" sx={{ mb: 2 }}>
-                Payment Methods Summary
+                Resumo por Forma de Pagamento
               </Typography>
               <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 2 }}>
                 {reportData.paymentMethods.map((summary: PaymentMethodSummary, index: number) => (
@@ -500,10 +500,10 @@ export default function DailyPayments(): React.ReactElement {
                     <CardContent>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
                         <Typography variant="subtitle1" fontWeight="bold">
-                          {summary.paymentMethod || 'Unknown Method'}
+                          {summary.paymentMethod || 'Forma Desconhecida'}
                         </Typography>
                         <Chip
-                          label={`${summary.transactionCount} payments`}
+                          label={`${summary.transactionCount} pagamentos`}
                           size="small"
                           sx={{ backgroundColor: otherColors.lightBlue, color: 'primary.main' }}
                         />
@@ -512,7 +512,7 @@ export default function DailyPayments(): React.ReactElement {
                         {formatCurrency(summary.totalAmount)}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        Average: {formatCurrency(summary.totalAmount / summary.transactionCount)}
+                        Média: {formatCurrency(summary.totalAmount / summary.transactionCount)}
                       </Typography>
                     </CardContent>
                   </Card>
@@ -523,7 +523,7 @@ export default function DailyPayments(): React.ReactElement {
             {/* Individual Payments Table */}
             <Box sx={{ mb: 4 }}>
               <Typography variant="h6" sx={{ mb: 2 }}>
-                Individual Payments
+                Lançamentos Individuais de Pagamento
               </Typography>
               <Box sx={{ height: 600, width: '100%', maxWidth: 800 }}>
                 <DataGridPro
@@ -558,10 +558,10 @@ export default function DailyPayments(): React.ReactElement {
             {reportData.paymentMethods.length === 0 && (
               <Box sx={{ textAlign: 'center', py: 8 }}>
                 <Typography variant="h6" color="text.secondary">
-                  No payments found for the selected period
+                  Nenhum pagamento encontrado para o período selecionado
                 </Typography>
                 <Typography variant="body2" color="text.disabled" sx={{ mt: 2 }}>
-                  Try selecting a different date range or check back later.
+                  Tente selecionar outro intervalo de datas ou retorne mais tarde.
                 </Typography>
               </Box>
             )}

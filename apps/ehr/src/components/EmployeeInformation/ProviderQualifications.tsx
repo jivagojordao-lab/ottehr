@@ -51,11 +51,11 @@ export function ProviderQualifications({
             <Table data-testid={dataTestIds.employeesPage.qualificationsTable}>
               <TableHead>
                 <TableRow>
-                  <TableCell>State</TableCell>
-                  <TableCell align="left">Qualification</TableCell>
-                  <TableCell align="left">License</TableCell>
-                  <TableCell align="left">Operate in state</TableCell>
-                  <TableCell align="left">Delete License</TableCell>
+                  <TableCell>Estado</TableCell>
+                  <TableCell align="left">Qualificação</TableCell>
+                  <TableCell align="left">Licença / Registro</TableCell>
+                  <TableCell align="left">Atuar no estado</TableCell>
+                  <TableCell align="left">Excluir Licença</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -67,7 +67,7 @@ export function ProviderQualifications({
                       {license.number && <Typography>{license.number}</Typography>}
                       {license.date && (
                         <Typography variant="body2" color="secondary.light">
-                          till {DateTime.fromISO(license.date).toFormat('MM/dd/yyyy')}
+                          até {DateTime.fromISO(license.date).toFormat('dd/MM/yyyy')}
                         </Typography>
                       )}
                     </TableCell>
@@ -115,7 +115,7 @@ export function ProviderQualifications({
           data-testid={dataTestIds.employeesPage.addQualificationCard}
         >
           <Typography fontWeight={600} color="primary.dark">
-            Add state qualification
+            Adicionar qualificação estadual
           </Typography>
 
           <Stack direction="row" spacing={2}>
@@ -132,10 +132,10 @@ export function ProviderQualifications({
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="State"
+                      label="Estado"
                       data-testid={dataTestIds.employeesPage.newQualificationStateDropdown}
                       error={errors.state}
-                      helperText={errors.state ? 'Please select a state' : null}
+                      helperText={errors.state ? 'Selecione um estado' : null}
                     />
                   )}
                   onChange={(_, value: string | null) => field.onChange(value ?? undefined)}
@@ -157,10 +157,10 @@ export function ProviderQualifications({
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Qualification"
+                      label="Qualificação"
                       data-testid={dataTestIds.employeesPage.newQualificationTypeDropdown}
                       error={errors.qualification}
-                      helperText={errors.qualification ? 'Please select a qualification' : null}
+                      helperText={errors.qualification ? 'Selecione uma qualificação' : null}
                     />
                   )}
                   onChange={(_, value: string | null) => field.onChange(value ?? undefined)}
@@ -179,10 +179,10 @@ export function ProviderQualifications({
                   {...field}
                   fullWidth
                   size="small"
-                  label="License number"
+                  label="Número da licença"
                   data-testid={dataTestIds.employeesPage.newQualificationNumberField}
                   error={errors.number}
-                  helperText={errors.number ? 'Please enter license number' : null}
+                  helperText={errors.number ? 'Informe o número da licença' : null}
                   onChange={(e) => field.onChange(e.target.value ?? undefined)}
                   value={field.value || ''}
                 />
@@ -195,13 +195,13 @@ export function ProviderQualifications({
               render={({ field: { onChange, value } }) => (
                 <LocalizationProvider dateAdapter={AdapterLuxon}>
                   <DatePicker
-                    label="Expiration date"
+                    label="Data de validade"
                     onChange={onChange}
                     slotProps={{
                       textField: {
                         style: { width: '100%' },
                         size: 'small',
-                        helperText: errors.date ? 'Please enter expiration date' : null,
+                        helperText: errors.date ? 'Informe a data de validade' : null,
                         error: errors.date,
                         inputProps: {
                           'data-testid': dataTestIds.employeesPage.newQualificationExpDatePicker,
@@ -213,32 +213,14 @@ export function ProviderQualifications({
                 </LocalizationProvider>
               )}
             />
-
-            {/*<Controller*/}
-            {/*  name="newLicenseExpirationDate"*/}
-            {/*  control={control}*/}
-            {/*  render={({ field }) => (*/}
-            {/*    <TextField*/}
-            {/*      {...field}*/}
-            {/*      fullWidth*/}
-            {/*      size="small"*/}
-            {/*      label="Expiration date"*/}
-            {/*      data-testid={dataTestIds.employeesPage.newQualificationTypeDropdown}*/}
-            {/*      error={errors.qualification}*/}
-            {/*      helperText={errors.qualification ? 'Please select a qualification' : null}*/}
-            {/*      onChange={(e) => field.onChange(e.target.value ?? undefined)}*/}
-            {/*      value={field.value || null}*/}
-            {/*    />*/}
-            {/*  )}*/}
-            {/*/>*/}
           </Stack>
 
           <RoundedButton data-testid={dataTestIds.employeesPage.addQualificationButton} onClick={handleAddLicense}>
-            Add
+            Adicionar
           </RoundedButton>
 
           {errors.duplicateLicense && (
-            <Typography color="error" variant="body2" mt={1} mx={1}>{`License already exists.`}</Typography>
+            <Typography color="error" variant="body2" mt={1} mx={1}>{`Licença já cadastrada.`}</Typography>
           )}
         </Card>
       </Stack>

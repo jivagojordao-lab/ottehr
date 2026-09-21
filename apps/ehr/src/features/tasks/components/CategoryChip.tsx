@@ -20,7 +20,7 @@ export const CategoryChip: React.FC<Props> = ({ category }) => {
       justifyContent="center"
     >
       <Typography variant="body2" display="inline" style={{ color: '#2169F5', fontSize: '13px' }}>
-        {TASK_CATEGORY_LABEL[category] ?? 'Unknown'}
+        {TASK_CATEGORY_LABEL[category] ?? 'Desconhecido'}
       </Typography>
     </Box>
   );

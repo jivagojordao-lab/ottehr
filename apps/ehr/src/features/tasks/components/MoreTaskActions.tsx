@@ -64,7 +64,7 @@ export const MoreTaskActions: React.FC<MoreTaskActionsProps> = ({ task, currentU
                   <ListItemIcon>
                     <ShortcutIcon color="primary" style={{ transform: 'scaleX(-1)' }} />
                   </ListItemIcon>
-                  <ListItemText primary="Unassign" />
+                  <ListItemText primary="Desatribuir" />
                 </ListItemButton>
               </ListItem>
             ) : (
@@ -88,7 +88,7 @@ export const MoreTaskActions: React.FC<MoreTaskActionsProps> = ({ task, currentU
                     <ListItemIcon>
                       <HowToRegOutlinedIcon color="primary" />
                     </ListItemIcon>
-                    <ListItemText primary="Assign me" />
+                    <ListItemText primary="Atribuir a mim" />
                   </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
@@ -101,7 +101,7 @@ export const MoreTaskActions: React.FC<MoreTaskActionsProps> = ({ task, currentU
                     <ListItemIcon>
                       <PersonAddIcon color="primary" style={{ transform: 'scaleX(-1)' }} />
                     </ListItemIcon>
-                    <ListItemText primary="Assign to someone else" />
+                    <ListItemText primary="Atribuir a outro profissional" />
                   </ListItemButton>
                 </ListItem>
               </>

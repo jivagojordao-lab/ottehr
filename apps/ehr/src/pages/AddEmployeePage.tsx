@@ -45,11 +45,11 @@ export default function AddEmployeePage(): ReactElement {
       }
 
       if (parsedError?.code === APIErrorCode.USER_ALREADY_EXISTS) {
-        enqueueSnackbar('User is already a member of the project', { variant: 'error' });
+        enqueueSnackbar('Usuário já é membro do projeto', { variant: 'error' });
         return;
       }
 
-      enqueueSnackbar('Unexpected error while creating user', { variant: 'error' });
+      enqueueSnackbar('Erro inesperado ao criar usuário', { variant: 'error' });
     } finally {
       setLoading(false);
     }
@@ -62,22 +62,22 @@ export default function AddEmployeePage(): ReactElement {
           {/* Breadcrumbs */}
           <CustomBreadcrumbs
             chain={[
-              { link: '/admin', children: 'Admin' },
-              { link: '/admin/employees', children: 'Employees' },
-              { link: '#', children: 'Add user' },
+              { link: '/admin', children: 'Administração' },
+              { link: '/admin/employees', children: 'Colaboradores' },
+              { link: '#', children: 'Adicionar colaborador' },
             ]}
           />
           <Paper sx={{ padding: 2 }}>
             {/* Page title */}
             <Typography variant="h3" color="primary.dark" marginBottom={1}>
-              Add user
+              Adicionar colaborador
             </Typography>
             <Typography variant="body1" sx={{ marginBottom: 2 }}>
-              This will immediately give the user the Staff role.
+              Isso atribuirá imediatamente a função de Recepção / Equipe ao usuário.
             </Typography>
             <form onSubmit={createEmployee}>
               <TextField
-                label="Email"
+                label="E-mail"
                 type="email"
                 required
                 value={email}
@@ -89,7 +89,7 @@ export default function AddEmployeePage(): ReactElement {
               />
               <br />
               <TextField
-                label="First name"
+                label="Nome"
                 required
                 value={firstName}
                 onChange={(event) => setFirstName(event.target.value)}
@@ -100,7 +100,7 @@ export default function AddEmployeePage(): ReactElement {
               />
               <br />
               <TextField
-                label="Last name"
+                label="Sobrenome"
                 required
                 value={lastName}
                 onChange={(event) => setLastName(event.target.value)}
@@ -111,7 +111,7 @@ export default function AddEmployeePage(): ReactElement {
               />
               <br />
               <LoadingButton type="submit" loading={loading} variant="contained" sx={{ marginTop: 2 }}>
-                Save
+                Salvar
               </LoadingButton>
             </form>
           </Paper>

@@ -18,7 +18,7 @@ export function BasicInformation({ control, existingUser, isActive }: BasicInfor
   return (
     <Box>
       <Typography sx={{ ...theme.typography.h4, color: theme.palette.primary.dark, mb: 2 }}>
-        Employee information
+        Informações do colaborador
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={4}>
@@ -27,7 +27,7 @@ export function BasicInformation({ control, existingUser, isActive }: BasicInfor
             control={control}
             render={({ field: { onChange, value } }) => (
               <TextField
-                label="First name"
+                label="Nome"
                 required
                 disabled={fieldsDisabled}
                 data-testid={dataTestIds.employeesPage.firstName}
@@ -45,7 +45,7 @@ export function BasicInformation({ control, existingUser, isActive }: BasicInfor
             control={control}
             render={({ field: { onChange, value } }) => (
               <TextField
-                label="Middle name"
+                label="Nome do meio"
                 data-testid={dataTestIds.employeesPage.middleName}
                 value={value || ''}
                 disabled={fieldsDisabled}
@@ -62,7 +62,7 @@ export function BasicInformation({ control, existingUser, isActive }: BasicInfor
             control={control}
             render={({ field: { onChange, value } }) => (
               <TextField
-                label="Last name"
+                label="Sobrenome"
                 data-testid={dataTestIds.employeesPage.lastName}
                 required
                 disabled={fieldsDisabled}
@@ -78,7 +78,7 @@ export function BasicInformation({ control, existingUser, isActive }: BasicInfor
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <TextField
-            label="Email"
+            label="E-mail"
             data-testid={dataTestIds.employeesPage.email}
             value={existingUser?.email ?? ''}
             sx={{ width: '100%' }}
@@ -97,12 +97,12 @@ export function BasicInformation({ control, existingUser, isActive }: BasicInfor
             rules={{
               pattern: {
                 value: phoneRegex,
-                message: 'Phone number must be 10 digits in the format (xxx) xxx-xxxx',
+                message: 'Telefone deve ter 10 dígitos no formato (xxx) xxx-xxxx',
               },
             }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <TextField
-                label="Phone"
+                label="Telefone"
                 data-testid={dataTestIds.employeesPage.phone}
                 value={value || ''}
                 disabled={fieldsDisabled}
@@ -129,7 +129,7 @@ export function BasicInformation({ control, existingUser, isActive }: BasicInfor
             rules={{
               pattern: {
                 value: phoneRegex,
-                message: 'Fax number must be 10 digits in the format (xxx) xxx-xxxx and a valid number',
+                message: 'Fax deve ter 10 dígitos no formato (xxx) xxx-xxxx',
               },
             }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -163,10 +163,10 @@ export function BasicInformation({ control, existingUser, isActive }: BasicInfor
                 if (value) {
                   const date = DateTime.fromISO(value);
                   if (!date.isValid) {
-                    return 'Please enter a valid birth date';
+                    return 'Informe uma data de nascimento válida';
                   }
                   if (date > DateTime.now()) {
-                    return 'Birth date cannot be in the future';
+                    return 'Data de nascimento não pode estar no futuro';
                   }
                 }
                 return true;
@@ -175,7 +175,7 @@ export function BasicInformation({ control, existingUser, isActive }: BasicInfor
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <LocalizationProvider dateAdapter={AdapterLuxon}>
                 <DatePicker
-                  label="Birth date"
+                  label="Data de nascimento"
                   onChange={onChange}
                   disabled={fieldsDisabled}
                   slotProps={{
@@ -203,7 +203,7 @@ export function BasicInformation({ control, existingUser, isActive }: BasicInfor
             control={control}
             render={({ field: { onChange, value } }) => (
               <TextField
-                label="Address line 1"
+                label="Endereço"
                 data-testid={dataTestIds.employeesPage.addressLine1}
                 value={value || ''}
                 disabled={fieldsDisabled}
@@ -220,7 +220,7 @@ export function BasicInformation({ control, existingUser, isActive }: BasicInfor
             control={control}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <TextField
-                label="Address line 2"
+                label="Complemento"
                 data-testid={dataTestIds.employeesPage.addressLine2}
                 value={value || ''}
                 onChange={onChange}
@@ -242,7 +242,7 @@ export function BasicInformation({ control, existingUser, isActive }: BasicInfor
             control={control}
             render={({ field: { onChange, value } }) => (
               <TextField
-                label="City"
+                label="Cidade"
                 data-testid={dataTestIds.employeesPage.addressCity}
                 value={value || ''}
                 disabled={fieldsDisabled}
@@ -267,7 +267,7 @@ export function BasicInformation({ control, existingUser, isActive }: BasicInfor
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="State"
+                    label="Estado"
                     margin="dense"
                     inputProps={{
                       ...params.inputProps,
@@ -286,12 +286,12 @@ export function BasicInformation({ control, existingUser, isActive }: BasicInfor
             rules={{
               pattern: {
                 value: zipRegex,
-                message: 'ZIP Code must be 5 or 9 numbers',
+                message: 'CEP deve conter dígitos válidos',
               },
             }}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <TextField
-                label="Zip"
+                label="CEP"
                 data-testid={dataTestIds.employeesPage.addressZip}
                 error={error?.message !== undefined}
                 value={value || ''}

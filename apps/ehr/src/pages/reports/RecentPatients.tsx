@@ -233,19 +233,19 @@ export default function RecentPatients(): React.ReactElement {
     (filter: string): string => {
       switch (filter) {
         case 'today':
-          return 'Today';
+          return 'Hoje';
         case 'yesterday':
-          return 'Yesterday';
+          return 'Ontem';
         case 'last7days':
-          return 'Last 7 days';
+          return 'Últimos 7 dias';
         case 'last30days':
-          return 'Last 30 days';
+          return 'Últimos 30 dias';
         case 'customRange':
-          return `${DateTime.fromISO(customStartDate).toFormat('MMM dd')} - ${DateTime.fromISO(customEndDate).toFormat(
-            'MMM dd, yyyy'
+          return `${DateTime.fromISO(customStartDate).toFormat('dd/MM')} - ${DateTime.fromISO(customEndDate).toFormat(
+            'dd/MM/yyyy'
           )}`;
         default:
-          return 'Today';
+          return 'Hoje';
       }
     },
     [customStartDate, customEndDate]
@@ -256,7 +256,7 @@ export default function RecentPatients(): React.ReactElement {
       [
         {
           field: 'patientId',
-          headerName: 'Patient ID',
+          headerName: 'ID do Paciente',
           flex: 1,
           minWidth: 120,
           sortable: true,
@@ -271,21 +271,21 @@ export default function RecentPatients(): React.ReactElement {
         },
         {
           field: 'firstName',
-          headerName: 'First Name',
+          headerName: 'Nome',
           flex: 1,
           minWidth: 120,
           sortable: true,
         },
         {
           field: 'lastName',
-          headerName: 'Last Name',
+          headerName: 'Sobrenome',
           flex: 1,
           minWidth: 120,
           sortable: true,
         },
         {
           field: 'phoneNumber',
-          headerName: 'Phone Number',
+          headerName: 'Telefone',
           flex: 1,
           minWidth: 140,
           sortable: true,
@@ -301,27 +301,27 @@ export default function RecentPatients(): React.ReactElement {
         },
         {
           field: 'email',
-          headerName: 'Email',
+          headerName: 'E-mail',
           flex: 1.5,
           minWidth: 200,
           sortable: true,
         },
         {
           field: 'serviceCategory',
-          headerName: 'In-person / Telemed',
+          headerName: 'Presencial / Telemedicina',
           flex: 1,
           minWidth: 150,
           sortable: true,
         },
         {
           field: 'patientStatus',
-          headerName: 'Patient Status',
+          headerName: 'Status do Paciente',
           flex: 0.8,
           minWidth: 130,
           sortable: true,
           renderCell: (params) => (
             <Chip
-              label={params.value === 'new' ? 'New' : 'Existing'}
+              label={params.value === 'new' ? 'Novo' : 'Retorno'}
               color={params.value === 'new' ? 'success' : 'primary'}
               size="small"
               variant="outlined"
@@ -330,14 +330,14 @@ export default function RecentPatients(): React.ReactElement {
         },
         {
           field: 'pointOfDiscovery',
-          headerName: 'Source',
+          headerName: 'Origem',
           flex: 1,
           minWidth: 150,
           sortable: true,
         },
         {
           field: 'mostRecentVisitDate',
-          headerName: 'Most Recent Visit',
+          headerName: 'Último Atendimento',
           flex: 1,
           minWidth: 150,
           sortable: true,
@@ -353,16 +353,16 @@ export default function RecentPatients(): React.ReactElement {
       let serviceCategory = patient.mostRecentVisit?.serviceCategory || '';
 
       if (serviceCategory === 'in-person-service-mode') {
-        serviceCategory = 'In-person';
+        serviceCategory = 'Presencial';
       } else if (serviceCategory === 'virtual-service-mode') {
-        serviceCategory = 'Telemed';
+        serviceCategory = 'Telemedicina';
       }
 
       return {
         ...patient,
         serviceCategory,
         mostRecentVisitDate: patient.mostRecentVisit?.date
-          ? DateTime.fromISO(patient.mostRecentVisit.date).toFormat('MMM dd, yyyy')
+          ? DateTime.fromISO(patient.mostRecentVisit.date).toFormat('dd/MM/yyyy')
           : '',
       };
     });
@@ -378,40 +378,40 @@ export default function RecentPatients(): React.ReactElement {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <PeopleIcon sx={{ fontSize: 32, color: 'primary.main' }} />
             <Typography variant="h4" component="h1" color="primary.dark" fontWeight={600}>
-              Recent Patients Report
+              Relatório de Pacientes Recentes
             </Typography>
           </Box>
         </Box>
 
         <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
           <FormControl sx={{ minWidth: 200 }}>
-            <InputLabel id="date-filter-label">Date Range</InputLabel>
+            <InputLabel id="date-filter-label">Período</InputLabel>
             <Select
               labelId="date-filter-label"
               id="date-filter"
               value={dateFilter}
-              label="Date Range"
+              label="Período"
               onChange={handleDateFilterChange}
             >
-              <MenuItem value="today">Today</MenuItem>
-              <MenuItem value="yesterday">Yesterday</MenuItem>
-              <MenuItem value="last7days">Last 7 Days</MenuItem>
-              <MenuItem value="last30days">Last 30 Days</MenuItem>
-              <MenuItem value="customRange">Custom Range</MenuItem>
+              <MenuItem value="today">Hoje</MenuItem>
+              <MenuItem value="yesterday">Ontem</MenuItem>
+              <MenuItem value="last7days">Últimos 7 Dias</MenuItem>
+              <MenuItem value="last30days">Últimos 30 Dias</MenuItem>
+              <MenuItem value="customRange">Intervalo Personalizado</MenuItem>
             </Select>
           </FormControl>
 
           {dateFilter === 'customRange' && (
             <>
               <TextField
-                label="Start Date"
+                label="Data Inicial"
                 type="date"
                 value={customStartDate}
                 onChange={handleCustomStartDateChange}
                 InputLabelProps={{ shrink: true }}
               />
               <TextField
-                label="End Date"
+                label="Data Final"
                 type="date"
                 value={customEndDate}
                 onChange={handleCustomEndDateChange}
@@ -421,16 +421,16 @@ export default function RecentPatients(): React.ReactElement {
           )}
 
           <FormControl sx={{ minWidth: 200 }}>
-            <InputLabel id="location-filter-label">Location</InputLabel>
+            <InputLabel id="location-filter-label">Unidade</InputLabel>
             <Select
               labelId="location-filter-label"
               id="location-filter"
               value={locationFilter}
-              label="Location"
+              label="Unidade"
               onChange={handleLocationFilterChange}
               disabled={loadingLocations}
             >
-              <MenuItem value="all">All Locations</MenuItem>
+              <MenuItem value="all">Todas as Unidades</MenuItem>
               {locations
                 .filter((loc) => loc.name)
                 .map((location) => (
@@ -442,7 +442,7 @@ export default function RecentPatients(): React.ReactElement {
           </FormControl>
 
           <Button variant="outlined" onClick={() => void fetchReport(dateFilter)} disabled={loading}>
-            Refresh
+            Atualizar
           </Button>
         </Box>
 

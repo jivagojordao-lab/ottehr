@@ -55,7 +55,7 @@ export default function EditEmployeePage(): JSX.Element {
       return deleteUser(oystehrZambda, { userId: id });
     },
     onSuccess: async () => {
-      enqueueSnackbar('User deleted.', { variant: 'success' });
+      enqueueSnackbar('Usuário excluído.', { variant: 'success' });
       await queryClient.invalidateQueries({ queryKey: ['get-employees'] });
       navigate('/admin/employees');
     },
@@ -66,7 +66,7 @@ export default function EditEmployeePage(): JSX.Element {
     try {
       await deleteMutation.mutateAsync();
     } catch (error) {
-      const message = getApiError({ error, defaultError: 'Failed to delete user.' });
+      const message = getApiError({ error, defaultError: 'Falha ao excluir usuário.' });
       setErrors({ submit: message });
       enqueueSnackbar(message, { variant: 'error' });
     }
@@ -130,12 +130,15 @@ export default function EditEmployeePage(): JSX.Element {
           { variant: 'warning', persist: true, preventDuplicate: true, key: 'erx-unenroll-failed' }
         );
       } else {
-        enqueueSnackbar(`User was ${userActivationMode}d successfully`, {
-          variant: 'success',
-        });
+        enqueueSnackbar(
+          userActivationMode === 'activate' ? 'Usuário ativado com sucesso' : 'Usuário desativado com sucesso',
+          {
+            variant: 'success',
+          }
+        );
       }
     } catch {
-      const errorString = `Failed to ${userActivationMode} user. Please try again`;
+      const errorString = `Falha ao ${userActivationMode === 'activate' ? 'ativar' : 'desativar'} usuário. Tente novamente`;
       setErrors((prev) => ({ ...prev, submit: `${errorString}` }));
       enqueueSnackbar(`${errorString}`, {
         variant: 'error',
@@ -146,15 +149,15 @@ export default function EditEmployeePage(): JSX.Element {
   };
 
   return (
-    <PageContainer tabTitle={'Edit Employee'}>
+    <PageContainer tabTitle={'Editar Colaborador'}>
       <>
         <Grid container direction="row" alignItems="center" justifyContent="center">
           <Grid item maxWidth={'1100px'} width={'100%'}>
             {/* Breadcrumbs */}
             <CustomBreadcrumbs
               chain={[
-                { link: '/admin', children: 'Admin' },
-                { link: '/admin/employees', children: 'Employees' },
+                { link: '/admin', children: 'Administração' },
+                { link: '/admin/employees', children: 'Colaboradores' },
                 { link: '#', children: user?.name || <Skeleton width={150} /> },
               ]}
             />
@@ -167,10 +170,10 @@ export default function EditEmployeePage(): JSX.Element {
               sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2, fontWeight: '600 !important' }}
             >
               {user?.name || <Skeleton width={250} />}
-              {isActive !== undefined && !isActive && <Chip label="Deactivated" color="error" size="small" />}
+              {isActive !== undefined && !isActive && <Chip label="Desativado" color="error" size="small" />}
               {needsSetup && (
                 <Chip
-                  label="NEEDS REVIEW"
+                  label="REQUER REVISÃO"
                   size="small"
                   data-testid={dataTestIds.employeesPage.needsReviewChip}
                   sx={{ backgroundColor: otherColors.orange100, color: otherColors.orange800, borderRadius: '4px' }}
@@ -178,7 +181,7 @@ export default function EditEmployeePage(): JSX.Element {
               )}
               {gettingAlerts && (
                 <Chip
-                  label="GETS ALERTS"
+                  label="RECEBE ALERTAS"
                   size="small"
                   data-testid={dataTestIds.employeesPage.gettingAlertsChip}
                   sx={{ bgcolor: 'info.light', color: 'info.dark', borderRadius: '4px' }}
@@ -193,7 +196,7 @@ export default function EditEmployeePage(): JSX.Element {
             <Box>
               {user && (
                 <EmployeeInformationForm
-                  submitLabel="Save changes"
+                  submitLabel="Salvar alterações"
                   existingUser={user}
                   isActive={isActive}
                   licenses={userLicenses}
@@ -217,12 +220,12 @@ export default function EditEmployeePage(): JSX.Element {
               ) : needsSetup ? (
                 <Paper sx={{ padding: 3, marginTop: 3 }}>
                   <Typography variant="h4" color="primary.dark" sx={{ fontWeight: '600 !important' }}>
-                    Delete user
+                    Excluir usuário
                   </Typography>
                   <Typography variant="body1" marginTop={1}>
-                    This user signed up but has never been set up as an employee, so they hold no role and have no
-                    clinician record. Assign them a role above to finish setting them up, or delete the account to
-                    permanently block their access.
+                    Este usuário se cadastrou, mas nunca foi configurado como colaborador, portanto não possui função nem
+                    registro clínico. Atribua uma função acima para concluir sua configuração ou exclua a conta para
+                    bloquear permanentemente o acesso.
                   </Typography>
 
                   {errors.submit && (
@@ -232,13 +235,13 @@ export default function EditEmployeePage(): JSX.Element {
                   )}
 
                   <ConfirmationDialog
-                    title="Delete user?"
-                    description={`This will permanently delete ${
+                    title="Excluir usuário?"
+                    description={`Isso excluirá permanentemente ${
                       user?.email || user?.name
-                    } and block EHR access. This cannot be undone.`}
+                    } e bloqueará o acesso ao prontuário eletrônico. Esta ação não pode ser desfeita.`}
                     response={handleDeleteUser}
                     actionButtons={{
-                      proceed: { text: 'Delete', color: 'error', loading: deleteMutation.isPending },
+                      proceed: { text: 'Excluir', color: 'error', loading: deleteMutation.isPending },
                     }}
                   >
                     {(showDialog) => (
@@ -256,7 +259,7 @@ export default function EditEmployeePage(): JSX.Element {
                         loading={deleteMutation.isPending}
                         onClick={showDialog}
                       >
-                        Delete
+                        Excluir
                       </LoadingButton>
                     )}
                   </ConfirmationDialog>
@@ -264,12 +267,12 @@ export default function EditEmployeePage(): JSX.Element {
               ) : (
                 <Paper sx={{ padding: 3, marginTop: 3 }}>
                   <Typography variant="h4" color="primary.dark" sx={{ fontWeight: '600 !important' }}>
-                    {isActive ? 'Deactivate profile' : 'Activate profile'}
+                    {isActive ? 'Desativar perfil' : 'Ativar perfil'}
                   </Typography>
                   <Typography variant="body1" marginTop={1}>
                     {isActive
-                      ? 'When you deactivate this account, this employee will not have access to the system anymore. If they are enrolled in eRx, their prescriber enrollment is removed as well.'
-                      : 'Activate this user account. This will immediately give the user the Staff role.'}
+                      ? 'Ao desativar esta conta, este colaborador não terá mais acesso ao sistema. Se estiver cadastrado no receituário digital (eRx), seu credenciamento prescritor também será revogado.'
+                      : 'Ativar esta conta de usuário. Isso atribuirá imediatamente a função de Recepção / Equipe ao usuário.'}
                   </Typography>
 
                   {/* Error on submit if request fails */}
@@ -295,7 +298,7 @@ export default function EditEmployeePage(): JSX.Element {
                       isActive ? () => handleUserActivation('deactivate') : () => handleUserActivation('activate')
                     }
                   >
-                    {isActive ? 'Deactivate' : 'Activate'}
+                    {isActive ? 'Desativar' : 'Ativar'}
                   </LoadingButton>
                 </Paper>
               )}

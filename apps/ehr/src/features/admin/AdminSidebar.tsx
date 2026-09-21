@@ -43,7 +43,7 @@ export const AdminSidebar: FC<AdminSidebarProps> = ({ children }) => {
   const navGroups = useMemo(() => (user ? resolveAccessibleAdminNavGroups(user.hasRole) : []), [user]);
 
   const drawerWidth = open ? OPEN_DRAWER_WIDTH : CLOSED_DRAWER_WIDTH;
-  const sidebarToggleLabel = `${open ? 'Collapse' : 'Expand'} sidebar`;
+  const sidebarToggleLabel = `${open ? 'Recolher' : 'Expandir'} barra lateral`;
 
   const toggleGroup = (groupLabel: string): void => {
     setCollapsedGroups((prev) => {
@@ -164,7 +164,7 @@ export const AdminSidebar: FC<AdminSidebarProps> = ({ children }) => {
                       padding: open ? '8px 16px 6px 16px' : '8px 0',
                       justifyContent: open ? 'space-between' : 'center',
                     }}
-                    aria-label={`Toggle ${group.label} section`}
+                    aria-label={`Alternar seção ${group.label}`}
                   >
                     {open && (
                       <Typography

@@ -310,15 +310,15 @@ function EmployeesTable({
         {canEditRoles ? (
           <Link to={`/admin/employees/add`}>
             <Button variant="contained" startIcon={<Add />}>
-              New Employee
+              Adicionar Colaborador
             </Button>
           </Link>
         ) : (
-          <Tooltip title="You must be an administrator to add new users" placement="top">
+          <Tooltip title="Você deve ser um administrador para adicionar novos colaboradores" placement="top">
             <span>
               {/* https://mui.com/material-ui/react-tooltip/#disabled-elements */}
               <Button variant="contained" startIcon={<Add />} disabled>
-                New Employee
+                Adicionar Colaborador
               </Button>
             </span>
           </Tooltip>
@@ -332,8 +332,8 @@ function EmployeesTable({
           <Grid item xs={12} md={3}>
             <TextField
               id="outlined-basic"
-              label="Name"
-              placeholder="Last, First, Middle"
+              label="Nome"
+              placeholder="Sobrenome, Nome"
               variant="outlined"
               onChange={handleChangeSearchText}
               value={searchText}
@@ -355,7 +355,7 @@ function EmployeesTable({
             <FormControlLabel
               name="last_login_filter"
               control={<Checkbox checked={lastLoginFilterChecked} onChange={handleChangeLastLoginFilter} />}
-              label="Hide last logins more than 90 days ago"
+              label="Ocultar acessos com mais de 90 dias"
               sx={{ '.MuiFormControlLabel-asterisk': { display: 'none' } }}
             />
           </Grid>
@@ -365,11 +365,11 @@ function EmployeesTable({
         <Table sx={{ minWidth: 650 }} aria-label="locationsTable" data-testid={dataTestIds.employeesPage.table}>
           <TableHead>
             <TableRow sx={{ '& .MuiTableCell-head': { fontWeight: 'bold', textAlign: 'left' } }}>
-              <TableCell sx={{ width: '25%' }}>Name (Last, First)</TableCell>
-              <TableCell>Role</TableCell>
-              <TableCell>Phone</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Last Login</TableCell>
+              <TableCell sx={{ width: '25%' }}>Nome (Sobrenome, Nome)</TableCell>
+              <TableCell>Função / Perfil</TableCell>
+              <TableCell>Telefone</TableCell>
+              <TableCell>E-mail</TableCell>
+              <TableCell>Último Acesso</TableCell>
               <TableCell>Status</TableCell>
             </TableRow>
           </TableHead>
@@ -411,7 +411,7 @@ function EmployeesTable({
                       </Link>
                       {employee.needsReview && (
                         <Chip
-                          label="NEEDS REVIEW"
+                          label="REQUER REVISÃO"
                           data-testid={dataTestIds.employeesPage.needsReviewChip}
                           sx={{
                             backgroundColor: otherColors.orange100,
@@ -465,11 +465,17 @@ function EmployeesTable({
                       color: otherColors.tableRow,
                     }}
                   >
-                    {employee.lastLogin ? formatDateForDisplay(employee.lastLogin) : 'Never'}
+                    {employee.lastLogin ? formatDateForDisplay(employee.lastLogin) : 'Nunca'}
                   </TableCell>
                   <TableCell>
                     <Chip
-                      label={employee.status.toUpperCase()}
+                      label={
+                        employee.status === 'Active'
+                          ? 'ATIVO'
+                          : employee.status === 'Deactivated'
+                          ? 'DESATIVADO'
+                          : employee.status.toUpperCase()
+                      }
                       data-testid={dataTestIds.employeesPage.statusChip}
                       sx={{
                         backgroundColor:
@@ -504,6 +510,8 @@ function EmployeesTable({
           page={pageNumber}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          labelRowsPerPage="Linhas por página:"
+          labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count !== -1 ? count : `mais de ${to}`}`}
           data-testid={dataTestIds.pagination.paginationContainer}
         />
       </TableContainer>
@@ -521,7 +529,7 @@ interface StateSelectProps {
 }
 
 function StateSelect({ onChange, selectedState }: StateSelectProps): ReactElement {
-  const EMPTY_STATE = { label: 'All states', value: '' };
+  const EMPTY_STATE = { label: 'Todos os estados', value: '' };
   const options = [EMPTY_STATE, ...AllStates];
 
   return (
@@ -529,7 +537,7 @@ function StateSelect({ onChange, selectedState }: StateSelectProps): ReactElemen
       value={selectedState || EMPTY_STATE}
       onChange={onChange}
       data-testid={dataTestIds.employeesPage.stateFilter}
-      getOptionLabel={(state) => state.label || 'Unknown'}
+      getOptionLabel={(state) => state.label || 'Desconhecido'}
       isOptionEqualToValue={(option, tempValue) => option.value === tempValue.value}
       options={options}
       renderOption={(props, option) => {
@@ -540,14 +548,25 @@ function StateSelect({ onChange, selectedState }: StateSelectProps): ReactElemen
         );
       }}
       fullWidth
-      renderInput={(params) => <TextField name="state" {...params} label="State" />}
+      renderInput={(params) => <TextField name="state" {...params} label="Estado" />}
     />
   );
 }
 
+export const ROLE_TRANSLATION: Partial<Record<RoleType, string>> = {
+  [RoleType.Administrator]: 'Administrador',
+  [RoleType.Manager]: 'Gerente',
+  [RoleType.Staff]: 'Recepção / Equipe',
+  [RoleType.Provider]: 'Médico / Profissional',
+  [RoleType.Clinician]: 'Clínico',
+  [RoleType.BillingAdmin]: 'Faturamento',
+  [RoleType.CustomerSupport]: 'Suporte ao Cliente',
+  [RoleType.Inactive]: 'Inativo',
+};
+
 /** Display label for a role, falling back to the raw value for roles not offered in the picker. */
 const roleLabel = (role: RoleType): string =>
-  AVAILABLE_EMPLOYEE_ROLES.find((entry) => entry.value === role)?.label ?? role;
+  ROLE_TRANSLATION[role] ?? AVAILABLE_EMPLOYEE_ROLES.find((entry) => entry.value === role)?.label ?? role;
 
 /**
  * Users can hold several roles, so show all of them rather than an arbitrary first. Users awaiting
@@ -572,10 +591,10 @@ function RoleSelect({ selectedRoles, onChange }: RoleSelectProps): ReactElement 
 
   return (
     <FormControl fullWidth>
-      <InputLabel id="employees-role-filter-label">Role</InputLabel>
+      <InputLabel id="employees-role-filter-label">Função / Perfil</InputLabel>
       <Select
         labelId="employees-role-filter-label"
-        label="Role"
+        label="Função / Perfil"
         multiple
         value={selectedRoles}
         inputProps={{ 'data-testid': dataTestIds.employeesPage.roleFilter }}
@@ -585,7 +604,7 @@ function RoleSelect({ selectedRoles, onChange }: RoleSelectProps): ReactElement 
         {options.map((role) => (
           <MenuItem key={role.value} value={role.value}>
             <Checkbox checked={selectedRoles.includes(role.value)} />
-            <ListItemText primary={role.label} />
+            <ListItemText primary={roleLabel(role.value)} />
           </MenuItem>
         ))}
       </Select>

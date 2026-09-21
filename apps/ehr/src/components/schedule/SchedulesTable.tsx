@@ -39,15 +39,15 @@ type ActiveFilter = 'all' | 'active' | 'inactive';
 
 const hoursText = (schedule?: ScheduleListItem): string => {
   if (!schedule?.todayHoursISO) {
-    return 'No scheduled hours';
+    return 'Sem horários agendados';
   }
   const { open, close } = schedule.todayHoursISO;
   const openTime = DateTime.fromISO(open).setZone(schedule.timezone);
   const closeTime = DateTime.fromISO(close).setZone(schedule.timezone);
   if (openTime.isValid && closeTime.isValid) {
-    return `${openTime.toFormat('h:mm a')} – ${closeTime.toFormat('h:mm a')}`;
+    return `${openTime.toFormat('HH:mm')} – ${closeTime.toFormat('HH:mm')}`;
   }
-  return 'No scheduled hours';
+  return 'Sem horários agendados';
 };
 
 // A Location schedule is live only if the Location is active AND its Schedule is
@@ -86,7 +86,7 @@ export function SchedulesTable(): ReactElement {
   useErrorQuery(error, (err) => {
     if (err) {
       enqueueSnackbar({
-        message: isApiError(err) ? (err as APIError).message : 'Error fetching schedules',
+        message: isApiError(err) ? (err as APIError).message : 'Erro ao buscar agendas',
         variant: 'error',
       });
     }
@@ -147,7 +147,7 @@ export function SchedulesTable(): ReactElement {
     <Paper sx={{ padding: 2 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2, flexWrap: 'wrap' }}>
         <TextField
-          label="Search"
+          label="Buscar"
           variant="outlined"
           size="small"
           value={search}
@@ -156,15 +156,15 @@ export function SchedulesTable(): ReactElement {
         />
         <TextField
           select
-          label="Type"
+          label="Tipo"
           size="small"
           value={ownerTypeFilter}
           onChange={(e) => setOwnerTypeFilter(e.target.value as OwnerTypeFilter)}
           sx={{ width: 160 }}
         >
-          <MenuItem value="all">All types</MenuItem>
-          <MenuItem value="location">Locations</MenuItem>
-          <MenuItem value="provider">Providers</MenuItem>
+          <MenuItem value="all">Todos os tipos</MenuItem>
+          <MenuItem value="location">Unidades</MenuItem>
+          <MenuItem value="provider">Profissionais</MenuItem>
         </TextField>
         <TextField
           select
@@ -174,12 +174,12 @@ export function SchedulesTable(): ReactElement {
           onChange={(e) => setActiveFilter(e.target.value as ActiveFilter)}
           sx={{ width: 160 }}
         >
-          <MenuItem value="all">All statuses</MenuItem>
-          <MenuItem value="active">Active</MenuItem>
-          <MenuItem value="inactive">Inactive</MenuItem>
+          <MenuItem value="all">Todos os status</MenuItem>
+          <MenuItem value="active">Ativo</MenuItem>
+          <MenuItem value="inactive">Inativo</MenuItem>
         </TextField>
         <Button variant="contained" startIcon={<Add />} onClick={() => navigate('/admin/schedule/add')}>
-          Add schedule
+          Adicionar Agenda
         </Button>
         {loading && (
           <Box sx={{ marginLeft: 'auto' }}>
@@ -193,8 +193,8 @@ export function SchedulesTable(): ReactElement {
           <TableHead>
             <TableRow>
               <TableCell sx={{ width: 48 }} />
-              <TableCell sx={{ fontWeight: 'bold', width: '45%' }}>Owner</TableCell>
-              <TableCell sx={{ fontWeight: 'bold', width: '30%' }}>Today&apos;s hours</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', width: '45%' }}>Titular / Unidade</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', width: '30%' }}>Horário de Hoje</TableCell>
               <TableCell sx={{ fontWeight: 'bold', width: '15%' }}>Status</TableCell>
               <TableCell sx={{ width: 96 }} />
             </TableRow>
@@ -219,7 +219,7 @@ export function SchedulesTable(): ReactElement {
                     </TableCell>
                     <TableCell>{hoursText(item.schedules[0])}</TableCell>
                     <TableCell>
-                      <BooleanStateChip state={active} label={active ? 'Active' : 'Inactive'} />
+                      <BooleanStateChip state={active} label={active ? 'Ativo' : 'Inativo'} />
                     </TableCell>
                     <TableCell />
                   </TableRow>
@@ -233,7 +233,7 @@ export function SchedulesTable(): ReactElement {
                 <Fragment key={item.owner.id}>
                   <TableRow hover sx={{ cursor: 'pointer' }} onClick={() => toggleExpanded(item.owner.id)}>
                     <TableCell>
-                      <IconButton size="small" aria-label={isOpen ? 'collapse' : 'expand'}>
+                      <IconButton size="small" aria-label={isOpen ? 'recolher' : 'expandir'}>
                         {isOpen ? <KeyboardArrowDownIcon /> : <KeyboardArrowRightIcon />}
                       </IconButton>
                     </TableCell>
@@ -242,7 +242,7 @@ export function SchedulesTable(): ReactElement {
                         <PersonOutlineOutlinedIcon fontSize="small" color="action" />
                         <Typography color="primary">{item.owner.name}</Typography>
                         <Typography variant="caption" color="text.secondary">
-                          {children.length} schedule{children.length === 1 ? '' : 's'}
+                          {children.length} {children.length === 1 ? 'agenda' : 'agendas'}
                         </Typography>
                       </Box>
                     </TableCell>
@@ -252,10 +252,10 @@ export function SchedulesTable(): ReactElement {
                     <TableCell />
                     <TableCell align="right">
                       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Tooltip title="Manage provider">
+                        <Tooltip title="Gerenciar profissional">
                           <IconButton
                             size="small"
-                            aria-label={`manage ${item.owner.name}`}
+                            aria-label={`gerenciar ${item.owner.name}`}
                             onClick={(e) => {
                               e.stopPropagation();
                               // owner.id is the Practitioner id; the provider
@@ -267,10 +267,10 @@ export function SchedulesTable(): ReactElement {
                             <EditOutlinedIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
-                        <Tooltip title="Add schedule">
+                        <Tooltip title="Adicionar agenda">
                           <IconButton
                             size="small"
-                            aria-label={`add schedule for ${item.owner.name}`}
+                            aria-label={`adicionar agenda para ${item.owner.name}`}
                             onClick={(e) => {
                               e.stopPropagation();
                               navigate(`/admin/schedule/add?provider=${item.owner.id}`);
@@ -294,7 +294,7 @@ export function SchedulesTable(): ReactElement {
                         >
                           <TableCell />
                           <TableCell sx={{ pl: 6 }}>
-                            <Typography color="primary">· {child.locationName ?? 'Unassigned location'}</Typography>
+                            <Typography color="primary">· {child.locationName ?? 'Unidade não atribuída'}</Typography>
                             {child.categoryLabels && child.categoryLabels.length > 0 && (
                               <Typography variant="caption" color="text.secondary">
                                 {child.categoryLabels.join(', ')}
@@ -303,7 +303,7 @@ export function SchedulesTable(): ReactElement {
                           </TableCell>
                           <TableCell>{hoursText(child)}</TableCell>
                           <TableCell>
-                            <BooleanStateChip state={childActive} label={childActive ? 'Active' : 'Inactive'} />
+                            <BooleanStateChip state={childActive} label={childActive ? 'Ativo' : 'Inativo'} />
                           </TableCell>
                           <TableCell />
                         </TableRow>
@@ -316,7 +316,7 @@ export function SchedulesTable(): ReactElement {
               <TableRow>
                 <TableCell colSpan={5}>
                   <Typography sx={{ py: 2, textAlign: 'center' }} color="text.secondary">
-                    No schedules match your filters.
+                    Nenhuma agenda encontrada com os filtros atuais.
                   </Typography>
                 </TableCell>
               </TableRow>

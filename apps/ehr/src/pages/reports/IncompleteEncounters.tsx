@@ -83,6 +83,20 @@ const getStatusColor = (
   }
 };
 
+const VISIT_STATUS_TRANSLATION: Record<string, string> = {
+  pending: 'Pendente',
+  arrived: 'Chegou',
+  intake: 'Triagem',
+  ready: 'Pronto',
+  'ready for provider': 'Aguardando Médico',
+  provider: 'Em Atendimento',
+  discharged: 'Liberado',
+  'awaiting supervisor approval': 'Aguardando Aprovação',
+  completed: 'Concluído',
+  cancelled: 'Cancelado',
+  'no show': 'Não Compareceu',
+};
+
 const useIncompleteEncounters = (
   dateRange: DateRangeFilter,
   start: string,
@@ -310,7 +324,7 @@ export default function IncompleteEncounters(): React.ReactElement {
     () => [
       {
         field: 'appointmentId',
-        headerName: 'Appointment ID',
+        headerName: 'ID do Atendimento',
         width: 320,
         sortable: true,
         renderCell: (params: GridRenderCellParams) => {
@@ -341,7 +355,7 @@ export default function IncompleteEncounters(): React.ReactElement {
         sortable: true,
         renderCell: (params: GridRenderCellParams) => (
           <Chip
-            label={params.value}
+            label={VISIT_STATUS_TRANSLATION[params.value] ?? params.value}
             color={getStatusColor(params.value as VisitStatusLabel)}
             size="small"
             variant="outlined"
@@ -350,7 +364,7 @@ export default function IncompleteEncounters(): React.ReactElement {
       },
       {
         field: 'appointmentTime',
-        headerName: 'Appointment Time',
+        headerName: 'Horário do Agendamento',
         width: 180,
         sortable: true,
         renderCell: (params: GridRenderCellParams) => {
@@ -401,31 +415,31 @@ export default function IncompleteEncounters(): React.ReactElement {
       },
       {
         field: 'location',
-        headerName: 'Location',
+        headerName: 'Unidade',
         width: 150,
         sortable: true,
       },
       {
         field: 'attendingProvider',
-        headerName: 'Attending Provider',
+        headerName: 'Profissional Responsável',
         width: 200,
         sortable: true,
       },
       {
         field: 'visitType',
-        headerName: 'Visit Type',
-        width: 120,
+        headerName: 'Tipo de Atendimento',
+        width: 150,
         sortable: true,
       },
       {
         field: 'patientName',
-        headerName: 'Patient Name',
+        headerName: 'Nome do Paciente',
         width: 200,
         sortable: true,
       },
       {
         field: 'reason',
-        headerName: 'Reason',
+        headerName: 'Motivo',
         width: 200,
         sortable: true,
       },
@@ -443,29 +457,27 @@ export default function IncompleteEncounters(): React.ReactElement {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <AssignmentLateIcon sx={{ fontSize: 32, color: 'primary.main' }} />
             <Typography variant="h4" component="h1" color="primary.dark" fontWeight={600}>
-              Incomplete Encounters
+              Consultas Incompletas
             </Typography>
           </Box>
         </Box>
 
         <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-          This report shows encounters that are not in a terminal state (completed, cancelled, or no show). Click an
-          appointment ID to navigate to the specific appointment chart. Click an appointment time to navigate to the
-          appropriate tracking board.
+          Este relatório exibe atendimentos que não estão em um estado final (concluído, cancelado ou não comparecimento). Clique no ID do atendimento para abrir o prontuário ou no horário para navegar ao painel de atendimentos.
         </Typography>
 
         {/* Date Filter */}
         <Box sx={{ mb: 3, display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
           <FormControl size="small" sx={{ minWidth: 200 }}>
-            <InputLabel>Date Range</InputLabel>
-            <Select value={dateRange} label="Date Range" onChange={handleDateRangeChange}>
-              <MenuItem value="today">Today</MenuItem>
-              <MenuItem value="yesterday">Yesterday</MenuItem>
-              <MenuItem value="last-7-days">Last 7 Days</MenuItem>
-              <MenuItem value="last-7-days-excluding-today">Last 7 Days (Excluding Today)</MenuItem>
-              <MenuItem value="last-30-days">Last 30 Days</MenuItem>
-              <MenuItem value="custom">Custom Date</MenuItem>
-              <MenuItem value="customRange">Custom Date Range</MenuItem>
+            <InputLabel>Período</InputLabel>
+            <Select value={dateRange} label="Período" onChange={handleDateRangeChange}>
+              <MenuItem value="today">Hoje</MenuItem>
+              <MenuItem value="yesterday">Ontem</MenuItem>
+              <MenuItem value="last-7-days">Últimos 7 dias</MenuItem>
+              <MenuItem value="last-7-days-excluding-today">Últimos 7 dias (exceto hoje)</MenuItem>
+              <MenuItem value="last-30-days">Últimos 30 dias</MenuItem>
+              <MenuItem value="custom">Data Personalizada</MenuItem>
+              <MenuItem value="customRange">Intervalo Personalizado</MenuItem>
             </Select>
           </FormControl>
 
@@ -487,7 +499,7 @@ export default function IncompleteEncounters(): React.ReactElement {
               <TextField
                 type="date"
                 size="small"
-                label="Start Date"
+                label="Data Inicial"
                 value={customStartDate}
                 onChange={handleCustomStartDateChange}
                 sx={{ minWidth: 160 }}
@@ -498,7 +510,7 @@ export default function IncompleteEncounters(): React.ReactElement {
               <TextField
                 type="date"
                 size="small"
-                label="End Date"
+                label="Data Final"
                 value={customEndDate}
                 onChange={handleCustomEndDateChange}
                 sx={{ minWidth: 160 }}
@@ -510,7 +522,7 @@ export default function IncompleteEncounters(): React.ReactElement {
           )}
 
           <Button variant="outlined" onClick={handleRefresh} disabled={isLoading} startIcon={<RefreshIcon />}>
-            Refresh
+            Atualizar
           </Button>
         </Box>
 

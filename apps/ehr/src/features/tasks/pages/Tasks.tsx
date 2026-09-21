@@ -41,12 +41,12 @@ import { CreateTaskDialog } from '../components/CreateTaskDialog';
 import { MoreTaskActions } from '../components/MoreTaskActions';
 
 const LOCAL_STORAGE_FILTERS_KEY = 'tasks.filters';
-const UNKNOWN = 'Unknown';
+const UNKNOWN = 'Desconhecido';
 const COMPLETED = 'completed';
 const TASK_STATUS_LABEL: Record<string, string> = {
-  ready: 'pending',
-  'in-progress': 'in progress',
-  completed: 'completed',
+  ready: 'pendente',
+  'in-progress': 'em andamento',
+  completed: 'concluída',
 };
 const CATEGORIES: Record<string, string> = Object.entries(TASK_CATEGORY_LABEL).reduce<Record<string, string>>(
   (previousValue, entry) => {
@@ -105,7 +105,7 @@ export const Tasks: React.FC = () => {
     if (task.status !== COMPLETED && currentUserProviderId === task.assignee?.id && task.completable) {
       return (
         <RoundedButton variant="contained" onClick={async () => await completeTask({ taskId: task.id })}>
-          Complete
+          Concluir
         </RoundedButton>
       );
     }
@@ -226,16 +226,16 @@ export const Tasks: React.FC = () => {
         <FormProvider {...methods}>
           <Paper>
             <Stack direction="row" spacing={2} padding="8px">
-              <LocationSelectInput name="location" label="Location" type="in-person" />
+              <LocationSelectInput name="location" label="Unidade" type="in-person" />
               <SelectInput
                 name="category"
-                label="Category"
+                label="Categoria"
                 options={Object.values(CATEGORIES)}
                 getOptionLabel={(option) =>
                   Object.entries(CATEGORIES).find(([_key, value]) => value === option)?.[0] ?? option
                 }
               />
-              <EmployeeSelectInput name="assignedTo" label="Assigned to" />
+              <EmployeeSelectInput name="assignedTo" label="Atribuído a" />
               <SelectInput
                 name="status"
                 label="Status"
@@ -244,7 +244,7 @@ export const Tasks: React.FC = () => {
                 getOptionLabel={(option) => TASK_STATUS_LABEL[option]}
               />
               <RoundedButton variant="contained" onClick={onNewTaskClick} startIcon={<AddIcon />}>
-                New Task
+                Nova Tarefa
               </RoundedButton>
             </Stack>
           </Paper>
@@ -267,17 +267,17 @@ export const Tasks: React.FC = () => {
                 <TableRow>
                   <TableCell style={{ width: '200px' }}>
                     <Typography fontWeight="500" fontSize="14px">
-                      Category and Date
+                      Categoria e Data
                     </Typography>
                   </TableCell>
                   <TableCell>
                     <Typography fontWeight="500" fontSize="14px">
-                      Task
+                      Tarefa
                     </Typography>
                   </TableCell>
                   <TableCell style={{ width: '200px' }}>
                     <Typography fontWeight="500" fontSize="14px">
-                      Assigned To
+                      Atribuído a
                     </Typography>
                   </TableCell>
                   <TableCell style={{ width: '200px' }}>
@@ -287,7 +287,7 @@ export const Tasks: React.FC = () => {
                   </TableCell>
                   <TableCell style={{ width: '200px' }}>
                     <Typography fontWeight="500" fontSize="14px">
-                      Action
+                      Ação
                     </Typography>
                   </TableCell>
                   <TableCell style={{ width: '50px' }}></TableCell>
@@ -304,7 +304,7 @@ export const Tasks: React.FC = () => {
                 {!isTasksLoading && (tasksData?.tasks ?? []).length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={5} align="center">
-                      <Typography variant="body2">No tasks</Typography>
+                      <Typography variant="body2">Nenhuma tarefa encontrada</Typography>
                     </TableCell>
                   </TableRow>
                 ) : null}
@@ -355,7 +355,7 @@ export const Tasks: React.FC = () => {
                               </Typography>
                             </>
                           ) : (
-                            'Unassigned'
+                            'Não atribuído'
                           )}
                         </TableCell>
                         <TableCell>
@@ -387,6 +387,8 @@ export const Tasks: React.FC = () => {
             count={tasksData?.total ?? -1}
             rowsPerPage={TASKS_PAGE_SIZE}
             page={page}
+            labelRowsPerPage="Linhas por página:"
+            labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count !== -1 ? count : `mais de ${to}`}`}
             onPageChange={(_e, newPageNumber) => {
               setPage(newPageNumber);
             }}
