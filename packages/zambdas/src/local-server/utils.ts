@@ -1,6 +1,6 @@
 import { APIGatewayProxyEventHeaders, APIGatewayProxyResult, Callback, Context, Handler } from 'aws-lambda';
 import { Request, Response } from 'express';
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { IncomingHttpHeaders } from 'http2';
 import _ from 'lodash';
 import { resolve } from 'path';
@@ -42,12 +42,21 @@ const secrets: Record<string, string> = {};
 
 function populateSecrets({ pathToSecretsFile }: { pathToSecretsFile: string }): void {
   console.log('Populating secrets from', pathToSecretsFile);
-  const configString = readFileSync(resolve(__dirname, `../../${pathToSecretsFile}`), { encoding: 'utf8' });
-  const fileContents: Record<string, string> = JSON.parse(configString);
-  Object.entries(fileContents).forEach(([key, value]) => {
-    secrets[key] = value;
-  });
-  console.log(`Populated ${Object.keys(secrets).length} secrets`);
+  const fullPath = resolve(__dirname, `../../${pathToSecretsFile}`);
+  if (!existsSync(fullPath)) {
+    console.log(`Secrets file not found at ${fullPath}, continuing with empty secrets.`);
+    return;
+  }
+  try {
+    const configString = readFileSync(fullPath, { encoding: 'utf8' });
+    const fileContents: Record<string, string> = JSON.parse(configString);
+    Object.entries(fileContents).forEach(([key, value]) => {
+      secrets[key] = value;
+    });
+    console.log(`Populated ${Object.keys(secrets).length} secrets`);
+  } catch (err) {
+    console.warn('Could not parse secrets file:', err);
+  }
 }
 
 const singleValueHeaders = (input: IncomingHttpHeaders): APIGatewayProxyEventHeaders => {
