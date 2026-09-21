@@ -2,14 +2,14 @@
   "baseUrl": "http://localhost:8103/",
   "port": 8103,
   "database": {
-    "host": "postgres",
+    "host": "localhost",
     "port": 5432,
     "dbname": "medplum",
     "username": "medplum",
     "password": "medplum_dev_password"
   },
   "redis": {
-    "host": "redis",
+    "host": "localhost",
     "port": 6379
   },
   "registerEnabled": true
