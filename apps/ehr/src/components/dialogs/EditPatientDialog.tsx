@@ -228,9 +228,9 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
   const [isSavingData, setSavingData] = useState<boolean>(false);
   const possibleUsStates = Object.keys(AllStatesToVirtualLocationLabels);
   const statesDropdownOptions: string[] = [...possibleUsStates.map((usState) => usState)];
-  const phoneNumberErrorMessage = 'Phone number must be 10 digits in the format (xxx) xxx-xxxx';
-  const emailErrorMessage = 'Email is not valid';
-  const zipCodeErrorMessage = 'ZIP Code must be 5 or 9 numbers';
+  const phoneNumberErrorMessage = 'O telefone deve conter DDD e dígitos válidos';
+  const emailErrorMessage = 'E-mail inválido';
+  const zipCodeErrorMessage = 'O CEP deve conter 8 dígitos';
 
   useEffect(() => {
     setValue('dateOfBirth', patient?.birthDate ? DateTime.fromISO(patient?.birthDate) : null);
@@ -325,7 +325,7 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
           color="primary.dark"
           sx={{ width: '100%', py: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}
         >
-          Edit Patient Information
+          Editar Informações do Paciente
           <IconButton onClick={onClose} aria-label="close" sx={{ mr: -3, mt: -3 }}>
             <CloseOutlinedIcon />
           </IconButton>
@@ -335,7 +335,7 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
             <TextField
               {...register('firstName', { required: true })}
               id="first-name"
-              label="First Name"
+              label="Nome"
               variant="outlined"
               fullWidth
               error={!!formState.errors.firstName}
@@ -346,7 +346,7 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
             <TextField
               {...register('middleName')}
               id="middle-name"
-              label="Middle Name"
+              label="Nome do meio"
               variant="outlined"
               fullWidth
               error={!!formState.errors.middleName}
@@ -356,7 +356,7 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
             <TextField
               {...register('lastName', { required: true })}
               id="last-name"
-              label="Last Name"
+              label="Sobrenome"
               variant="outlined"
               fullWidth
               error={!!formState.errors.lastName}
@@ -367,7 +367,7 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
             <TextField
               {...register('preferredName')}
               id="preferred-name"
-              label="Preferred name"
+              label="Nome social / preferido"
               variant="outlined"
               fullWidth
               error={!!formState.errors.preferredName}
@@ -447,11 +447,11 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
                       resetField('dateOfBirth');
                       setValue('dateOfBirth', val);
                     } else {
-                      setFormError('dateOfBirth', { message: 'Date of birth is not valid' });
+                      setFormError('dateOfBirth', { message: 'Data de nascimento inválida' });
                     }
                   }}
                   defaultValue={null}
-                  label="Date of birth"
+                  label="Data de nascimento"
                   required
                 ></DateSearch>
               )}
@@ -465,11 +465,11 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
                 <PatternFormat
                   customInput={TextField}
                   value={value}
-                  format="(###) ###-####"
+                  format="(##) #####-####"
                   mask=" "
-                  label="Primary phone"
+                  label="Telefone principal"
                   variant="outlined"
-                  placeholder="(XXX) XXX-XXXX"
+                  placeholder="(XX) XXXXX-XXXX"
                   required
                   fullWidth
                   error={!!formState.errors.primaryPhoneNumber}
@@ -498,11 +498,11 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
                 <PatternFormat
                   customInput={TextField}
                   value={value}
-                  format="(###) ###-####"
+                  format="(##) #####-####"
                   mask=" "
-                  label="Secondary phone"
+                  label="Telefone secundário"
                   variant="outlined"
-                  placeholder="(XXX) XXX-XXXX"
+                  placeholder="(XX) XXXXX-XXXX"
                   fullWidth
                   error={!!formState.errors.secondaryPhoneNumber}
                   helperText={formState.errors.secondaryPhoneNumber ? phoneNumberErrorMessage : ''}
@@ -528,7 +528,7 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
               control={control}
               render={({ field: { value } }) => (
                 <TextField
-                  label="Primary email"
+                  label="E-mail principal"
                   value={value}
                   variant="outlined"
                   error={!!formState.errors.primaryEmail}
@@ -555,7 +555,7 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
               control={control}
               render={({ field: { value } }) => (
                 <TextField
-                  label="Secondary email"
+                  label="E-mail secundário"
                   value={value}
                   variant="outlined"
                   error={!!formState.errors.secondaryEmail}
@@ -579,7 +579,7 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
             <TextField
               {...register('addressLineOne')}
               id="address-one"
-              label="Address"
+              label="Endereço / Logradouro"
               variant="outlined"
               fullWidth
               required
@@ -590,7 +590,7 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
             <TextField
               {...register('addressLineTwo')}
               id="address-two"
-              label="Address 2"
+              label="Complemento / Número"
               variant="outlined"
               fullWidth
               error={!!formState.errors.addressLineTwo}
@@ -602,7 +602,7 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
                 <TextField
                   {...register('city')}
                   id="city"
-                  label="City"
+                  label="Cidade"
                   variant="outlined"
                   fullWidth
                   required
@@ -621,7 +621,7 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
                       onChange={(event, selectedState) => {
                         setValue('state', selectedState ? selectedState : undefined);
                       }}
-                      getOptionLabel={(state) => state || 'Unknown'}
+                      getOptionLabel={(state) => state || 'Desconhecido'}
                       isOptionEqualToValue={(option, tempValue) => option === tempValue}
                       options={statesDropdownOptions}
                       renderOption={(props, option) => {
@@ -633,7 +633,7 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
                       }}
                       fullWidth
                       disableClearable={true}
-                      renderInput={(params) => <TextField name="state" {...params} label="State" required />}
+                      renderInput={(params) => <TextField name="state" {...params} label="Estado / UF" required />}
                     />
                   )}
                 />
@@ -647,10 +647,10 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
                   render={({ field: { value, onChange } }) => (
                     <PatternFormat
                       customInput={TextField}
-                      label="ZIP"
+                      label="CEP"
                       value={value || ''}
-                      format="#####-####"
-                      placeholder="#####-####"
+                      format="#####-###"
+                      placeholder="XXXXX-XXX"
                       variant="outlined"
                       fullWidth
                       required
@@ -680,7 +680,7 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
             onClick={onClose}
             color="primary"
           >
-            Cancel
+            Cancelar
           </RoundedButton>
           <LoadingButton
             loading={isSavingData}
@@ -691,12 +691,12 @@ const EditPatientDialog = ({ modalOpen, onClose }: EditPatientDialogProps): Reac
             sx={{ fontWeight: 500, textTransform: 'none', borderRadius: 6, mr: 2, mb: 1, px: 4 }}
             disabled={!formState.isValid}
           >
-            Save
+            Salvar Alterações
           </LoadingButton>
         </DialogActions>
         {error && (
           <Typography color="error" variant="body2" my={1} mx={2}>
-            There was an error editing this patient, please try again.
+            Ocorreu um erro ao editar este paciente, por favor tente novamente.
           </Typography>
         )}
       </form>

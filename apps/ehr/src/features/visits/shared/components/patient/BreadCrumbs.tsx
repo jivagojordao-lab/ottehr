@@ -6,14 +6,14 @@ import { getFullName } from 'utils/lib/fhir/patient';
 export const BreadCrumbs: FC<{ patient: Patient | undefined }> = ({ patient }) => (
   <CustomBreadcrumbs
     chain={[
-      { link: '/patients', children: 'Patients' },
+      { link: '/patients', children: 'Pacientes' },
       {
         link: `/patient/${patient?.id}`,
         children: patient ? getFullName(patient) : '',
       },
       {
         link: '#',
-        children: 'Patient Profile',
+        children: 'Dados do Paciente',
       },
     ]}
   />

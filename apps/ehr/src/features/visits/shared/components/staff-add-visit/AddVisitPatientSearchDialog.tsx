@@ -37,7 +37,7 @@ export const AddVisitPatientSearchDialog: FC<AddVisitPatientSearchDialogProps> =
       <Box sx={{ minWidth: '600px', borderRadius: '4px', p: '35px', maxHeight: '450px', overflow: 'scroll' }}>
         <Box>
           <Typography variant="h4" sx={{ fontWeight: '600 !important', color: 'primary.main', marginBottom: '4px' }}>
-            Select Patient
+            Selecionar Paciente
           </Typography>
         </Box>
         <Box>
@@ -49,9 +49,10 @@ export const AddVisitPatientSearchDialog: FC<AddVisitPatientSearchDialogProps> =
             }}
           >
             {patients.map((patient) => {
-              const label = `${getFullNameFromPatientInfo(patient)} (DOB: ${DateTime.fromISO(
-                patient?.dateOfBirth || ''
-              ).toFormat('MMMM dd, yyyy')})`;
+              const dob = patient?.dateOfBirth
+                ? DateTime.fromISO(patient.dateOfBirth).setLocale('pt-BR').toFormat('dd/MM/yyyy')
+                : '-';
+              const label = `${getFullNameFromPatientInfo(patient)} (Nasc: ${dob})`;
               return <FormControlLabel key={patient.id} value={patient.id} control={<Radio />} label={label} />;
             })}
           </RadioGroup>
@@ -68,7 +69,7 @@ export const AddVisitPatientSearchDialog: FC<AddVisitPatientSearchDialogProps> =
               }}
               onClick={handleSelectExistingPatient}
             >
-              Prefill for {getFullNameFromPatientInfo(selectedPatient)}
+              Selecionar {getFullNameFromPatientInfo(selectedPatient)}
             </Button>
           </Box>
         )}
@@ -83,7 +84,7 @@ export const AddVisitPatientSearchDialog: FC<AddVisitPatientSearchDialogProps> =
             }}
             onClick={handleManuallyEnterPatientDetails}
           >
-            Patient Not Found - Add Manually
+            Paciente não encontrado - Cadastrar Manualmente
           </Button>
         </Box>
       </Box>

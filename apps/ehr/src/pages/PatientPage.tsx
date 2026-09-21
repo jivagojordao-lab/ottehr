@@ -248,7 +248,7 @@ export default function PatientPage(): JSX.Element {
         <Stack spacing={2}>
           <CustomBreadcrumbs
             chain={[
-              { link: '/patients', children: 'Patients' },
+              { link: '/patients', children: 'Pacientes' },
               {
                 link: '#',
                 children: loading ? (
@@ -263,7 +263,7 @@ export default function PatientPage(): JSX.Element {
             ]}
           />
           <Typography variant="subtitle1" color="primary.main">
-            Visit History
+            Histórico de Consultas
           </Typography>
 
           <Paper
@@ -297,7 +297,7 @@ export default function PatientPage(): JSX.Element {
             >
               {latestAppointment && (
                 <GoToButton
-                  text="Progress Note"
+                  text="Prontuário"
                   backgroundColor={otherColors.lightBlue}
                   onClick={() =>
                     window.open(
@@ -313,7 +313,7 @@ export default function PatientPage(): JSX.Element {
               {!isMergedPatient && (
                 <>
                   <GoToButton
-                    text="Patient Profile"
+                    text="Dados do Paciente"
                     backgroundColor={otherColors.lightBlue}
                     dataTestId={dataTestIds.patientRecordPage.seeAllPatientInfoButton}
                     onClick={() => navigate(`/patient/${id}/info`)}
@@ -321,7 +321,7 @@ export default function PatientPage(): JSX.Element {
                     <ContactPageOutlinedIcon />
                   </GoToButton>
                   <GoToButton
-                    text="Account Settings"
+                    text="Configurações"
                     backgroundColor={otherColors.lightBlue}
                     onClick={() => setShowAccountSettingsDialog(true)}
                   >
@@ -330,7 +330,7 @@ export default function PatientPage(): JSX.Element {
                   {/* Review Docs opens the second row of the grid, as laid out in the design. */}
                   <Box sx={{ gridColumnStart: 1 }}>
                     <GoToButton
-                      text="Review Docs"
+                      text="Documentos"
                       backgroundColor={otherColors.lightBlue}
                       onClick={() => navigate(`/patient/${id}/docs`)}
                     >
@@ -338,7 +338,7 @@ export default function PatientPage(): JSX.Element {
                     </GoToButton>
                   </Box>
                   <GoToButton
-                    text="Fax Patient Docs"
+                    text="Enviar Docs"
                     backgroundColor={otherColors.lightBlue}
                     dataTestId={dataTestIds.patientRecordPage.faxPatientDocsButton}
                     onClick={() => openFaxFor('patient-docs')}
@@ -346,7 +346,7 @@ export default function PatientPage(): JSX.Element {
                     <FaxOutlinedIcon />
                   </GoToButton>
                   <GoToButton
-                    text="Medical Record"
+                    text="Prontuário Completo"
                     backgroundColor={otherColors.lightBlue}
                     dataTestId={dataTestIds.patientRecordPage.medicalRecordButton}
                     loading={isDownloadingMedicalRecord}
@@ -362,7 +362,7 @@ export default function PatientPage(): JSX.Element {
                     <LocalPharmacyIcon sx={{ color: '#2e7d32' }} />
                   </GoToButton>
                   <GoToButton
-                    text="Action Logs"
+                    text="Histórico de Ações"
                     backgroundColor={otherColors.lightBlue}
                     onClick={() => navigate(`/patient/${id}/action-logs`)}
                   >
@@ -388,7 +388,7 @@ export default function PatientPage(): JSX.Element {
               <ListItemIcon>
                 <DownloadIcon fontSize="small" color="primary" />
               </ListItemIcon>
-              <ListItemText>Download Archive</ListItemText>
+              <ListItemText>Baixar Arquivo Completo</ListItemText>
             </MenuItem>
             <MenuItem
               data-testid={dataTestIds.patientRecordPage.faxMedicalRecordMenuItem}
@@ -400,13 +400,13 @@ export default function PatientPage(): JSX.Element {
               <ListItemIcon>
                 <FaxOutlinedIcon fontSize="small" color="primary" />
               </ListItemIcon>
-              <ListItemText>Send as Fax</ListItemText>
+              <ListItemText>Enviar por Fax</ListItemText>
             </MenuItem>
           </Menu>
 
           <SendFaxDialog
             controller={faxController}
-            title={faxDialog === 'medical-record' ? 'Fax Medical Record' : 'Fax Patient Docs'}
+            title={faxDialog === 'medical-record' ? 'Enviar Prontuário por Fax' : 'Enviar Documentos por Fax'}
             visits={faxDialog === 'patient-docs' ? faxableVisits : undefined}
           />
 
@@ -418,7 +418,7 @@ export default function PatientPage(): JSX.Element {
               icon={<CircularProgress size={20} />}
               sx={{ '& .MuiAlert-icon': { display: 'flex', alignItems: 'center' } }}
             >
-              Patients merge in progress (merging with patient {activeMergeTask?.otherPatientId || 'unknown'})
+              Mesclagem de pacientes em andamento (mesclando com paciente {activeMergeTask?.otherPatientId || 'desconhecido'})
             </Alert>
           )}
 
@@ -427,13 +427,13 @@ export default function PatientPage(): JSX.Element {
               severity="error"
               action={
                 <Button color="error" size="small" onClick={() => void handleDismissMergeTask()}>
-                  Dismiss
+                  Dispensar
                 </Button>
               }
             >
-              Patients merge failed
-              {activeMergeTask?.otherPatientId ? ` (with patient ${activeMergeTask.otherPatientId})` : ''}:{' '}
-              {activeMergeTask?.statusReason || 'Unknown error.'}
+              Falha na mesclagem de pacientes
+              {activeMergeTask?.otherPatientId ? ` (com paciente ${activeMergeTask.otherPatientId})` : ''}:{' '}
+              {activeMergeTask?.statusReason || 'Erro desconhecido.'}
             </Alert>
           )}
 
@@ -444,7 +444,7 @@ export default function PatientPage(): JSX.Element {
                   severity="warning"
                   action={
                     <Tooltip
-                      title={!isAdmin ? 'To merge patients you must have the Administrator role' : ''}
+                      title={!isAdmin ? 'Para mesclar pacientes você deve ter permissão de Administrador' : ''}
                       placement="top"
                     >
                       <span>
@@ -455,13 +455,13 @@ export default function PatientPage(): JSX.Element {
                           onClick={handleMergeClick}
                           disabled={!isAdmin}
                         >
-                          Merge Patients
+                          Mesclar Pacientes
                         </Button>
                       </span>
                     </Tooltip>
                   }
                 >
-                  Potential duplicate patients found
+                  Possíveis pacientes duplicados encontrados
                 </Alert>
               )}
 
@@ -481,7 +481,7 @@ export default function PatientPage(): JSX.Element {
                       value="encounters"
                       label={
                         <Typography sx={{ textTransform: 'none', fontWeight: 500, fontSize: '14px' }}>
-                          Visits - {appointments?.length || 0}
+                          Consultas - {appointments?.length || 0}
                         </Typography>
                       }
                     />
@@ -490,7 +490,7 @@ export default function PatientPage(): JSX.Element {
                         value="followups"
                         label={
                           <Typography sx={{ textTransform: 'none', fontWeight: 500, fontSize: '14px' }}>
-                            Patient Follow-ups
+                            Retornos e Acompanhamentos
                           </Typography>
                         }
                       />
@@ -501,7 +501,7 @@ export default function PatientPage(): JSX.Element {
                         value="labs"
                         label={
                           <Typography sx={{ textTransform: 'none', fontWeight: 500, fontSize: '14px' }}>
-                            Labs
+                            Exames Laboratoriais
                           </Typography>
                         }
                       />
@@ -511,7 +511,7 @@ export default function PatientPage(): JSX.Element {
                         value="in-house-labs"
                         label={
                           <Typography sx={{ textTransform: 'none', fontWeight: 500, fontSize: '14px' }}>
-                            In-House Labs
+                            Exames Rápidos
                           </Typography>
                         }
                       />
@@ -521,7 +521,7 @@ export default function PatientPage(): JSX.Element {
                         value="radiology"
                         label={
                           <Typography sx={{ textTransform: 'none', fontWeight: 500, fontSize: '14px' }}>
-                            Radiology
+                            Radiologia & Imagem
                           </Typography>
                         }
                       />

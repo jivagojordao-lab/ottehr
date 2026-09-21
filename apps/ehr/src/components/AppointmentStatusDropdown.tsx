@@ -23,6 +23,13 @@ const MenuProps = {
 
 const statuses = ['Pending', 'Booked', 'Arrived', 'Cancelled'];
 
+const STATUS_LABELS_BR: Record<string, string> = {
+  Pending: 'Pendente',
+  Booked: 'Agendado',
+  Arrived: 'Chegou',
+  Cancelled: 'Cancelado',
+};
+
 interface AppointmentsStatusDropdownProps {
   appointmentStatus: string[];
   setAppointmentStatus?: Dispatch<SetStateAction<string[]>>;
@@ -53,13 +60,13 @@ export default function AppointmentStatusDropdown({
           value={appointmentStatus}
           onChange={handleChange}
           input={<OutlinedInput label="Status" />}
-          renderValue={(selected) => selected.join(', ')}
+          renderValue={(selected) => selected.map((s) => STATUS_LABELS_BR[s] ?? s).join(', ')}
           MenuProps={MenuProps}
         >
           {statuses.map((status) => (
             <MenuItem key={status} value={status}>
               <Checkbox checked={appointmentStatus && appointmentStatus.includes(status)} />
-              <ListItemText primary={status} />
+              <ListItemText primary={STATUS_LABELS_BR[status] ?? status} />
             </MenuItem>
           ))}
         </Select>

@@ -39,9 +39,9 @@ export type { StateType } from 'utils/lib/types/common';
 export type EmailUserValue = 'Patient (Self)' | 'Parent/Guardian';
 
 export const appointmentTypeLabels: { [type in FhirAppointmentType]: string } = {
-  prebook: 'Pre-booked',
-  walkin: 'Walk-in',
-  posttelemed: 'Post Telemed',
+  prebook: 'Agendado',
+  walkin: 'Demanda Espontânea',
+  posttelemed: 'Pós-Telemedicina',
 };
 
 // this might be a bit redundant given the AppointmentType type. is "booked" still used somewhere?
@@ -52,15 +52,15 @@ export enum VisitType {
 }
 
 export const visitTypeToInPersonLabel: { [visitType in VisitType]: string } = {
-  'walk-in': 'Walk-in In Person Visit',
-  'pre-booked': 'Pre-booked In Person Visit',
-  'post-telemed': 'Post Telemed Lab Only',
+  'walk-in': 'Presencial - Demanda Espontânea',
+  'pre-booked': 'Presencial - Agendado',
+  'post-telemed': 'Presencial - Pós-Telemedicina',
 };
 
 export const visitTypeToTelemedLabel: { [visitType in VisitType]: string } = {
-  'walk-in': 'On-demand Telemed',
-  'pre-booked': 'Pre-booked Telemed',
-  'post-telemed': 'Post Telemed Lab Only',
+  'walk-in': 'Telemedicina - Demanda Espontânea',
+  'pre-booked': 'Telemedicina - Agendado',
+  'post-telemed': 'Telemedicina - Pós-Telemedicina',
 };
 
 export enum PersonSex {

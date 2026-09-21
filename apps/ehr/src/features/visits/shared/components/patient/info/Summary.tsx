@@ -13,6 +13,13 @@ type Props = {
   loading?: boolean;
 };
 
+const GENDER_LABELS_BR: Record<string, string> = {
+  male: 'Masculino',
+  female: 'Feminino',
+  other: 'Outro',
+  unknown: 'Desconhecido',
+};
+
 export const Summary: FC<Props> = ({ patient, loading }) => {
   const pronouns = getExtensionValue(patient, PATIENT_INDIVIDUAL_PRONOUNS_URL);
 
@@ -24,7 +31,9 @@ export const Summary: FC<Props> = ({ patient, loading }) => {
         <Skeleton width={36} />
       ) : (
         patient?.gender && (
-          <Typography data-testid={dataTestIds.patientHeader.patientBirthSex}>{capitalize(patient?.gender)}</Typography>
+          <Typography data-testid={dataTestIds.patientHeader.patientBirthSex}>
+            {GENDER_LABELS_BR[patient.gender.toLowerCase()] || capitalize(patient.gender)}
+          </Typography>
         )
       )}
 

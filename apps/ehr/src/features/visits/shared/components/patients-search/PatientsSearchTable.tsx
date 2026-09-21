@@ -207,7 +207,7 @@ export const PatientsSearchTable: React.FC<{
                     </TableCell>
                     <TableCell width={COLUMN_CONFIG.lastVisit.width}>
                       {patient.lastVisit
-                        ? `${new Date(patient.lastVisit.date).toLocaleDateString()} at ${patient.lastVisit.location}`
+                        ? `${new Date(patient.lastVisit.date).toLocaleDateString('pt-BR')} em ${patient.lastVisit.location}`
                         : '-'}
                     </TableCell>
                   </TableRow>
@@ -224,6 +224,8 @@ export const PatientsSearchTable: React.FC<{
                 count={searchResult?.pagination.totalItems || 0}
                 rowsPerPage={searchOptions.pagination.pageSize}
                 page={page}
+                labelRowsPerPage="Itens por página:"
+                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count !== -1 ? count : `mais de ${to}`}`}
                 onPageChange={(_, newPage) => {
                   void search({ pagination: { offset: searchOptions.pagination.pageSize * newPage } });
                 }}

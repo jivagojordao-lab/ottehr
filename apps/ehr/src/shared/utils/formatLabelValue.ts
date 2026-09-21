@@ -20,18 +20,18 @@ export const getVisitTypeLabelForTypeAndServiceMode = (input: {
   switch (type) {
     case 'walk-in':
       if (serviceMode === 'virtual') {
-        return 'On-demand Telemed';
+        return 'Telemedicina - Demanda Espontânea';
       } else {
-        return 'Walk-in In Person Visit';
+        return 'Presencial - Demanda Espontânea';
       }
     case 'pre-booked':
       if (serviceMode === 'virtual') {
-        return 'Pre-booked Telemed';
+        return 'Telemedicina - Agendado';
       } else {
-        return 'Pre-booked In Person Visit';
+        return 'Presencial - Agendado';
       }
     case 'post-telemed':
-      return 'Post Telemed Lab Only';
+      return 'Presencial - Pós-Telemedicina';
     default: {
       return '-';
     }

@@ -117,6 +117,14 @@ const visitTypeContext: Record<VisitType, { mode: ServiceMode; visitCtx: Service
   [VisitType.VirtualScheduled]: { mode: ServiceMode.virtual, visitCtx: ServiceVisitType.prebook },
 };
 
+const VISIT_TYPE_LABELS_BR: Record<string, string> = {
+  'in-person-walk-in': 'Presencial - Demanda Espontânea',
+  'in-person-pre-booked': 'Presencial - Agendado',
+  'in-person-post-telemed': 'Presencial - Pós-Telemedicina',
+  'virtual-on-demand': 'Telemedicina - Demanda Espontânea',
+  'virtual-scheduled': 'Telemedicina - Agendado',
+};
+
 export const getPostAppointmentSnackbar = ({
   hasClientCopyFailures,
   isScheduledFollowUp,
@@ -128,14 +136,14 @@ export const getPostAppointmentSnackbar = ({
 }): { message: string; variant: 'warning' | 'success' } => {
   if (hasClientCopyFailures) {
     return {
-      message: "Visit created, but some fields couldn't be copied from the previous visit.",
+      message: 'Atendimento criado, mas alguns dados da consulta anterior não puderam ser copiados.',
       variant: 'warning',
     };
   }
   if (isScheduledFollowUp && copyAttempted) {
-    return { message: 'Visit added; notes copied from the previous visit.', variant: 'success' };
+    return { message: 'Atendimento adicionado; anotações da consulta anterior copiadas com sucesso.', variant: 'success' };
   }
-  return { message: 'Visit added successfully', variant: 'success' };
+  return { message: 'Atendimento criado com sucesso', variant: 'success' };
 };
 
 export default function AddPatient(): JSX.Element {
@@ -537,7 +545,7 @@ export default function AddPatient(): JSX.Element {
       let createSlotInput: CreateSlotParams;
       if (visitType === VisitType.InPersonWalkIn || visitType === VisitType.VirtualOnDemand) {
         if (!selectedBookable) {
-          enqueueSnackbar('Please select where to book', { variant: 'error' });
+          enqueueSnackbar('Por favor, selecione onde agendar', { variant: 'error' });
           setLoading(false);
           return;
         }
@@ -556,7 +564,7 @@ export default function AddPatient(): JSX.Element {
           timezone = locationWithSlotData?.location?.timezone ?? 'UTC';
         }
         if (!walkinScheduleId) {
-          enqueueSnackbar('No walk-in availability for this target right now.', { variant: 'error' });
+          enqueueSnackbar('Sem disponibilidade para demanda espontânea no momento.', { variant: 'error' });
           setLoading(false);
           return;
         }
@@ -570,7 +578,7 @@ export default function AddPatient(): JSX.Element {
         };
       } else {
         if (!slot) {
-          enqueueSnackbar('Please select a time slot', { variant: 'error' });
+          enqueueSnackbar('Por favor, selecione um horário', { variant: 'error' });
           setLoading(false);
           return;
         }
@@ -594,7 +602,7 @@ export default function AddPatient(): JSX.Element {
         persistedSlot = await createSlot(createSlotInput, oystehrZambda);
       } catch (error) {
         console.error(`Failed to create slot: ${error}`);
-        let errorMessage = 'An unexpected error occurred creating the slot, please try again.';
+        let errorMessage = 'Ocorreu um erro inesperado ao criar o horário, por favor tente novamente.';
         if (isApiError(error)) {
           errorMessage = (error as APIError).message;
         }
@@ -619,7 +627,7 @@ export default function AddPatient(): JSX.Element {
         response = await createAppointment(oystehrZambda, zambdaParams);
       } catch (error) {
         console.error(`Failed to add patient: ${error}`);
-        enqueueSnackbar('An unexpected error occurred, please try again.', { variant: 'error' });
+        enqueueSnackbar('Ocorreu um erro inesperado, por favor tente novamente.', { variant: 'error' });
         apiErr = true;
       }
 
@@ -664,8 +672,8 @@ export default function AddPatient(): JSX.Element {
         <Grid item xs={5}>
           <CustomBreadcrumbs
             chain={[
-              { link: '/visits', children: 'Tracking Board' },
-              { link: '#', children: isScheduledFollowUp ? 'Add Scheduled Follow-up' : 'Add Visit' },
+              { link: '/visits', children: 'Painel de Atendimentos' },
+              { link: '#', children: isScheduledFollowUp ? 'Agendar Consulta de Retorno' : 'Novo Atendimento' },
             ]}
           />
 
@@ -677,7 +685,7 @@ export default function AddPatient(): JSX.Element {
             color={'primary.dark'}
             data-testid={dataTestIds.addPatientPage.pageTitle}
           >
-            {isScheduledFollowUp ? 'Add Scheduled Follow-up Visit' : 'Add Visit'}
+            {isScheduledFollowUp ? 'Agendar Consulta de Retorno' : 'Novo Atendimento'}
           </Typography>
 
           {/* form content */}
@@ -685,13 +693,13 @@ export default function AddPatient(): JSX.Element {
             <form noValidate onSubmit={(e) => handleFormSubmit(e)}>
               <Stack spacing={2} padding={4}>
                 <FormControl fullWidth error={!!errors.visitType}>
-                  <InputLabel id="visit-type-label">Visit type *</InputLabel>
+                  <InputLabel id="visit-type-label">Tipo de Atendimento *</InputLabel>
                   <Select
                     data-testid={dataTestIds.addPatientPage.visitTypeDropdown}
                     labelId="visit-type-label"
                     id="visit-type-select"
                     value={visitType || ''}
-                    label="Visit type *"
+                    label="Tipo de Atendimento *"
                     required
                     onChange={(event) => {
                       setSlot(undefined);
@@ -700,21 +708,21 @@ export default function AddPatient(): JSX.Element {
                   >
                     {filteredVisitTypes.map((option) => (
                       <MenuItem value={option.id} key={option.id}>
-                        {option.label}
+                        {VISIT_TYPE_LABELS_BR[option.id] || option.label}
                       </MenuItem>
                     ))}
                   </Select>
-                  {errors.visitType && <FormHelperText>Visit type is required</FormHelperText>}
+                  {errors.visitType && <FormHelperText>O tipo de atendimento é obrigatório</FormHelperText>}
                 </FormControl>
 
                 <FormControl fullWidth error={!!errors.serviceCategory || isPickerEmpty}>
-                  <InputLabel id="service-category-label">Service category *</InputLabel>
+                  <InputLabel id="service-category-label">Especialidade / Categoria *</InputLabel>
                   <Select
                     data-testid={dataTestIds.addPatientPage.serviceCategoryDropdown}
                     labelId="service-category-label"
                     id="service-category-select"
                     value={serviceCategory || ''}
-                    label="Service category *"
+                    label="Especialidade / Categoria *"
                     required
                     disabled={isPickerLocked}
                     onChange={(event) => {
@@ -728,9 +736,9 @@ export default function AddPatient(): JSX.Element {
                     ))}
                   </Select>
                   {isPickerEmpty ? (
-                    <FormHelperText>No service categories available — contact an administrator.</FormHelperText>
+                    <FormHelperText>Nenhuma especialidade disponível — contate o administrador.</FormHelperText>
                   ) : (
-                    errors.serviceCategory && <FormHelperText>Service category is required</FormHelperText>
+                    errors.serviceCategory && <FormHelperText>A especialidade é obrigatória</FormHelperText>
                   )}
                 </FormControl>
 
@@ -775,7 +783,7 @@ export default function AddPatient(): JSX.Element {
                     // unaffected if they're added later.
                   }}
                   error={!!errors.location}
-                  helperText="Location is required"
+                  helperText="A unidade é obrigatória"
                 />
 
                 {!isScheduledFollowUp && (
@@ -793,7 +801,7 @@ export default function AddPatient(): JSX.Element {
                 )}
                 {isScheduledFollowUp && patientInfo && (
                   <Typography variant="body1" color="text.secondary">
-                    Patient: {patientInfo.firstName} {patientInfo.lastName}
+                    Paciente: {patientInfo.firstName} {patientInfo.lastName}
                   </Typography>
                 )}
 
@@ -801,17 +809,17 @@ export default function AddPatient(): JSX.Element {
                 {shouldShowReasonForVisitFields && (
                   <Box marginTop={4}>
                     <Typography variant="h4" color="primary.dark">
-                      Visit information
+                      Informações do Atendimento
                     </Typography>
                     <Box marginTop={2}>
                       <FormControl fullWidth error={!!errors.reasonForVisit}>
-                        <InputLabel id="reason-for-visit-label">Reason for visit *</InputLabel>
+                        <InputLabel id="reason-for-visit-label">Motivo do Atendimento *</InputLabel>
                         <Select
                           data-testid={dataTestIds.addPatientPage.reasonForVisitDropdown}
                           labelId="reason-for-visit-label"
                           id="reason-for-visit-select"
                           value={reasonForVisit || ''}
-                          label="Reason for visit *"
+                          label="Motivo do Atendimento *"
                           required
                           onChange={(event) => {
                             setReasonForVisit(event.target.value);
@@ -826,14 +834,14 @@ export default function AddPatient(): JSX.Element {
                             </MenuItem>
                           ))}
                         </Select>
-                        {errors.reasonForVisit && <FormHelperText>Reason for visit is required</FormHelperText>}
+                        {errors.reasonForVisit && <FormHelperText>O motivo do atendimento é obrigatório</FormHelperText>}
                       </FormControl>
                     </Box>
                     {isOtherFollowUpReason && (
                       <Box marginTop={2}>
                         <FormControl fullWidth error={!!errors.otherReason}>
                           <TextField
-                            label="Other reason"
+                            label="Outro motivo"
                             id="follow-up-other-reason-text"
                             value={otherReason}
                             required
@@ -842,7 +850,7 @@ export default function AddPatient(): JSX.Element {
                               if (errors.otherReason) setErrors((prev) => ({ ...prev, otherReason: false }));
                             }}
                             error={!!errors.otherReason}
-                            helperText={errors.otherReason ? 'Please specify the follow-up reason' : undefined}
+                            helperText={errors.otherReason ? 'Por favor, especifique o motivo do retorno' : undefined}
                           />
                         </FormControl>
                       </Box>
@@ -850,7 +858,7 @@ export default function AddPatient(): JSX.Element {
                     <Box marginTop={2}>
                       <FormControl fullWidth>
                         <TextField
-                          label="Tell us more (optional)"
+                          label="Mais detalhes / Observações (opcional)"
                           id="reason-additional-text"
                           value={reasonForVisitAdditional}
                           aria-describedby="reason-additional-helper-text"
@@ -903,12 +911,12 @@ export default function AddPatient(): JSX.Element {
                 <Box marginTop={4}>
                   {errors.submit && (
                     <Typography color="error" variant="body2" mb={2}>
-                      Failed to add patient. Please try again.
+                      Falha ao adicionar atendimento. Por favor, tente novamente.
                     </Typography>
                   )}
                   {errors.search && (
                     <Typography color="error" variant="body2" mb={2}>
-                      Please search for patients before adding
+                      Por favor, busque pelo paciente antes de adicionar
                     </Typography>
                   )}
                   <LoadingButton
@@ -923,7 +931,7 @@ export default function AddPatient(): JSX.Element {
                       marginRight: 1,
                     }}
                   >
-                    Add {visitType}
+                    {isScheduledFollowUp ? 'Confirmar Retorno' : 'Confirmar Atendimento'}
                   </LoadingButton>
                   <Button
                     data-testid={dataTestIds.addPatientPage.cancelButton}
@@ -936,16 +944,16 @@ export default function AddPatient(): JSX.Element {
                       navigate('/visits');
                     }}
                   >
-                    Cancel
+                    Cancelar
                   </Button>
                 </Box>
               </Stack>
             </form>
             <CustomDialog
               open={selectSlotDialogOpen}
-              title="Please select a date and time"
-              description="To continue, please select an available appointment."
-              closeButtonText="Close"
+              title="Por favor, selecione data e horário"
+              description="Para continuar, por favor selecione um horário de agendamento disponível."
+              closeButtonText="Fechar"
               handleClose={() => setSelectSlotDialogOpen(false)}
             />
           </Paper>

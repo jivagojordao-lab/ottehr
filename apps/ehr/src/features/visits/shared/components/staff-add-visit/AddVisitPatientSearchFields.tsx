@@ -45,7 +45,7 @@ export const AddVisitPatientSearchFields: FC<AddVisitPatientSearchFieldsProps> =
   phoneNumber,
   dateOfBirth,
 }) => {
-  const phoneNumberErrorMessage = 'Phone number must be 10 digits in the format (xxx) xxx-xxxx';
+  const phoneNumberErrorMessage = 'O telefone/celular deve conter DDD e dígitos válidos';
 
   return (
     <>
@@ -53,11 +53,11 @@ export const AddVisitPatientSearchFields: FC<AddVisitPatientSearchFieldsProps> =
         <TextField
           data-testid={lastName.dataTestId}
           fullWidth
-          label="Last Name"
-          placeholder={lastName.displayPlaceholder ? 'Doe' : undefined}
+          label="Sobrenome"
+          placeholder={lastName.displayPlaceholder ? 'Silva' : undefined}
           value={lastName.value}
           error={lastName.error}
-          helperText={lastName.error ? 'Last name is required' : ''}
+          helperText={lastName.error ? 'O sobrenome é obrigatório' : ''}
           onChange={lastName.onChange}
           {...(lastName.additionalProps ?? {})}
           required={lastName.required}
@@ -68,11 +68,11 @@ export const AddVisitPatientSearchFields: FC<AddVisitPatientSearchFieldsProps> =
         <TextField
           data-testid={firstName.dataTestId}
           fullWidth
-          label="Given Names"
-          placeholder={firstName.displayPlaceholder ? 'John Henry' : undefined}
+          label="Nome"
+          placeholder={firstName.displayPlaceholder ? 'João Carlos' : undefined}
           value={firstName.value}
           error={firstName.error}
-          helperText={firstName.error ? 'First name is required' : ''}
+          helperText={firstName.error ? 'O nome é obrigatório' : ''}
           onChange={firstName.onChange}
           {...(firstName.additionalProps ?? {})}
           required={firstName.required}
@@ -84,11 +84,11 @@ export const AddVisitPatientSearchFields: FC<AddVisitPatientSearchFieldsProps> =
           data-testid={phoneNumber.dataTestId}
           customInput={TextField}
           value={phoneNumber.value}
-          format="(###) ###-####"
+          format="(##) #####-####"
           mask=" "
-          label="Mobile Phone"
+          label="Celular / Telefone"
           variant="outlined"
-          placeholder={phoneNumber.displayPlaceholder ? '(XXX) XXX-XXXX' : undefined}
+          placeholder={phoneNumber.displayPlaceholder ? '(XX) XXXXX-XXXX' : undefined}
           fullWidth
           error={phoneNumber.error}
           helperText={phoneNumber.error ? phoneNumberErrorMessage : ''}
@@ -102,7 +102,7 @@ export const AddVisitPatientSearchFields: FC<AddVisitPatientSearchFieldsProps> =
         {dateOfBirth.readOnly ? (
           <TextField
             fullWidth
-            label="Date of birth"
+            label="Data de nascimento"
             value={dateOfBirth.value}
             error={dateOfBirth.error}
             helperText={dateOfBirth.error ? dateOfBirth.errorMessage : undefined}
@@ -114,7 +114,7 @@ export const AddVisitPatientSearchFields: FC<AddVisitPatientSearchFieldsProps> =
             date={dateOfBirth.birthDate}
             setDate={dateOfBirth.setBirthDate}
             defaultValue={null}
-            label="Date of birth"
+            label="Data de nascimento"
             required={dateOfBirth.required}
             setIsValidDate={dateOfBirth.setValidDate}
             error={dateOfBirth.error}

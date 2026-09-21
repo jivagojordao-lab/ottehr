@@ -514,7 +514,7 @@ export const PatientAccountComponent: FC<PatientAccountComponentProps> = ({
 
   const handleSaveForm = async (values: any): Promise<void> => {
     if (!patient?.id) {
-      enqueueSnackbar('Something went wrong. Please reload the page.', { variant: 'error' });
+      enqueueSnackbar('Ocorreu um erro. Por favor, recarregue a página.', { variant: 'error' });
       return;
     }
 
@@ -528,7 +528,7 @@ export const PatientAccountComponent: FC<PatientAccountComponentProps> = ({
 
       if (appointmentId && dirtyFields[OCCUPATIONAL_MEDICINE_EMPLOYER_FIELD_KEY]) {
         if (!oystehrZambda) {
-          enqueueSnackbar('Something went wrong. Please reload the page.', { variant: 'error' });
+          enqueueSnackbar('Ocorreu um erro. Por favor, recarregue a página.', { variant: 'error' });
           return;
         }
         try {
@@ -538,7 +538,7 @@ export const PatientAccountComponent: FC<PatientAccountComponentProps> = ({
           );
           await queryClient.invalidateQueries({ queryKey: ['get-visit-details'] });
         } catch {
-          enqueueSnackbar('Save operation failed. The server encountered an error while processing your request.', {
+          enqueueSnackbar('Falha ao salvar. O servidor encontrou um erro ao processar sua solicitação.', {
             variant: 'error',
           });
           return;
@@ -567,11 +567,11 @@ export const PatientAccountComponent: FC<PatientAccountComponentProps> = ({
         },
         {
           onSuccess: () => {
-            enqueueSnackbar('Coverage removed from patient account', { variant: 'success' });
+            enqueueSnackbar('Convênio removido da conta do paciente', { variant: 'success' });
             void queryClient.invalidateQueries({ queryKey: ['patient-coverages'] });
           },
           onError: () => {
-            enqueueSnackbar('Save operation failed. The server encountered an error while processing your request.', {
+            enqueueSnackbar('Falha ao salvar. O servidor encontrou um erro ao processar sua solicitação.', {
               variant: 'error',
             });
           },
@@ -703,7 +703,7 @@ export const PatientAccountComponent: FC<PatientAccountComponentProps> = ({
             <ActionBar
               handleDiscard={handleBackClickWithConfirmation}
               handleSave={handleSubmit(handleSaveForm, (validationErrors) => {
-                enqueueSnackbar('Please fix all field validation errors and try again', { variant: 'error' });
+                enqueueSnackbar('Por favor, corrija os erros nos campos e tente novamente', { variant: 'error' });
                 scrollToFirstInvalidField(Object.keys(validationErrors), (key) => Boolean(validationErrors[key]));
               })}
               loading={submitQR.isPending}
@@ -715,11 +715,11 @@ export const PatientAccountComponent: FC<PatientAccountComponentProps> = ({
           <CustomDialog
             open={openConfirmationDialog}
             handleClose={handleCloseConfirmationDialog}
-            title="Discard Changes?"
-            description="You have unsaved changes. Are you sure you want to discard them and go back?"
-            closeButtonText="Cancel"
+            title="Descartar alterações?"
+            description="Você tem alterações não salvas. Tem certeza de que deseja descartá-las e voltar?"
+            closeButtonText="Cancelar"
             handleConfirm={handleDiscardChanges}
-            confirmText="Discard Changes"
+            confirmText="Descartar Alterações"
           />
         </FormProvider>
       </SaveBlockedReasonProvider>
@@ -733,7 +733,7 @@ const PatientInformationPage: FC = () => {
   return (
     <PatientAccountComponent
       id={id}
-      title="Patient Profile"
+      title="Dados do Paciente"
       renderBreadCrumbs
       renderHeader
       containerSX={{ padding: theme.spacing(3) }}

@@ -23,6 +23,13 @@ interface CancelVisitDialogProps {
   onClose: () => void;
 }
 
+const CANCEL_REASON_LABELS_BR: Record<string, string> = {
+  'Patient did not answer after multiple attempts': 'Paciente não atendeu após várias tentativas',
+  'Wrong patient name on chart': 'Nome de paciente incorreto no prontuário',
+  'Technical issues connecting and/ or with video': 'Problemas técnicos de conexão ou vídeo',
+  Other: 'Outro motivo',
+};
+
 const CancelVisitDialog = ({ onClose }: CancelVisitDialogProps): ReactElement => {
   const [reason, setReason] = useState('');
   const [error, setError] = useState<boolean>(false);
@@ -105,21 +112,21 @@ const CancelVisitDialog = ({ onClose }: CancelVisitDialogProps): ReactElement =>
     >
       <form onSubmit={(e) => handleCancelAppointment(e)}>
         <DialogTitle variant="h4" color="primary.dark" sx={{ width: '100%' }}>
-          Cancellation reason
+          Motivo do Cancelamento
         </DialogTitle>
         <DialogContent>
           <FormControl fullWidth required sx={{ mt: 2 }}>
-            <InputLabel id="cancellation-reason-label">Cancellation Reason</InputLabel>
+            <InputLabel id="cancellation-reason-label">Motivo do Cancelamento</InputLabel>
             <Select
               labelId="cancellation-reason-label"
               id="cancellation-reason"
               value={reason}
-              label="Cancellation Reason"
+              label="Motivo do Cancelamento"
               onChange={handleReasonChange}
             >
               {cancellationReasons.map((reason) => (
                 <MenuItem key={reason.value} value={reason.value}>
-                  {reason.label}
+                  {CANCEL_REASON_LABELS_BR[reason.label] || reason.label}
                 </MenuItem>
               ))}
             </Select>
@@ -128,7 +135,7 @@ const CancelVisitDialog = ({ onClose }: CancelVisitDialogProps): ReactElement =>
             <FormControl fullWidth required>
               <TextField
                 id="other-reason"
-                label="Reason"
+                label="Descreva o motivo"
                 variant="outlined"
                 fullWidth
                 required={true}
@@ -148,15 +155,15 @@ const CancelVisitDialog = ({ onClose }: CancelVisitDialogProps): ReactElement =>
             size="medium"
             sx={buttonSx}
           >
-            Cancel visit
+            Cancelar Atendimento
           </LoadingButton>
           <Button onClick={onClose} variant="text" color="primary" size="medium" sx={buttonSx}>
-            Keep
+            Manter Atendimento
           </Button>
         </DialogActions>
         {error && (
           <Typography color="error" variant="body2" my={1} mx={2}>
-            There was an error cancelling this appointment, please try again.
+            Ocorreu um erro ao cancelar este atendimento, por favor tente novamente.
           </Typography>
         )}
       </form>

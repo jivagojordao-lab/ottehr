@@ -40,7 +40,7 @@ export const ActionBar: FC<ActionBarProps> = ({
       disabled={submitDisabled || Boolean(submitBlockedReason)}
       onClick={handleSave}
     >
-      Save All
+      Salvar Tudo
     </LoadingButton>
   );
 
@@ -69,7 +69,7 @@ export const ActionBar: FC<ActionBarProps> = ({
         }}
         onClick={handleDiscard}
       >
-        Back
+        Voltar
       </Button>
       {backButtonHidden && <span />} {/* Placeholder to keep Save changes button on the right */}
       {submitBlockedReason ? (

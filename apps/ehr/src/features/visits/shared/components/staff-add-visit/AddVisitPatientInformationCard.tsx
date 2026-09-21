@@ -24,6 +24,13 @@ import { PersonSex } from 'utils/lib/types/common';
 import { AddVisitPatientSearchDialog } from './AddVisitPatientSearchDialog';
 import { AddVisitPatientSearchFields } from './AddVisitPatientSearchFields';
 
+const GENDER_LABELS_BR: Record<string, string> = {
+  male: 'Masculino',
+  female: 'Feminino',
+  other: 'Outro / Intersexo',
+  unknown: 'Desconhecido',
+};
+
 const defaultSearchFilters = { givenNames: '', lastName: '', phone: '', dateOfBirth: '' };
 const readOnlyTextFieldProps: TextFieldProps = {
   InputProps: {
@@ -65,7 +72,7 @@ export const AddVisitPatientInformationCard: FC<AddVisitPatientInformationCardPr
 
   // consts
   const formattedDOB = patientInfo?.dateOfBirth
-    ? DateTime.fromISO(patientInfo.dateOfBirth).toFormat('MMMM dd, yyyy')
+    ? DateTime.fromISO(patientInfo.dateOfBirth).setLocale('pt-BR').toFormat('dd/MM/yyyy')
     : '';
 
   // helpers
@@ -256,14 +263,14 @@ export const AddVisitPatientInformationCard: FC<AddVisitPatientInformationCardPr
       <Grid container rowSpacing={2}>
         <Grid item>
           <Typography variant="h4" color="primary.dark">
-            Patient information
+            Informações do Paciente
           </Typography>
         </Grid>
         {showFields === 'displayPatientSearch' || showFields === 'initialPatientSearch' ? (
           <>
             <Grid item>
               <Typography variant="body1">
-                Please enter name, date of birth or phone to search for existing patients before proceeding.
+                Por favor, insira o nome, data de nascimento ou telefone para buscar pacientes cadastrados antes de prosseguir.
               </Typography>
             </Grid>
             <Grid item>
@@ -304,7 +311,7 @@ export const AddVisitPatientInformationCard: FC<AddVisitPatientInformationCardPr
                     value: '',
                     birthDate,
                     error: !!errors.dateOfBirth,
-                    errorMessage: 'Date of birth is required',
+                    errorMessage: 'A data de nascimento é obrigatória',
                     setBirthDate: (date) => {
                       setBirthDate(date);
                       setSearchField({ field: 'dateOfBirth', value: date?.toISODate() || '' });
@@ -323,7 +330,7 @@ export const AddVisitPatientInformationCard: FC<AddVisitPatientInformationCardPr
                     sx={{ borderRadius: 28, p: '8px 22px', textTransform: 'none' }}
                     onClick={handlePatientSearchClick}
                   >
-                    Search for Patients
+                    Buscar Pacientes
                   </LoadingButton>
                 </Grid>
               </Grid>
@@ -364,7 +371,7 @@ export const AddVisitPatientInformationCard: FC<AddVisitPatientInformationCardPr
                         required: false,
                         value: formattedDOB,
                         error: !!errors.dateOfBirth,
-                        errorMessage: 'Date of birth is required',
+                        errorMessage: 'A data de nascimento é obrigatória',
                         additionalProps: readOnlyTextFieldProps,
                         dataTestId: dataTestIds.addPatientPage.prefilledPatientBirthday,
                         readOnly: true,
@@ -373,14 +380,14 @@ export const AddVisitPatientInformationCard: FC<AddVisitPatientInformationCardPr
                     <Grid item xs={12} sm={6}>
                       <TextField
                         fullWidth
-                        label="Sex at birth"
+                        label="Sexo biológico"
                         value={
                           patientInfo.sex
-                            ? `${patientInfo.sex.charAt(0).toUpperCase() + patientInfo.sex.slice(1)}`
+                            ? GENDER_LABELS_BR[patientInfo.sex.toLowerCase()] || patientInfo.sex
                             : undefined
                         }
                         error={!!errors.sexAtBirth}
-                        helperText={errors.sexAtBirth ? 'Sex at birth is required' : undefined}
+                        helperText={errors.sexAtBirth ? 'O sexo biológico é obrigatório' : undefined}
                         {...readOnlyTextFieldProps}
                         data-testid={dataTestIds.addPatientPage.prefilledPatientBirthSex}
                       />
@@ -430,30 +437,30 @@ export const AddVisitPatientInformationCard: FC<AddVisitPatientInformationCardPr
                         setBirthDate,
                         setValidDate,
                         error: !!errors.dateOfBirth,
-                        errorMessage: 'Date of birth is required',
+                        errorMessage: 'A data de nascimento é obrigatória',
                         readOnly: false,
                       }}
                     />
                     <Grid item xs={12} sm={6}>
                       <FormControl fullWidth error={!!errors.sexAtBirth}>
-                        <InputLabel id="sex-at-birth-label">Sex at birth *</InputLabel>
+                        <InputLabel id="sex-at-birth-label">Sexo biológico *</InputLabel>
                         <Select
                           data-testid={dataTestIds.addPatientPage.sexAtBirthDropdown}
                           labelId="sex-at-birth-label"
                           id="sex-at-birth-select"
                           value={patientInfo.sex || ''}
-                          label="Sex at birth *"
+                          label="Sexo biológico *"
                           required
                           onChange={(event) => {
                             const selectedSex = event.target.value as PersonSex;
                             setPatientInfo({ ...patientInfo, sex: selectedSex });
                           }}
                         >
-                          <MenuItem value={PersonSex.Male}>Male</MenuItem>
-                          <MenuItem value={PersonSex.Female}>Female</MenuItem>
-                          <MenuItem value={PersonSex.Intersex}>Intersex</MenuItem>
+                          <MenuItem value={PersonSex.Male}>Masculino</MenuItem>
+                          <MenuItem value={PersonSex.Female}>Feminino</MenuItem>
+                          <MenuItem value={PersonSex.Intersex}>Outro / Intersexo</MenuItem>
                         </Select>
-                        {errors.sexAtBirth && <FormHelperText>Sex at birth is required</FormHelperText>}
+                        {errors.sexAtBirth && <FormHelperText>O sexo biológico é obrigatório</FormHelperText>}
                       </FormControl>
                     </Grid>
                   </>
@@ -466,7 +473,7 @@ export const AddVisitPatientInformationCard: FC<AddVisitPatientInformationCardPr
                     sx={{ borderRadius: 28, p: '8px 22px', textTransform: 'none' }}
                     onClick={handleResetSearch}
                   >
-                    Reset
+                    Nova Busca
                   </Button>
                 </Grid>
               </Grid>
@@ -477,7 +484,7 @@ export const AddVisitPatientInformationCard: FC<AddVisitPatientInformationCardPr
 
       {errors.searchEntry && (
         <Typography color="error" variant="body2" mb={2}>
-          Please enter at least one search term
+          Por favor, preencha pelo menos um campo para buscar
         </Typography>
       )}
 

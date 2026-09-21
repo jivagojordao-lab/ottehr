@@ -87,11 +87,24 @@ const StatusChip = styled(Chip)(() => ({
   },
 }));
 
+const VISIT_STATUS_LABELS_BR: Record<string, string> = {
+  pending: 'Pendente',
+  booked: 'Agendado',
+  arrived: 'Chegou',
+  intake: 'Triagem',
+  'ready for provider': 'Aguardando Atendimento',
+  'ready for discharge': 'Pronto para Alta',
+  provider: 'Em Atendimento',
+  completed: 'Concluído',
+  cancelled: 'Cancelado',
+  'no-show': 'Não Compareceu',
+};
+
 export const getFollowupStatusChip = (status: 'OPEN' | 'RESOLVED'): ReactElement => {
   const statusVal =
     status === 'OPEN'
-      ? { statusText: 'OPEN', statusColors: statusColors.OPEN }
-      : { statusText: 'RESOLVED', statusColors: statusColors.RESOLVED };
+      ? { statusText: 'ABERTO', statusColors: statusColors.OPEN }
+      : { statusText: 'RESOLVIDO', statusColors: statusColors.RESOLVED };
   return (
     <StatusChip
       label={statusVal.statusText}
@@ -124,15 +137,15 @@ interface TableColumn {
 }
 
 const columns: TableColumn[] = [
-  { id: 'dateTime', label: 'Date & Time', sortable: true, width: 150 },
+  { id: 'dateTime', label: 'Data & Horário', sortable: true, width: 150 },
   { id: 'status', label: 'Status', width: 140 },
-  { id: 'type', label: 'Type & Service Category', width: 180 },
-  { id: 'reason', label: 'Reason for visit', width: 150 },
-  { id: 'provider', label: 'Provider', width: 150 },
-  { id: 'office', label: 'Office', width: 150 },
-  { id: 'los', label: 'LOS', width: 100 },
-  { id: 'info', label: 'Visit Info', width: 120, align: 'center' },
-  { id: 'note', label: 'Progress Note', width: 150 },
+  { id: 'type', label: 'Tipo & Especialidade', width: 180 },
+  { id: 'reason', label: 'Motivo da Consulta', width: 150 },
+  { id: 'provider', label: 'Profissional', width: 150 },
+  { id: 'office', label: 'Unidade', width: 150 },
+  { id: 'los', label: 'Duração', width: 100 },
+  { id: 'info', label: 'Detalhes', width: 120, align: 'center' },
+  { id: 'note', label: 'Prontuário', width: 150 },
 ];
 
 export const PatientEncountersGrid: FC<PatientEncountersGridProps> = (props) => {
@@ -263,7 +276,7 @@ export const PatientEncountersGrid: FC<PatientEncountersGridProps> = (props) => 
         // Scheduled follow-ups use encounter status directly (planned, arrived, etc.)
         // Annotation follow-ups use OPEN/RESOLVED
         if (encounter.followupSubtype === 'scheduled') {
-          return <Typography variant="body2">{encounter.status}</Typography>;
+          return <Typography variant="body2">{VISIT_STATUS_LABELS_BR[encounter.status.toLowerCase()] || encounter.status}</Typography>;
         }
         return getFollowupStatusChip(getAnnotationFollowupStatusLabel(encounter.status));
       }
@@ -271,7 +284,7 @@ export const PatientEncountersGrid: FC<PatientEncountersGridProps> = (props) => 
         if (encounter.followupSubtype !== 'scheduled' || !encounter.appointmentId) return null;
         return (
           <RoundedButton to={`/visit/${encounter.appointmentId}`} state={{ encounterId: encounter.encounterId }}>
-            Visit Info
+            Detalhes
           </RoundedButton>
         );
       }
@@ -286,7 +299,7 @@ export const PatientEncountersGrid: FC<PatientEncountersGridProps> = (props) => 
           { id: originalAppointmentId, encounterId, isFollowUp: true },
           pathSegment
         );
-        return <RoundedButton to={to}>Progress Note</RoundedButton>;
+        return <RoundedButton to={to}>Prontuário</RoundedButton>;
       }
       default:
         return '-';
@@ -299,7 +312,7 @@ export const PatientEncountersGrid: FC<PatientEncountersGridProps> = (props) => 
         return row.dateTime ? formatISOStringToDateAndTime(row.dateTime) : '-';
       case 'status':
         if (!row.status) return null;
-        return row.status;
+        return VISIT_STATUS_LABELS_BR[row.status.toLowerCase()] || row.status;
       case 'type': {
         const typeLabel = getVisitTypeLabelForTypeAndServiceMode({ type: row.type, serviceMode: row.serviceMode });
         const serviceCategoryAbbr = resolveServiceCategoryAbbr(row.serviceCategory);
@@ -317,12 +330,12 @@ export const PatientEncountersGrid: FC<PatientEncountersGridProps> = (props) => 
       case 'office':
         return row.office || '-';
       case 'los':
-        return row.length !== undefined ? `${formatMinutes(row.length)} ${row.length === 1 ? 'min' : 'mins'}` : '-';
+        return row.length !== undefined ? `${formatMinutes(row.length)} min` : '-';
       case 'info': {
         if (!row.appointmentId) return null;
         return (
           <RoundedButton to={`/visit/${row.appointmentId}`} state={{ encounterId: row.encounterId }}>
-            Visit Info
+            Detalhes
           </RoundedButton>
         );
       }
@@ -331,7 +344,7 @@ export const PatientEncountersGrid: FC<PatientEncountersGridProps> = (props) => 
         const to = row.encounterId
           ? withFollowUpEncounterId(baseUrl, { isFollowUp: true, encounterId: row.encounterId })
           : baseUrl;
-        return <RoundedButton to={to}>Progress Note</RoundedButton>;
+        return <RoundedButton to={to}>Prontuário</RoundedButton>;
       }
       default:
         return '-';
@@ -342,28 +355,28 @@ export const PatientEncountersGrid: FC<PatientEncountersGridProps> = (props) => 
     <Paper sx={{ padding: 3 }} component={Stack} spacing={2}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Typography variant="h4" color="primary.dark" sx={{ flexGrow: 1 }}>
-          Encounters - {totalCount}
+          Consultas - {totalCount}
         </Typography>
-        {latestVisitDate && <Typography>Latest visit: {formatISOStringToDateAndTime(latestVisitDate)}</Typography>}
+        {latestVisitDate && <Typography>Última consulta: {formatISOStringToDateAndTime(latestVisitDate)}</Typography>}
         <RoundedButton
           to={patient?.id ? `/visits/add?patientId=${patient.id}` : '/visits/add'}
           variant="contained"
           startIcon={<AddIcon fontSize="small" />}
         >
-          New Visit
+          Nova Consulta
         </RoundedButton>
         <RoundedButton
           variant="contained"
           startIcon={<AddIcon fontSize="small" />}
           onClick={() => navigate('followup/add')}
         >
-          Follow-up
+          Consulta de Retorno
         </RoundedButton>
       </Box>
 
       <Box sx={{ display: 'flex', gap: 2 }}>
-        <TextField size="small" fullWidth label="Type" select value={type} onChange={(e) => setType(e.target.value)}>
-          <MenuItem value="all">All</MenuItem>
+        <TextField size="small" fullWidth label="Tipo" select value={type} onChange={(e) => setType(e.target.value)}>
+          <MenuItem value="all">Todos</MenuItem>
           <MenuItem value={'walk-in|in-person'}>{visitTypeToInPersonLabel['walk-in']}</MenuItem>
           <MenuItem value={'post-telemed|in-person'}>{visitTypeToInPersonLabel['post-telemed']}</MenuItem>
           <MenuItem value={'pre-booked|in-person'}>{visitTypeToInPersonLabel['pre-booked']}</MenuItem>
@@ -374,7 +387,7 @@ export const PatientEncountersGrid: FC<PatientEncountersGridProps> = (props) => 
         <TextField
           size="small"
           fullWidth
-          label="Service Category"
+          label="Especialidade"
           select
           value={serviceCategory}
           onChange={(e) => {
@@ -382,7 +395,7 @@ export const PatientEncountersGrid: FC<PatientEncountersGridProps> = (props) => 
             setPage(0);
           }}
         >
-          <MenuItem value="all">All</MenuItem>
+          <MenuItem value="all">Todas</MenuItem>
           {serviceCategories.map((sc) => (
             <MenuItem key={sc.code} value={sc.code}>
               {sc.display}
@@ -393,30 +406,30 @@ export const PatientEncountersGrid: FC<PatientEncountersGridProps> = (props) => 
         <TextField
           size="small"
           fullWidth
-          label="Visit Period"
+          label="Período"
           select
           value={period}
           onChange={(e) => setPeriod(+e.target.value)}
         >
-          <MenuItem value={0}>All</MenuItem>
-          <MenuItem value={1}>Last month</MenuItem>
-          <MenuItem value={3}>Last 3 months</MenuItem>
-          <MenuItem value={6}>Last 6 months</MenuItem>
-          <MenuItem value={12}>Last year</MenuItem>
+          <MenuItem value={0}>Todo o Histórico</MenuItem>
+          <MenuItem value={1}>Último mês</MenuItem>
+          <MenuItem value={3}>Últimos 3 meses</MenuItem>
+          <MenuItem value={6}>Últimos 6 meses</MenuItem>
+          <MenuItem value={12}>Último ano</MenuItem>
         </TextField>
 
         <TextField
           size="small"
           fullWidth
-          label="Visit Status"
+          label="Status"
           select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
         >
-          <MenuItem value="all">All</MenuItem>
+          <MenuItem value="all">Todos</MenuItem>
           {[...new Set(visitStatusArray.filter((item) => item !== 'cancelled'))].map((status) => (
             <MenuItem key={status} value={status}>
-              {capitalize(status)}
+              {VISIT_STATUS_LABELS_BR[status.toLowerCase()] || capitalize(status)}
             </MenuItem>
           ))}
         </TextField>
@@ -426,7 +439,7 @@ export const PatientEncountersGrid: FC<PatientEncountersGridProps> = (props) => 
             whiteSpace: 'nowrap',
           }}
           control={<Checkbox value={hideCancelled} onChange={(e) => setHideCancelled(e.target.checked)} />}
-          label="Hide “Cancelled”"
+          label="Ocultar Cancelados"
         />
 
         <FormControlLabel
@@ -434,7 +447,7 @@ export const PatientEncountersGrid: FC<PatientEncountersGridProps> = (props) => 
             whiteSpace: 'nowrap',
           }}
           control={<Checkbox value={hideNoShow} onChange={(e) => setHideNoShow(e.target.checked)} />}
-          label="Hide “No Show”"
+          label="Ocultar Não Compareceu"
         />
       </Box>
 
@@ -475,13 +488,13 @@ export const PatientEncountersGrid: FC<PatientEncountersGridProps> = (props) => 
             {visitHistoryIsLoading ? (
               <TableRow>
                 <TableCell colSpan={columns.length} sx={{ textAlign: 'center', py: 4 }}>
-                  Loading...
+                  Carregando...
                 </TableCell>
               </TableRow>
             ) : paginatedData.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={columns.length} sx={{ textAlign: 'center', py: 4 }}>
-                  No encounters found
+                  Nenhuma consulta encontrada
                 </TableCell>
               </TableRow>
             ) : (
@@ -563,6 +576,8 @@ export const PatientEncountersGrid: FC<PatientEncountersGridProps> = (props) => 
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        labelRowsPerPage="Itens por página:"
+        labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count !== -1 ? count : `mais de ${to}`}`}
       />
     </Paper>
   );

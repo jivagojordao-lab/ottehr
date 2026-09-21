@@ -34,7 +34,7 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
       hideDialog();
     } catch (error: unknown) {
       console.error(error);
-      enqueueSnackbar('An error occurred. Please try again.', { variant: 'error' });
+      enqueueSnackbar('Ocorreu um erro. Por favor, tente novamente.', { variant: 'error' });
     }
   };
 
@@ -60,10 +60,10 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
             disabled={props?.actionButtons?.proceed?.disabled}
             loading={props?.actionButtons?.proceed?.loading}
           >
-            {props?.actionButtons?.proceed?.text || 'Proceed'}
+            {props?.actionButtons?.proceed?.text || 'Prosseguir'}
           </RoundedButton>
           <RoundedButton onClick={hideDialog} color={props?.actionButtons?.back?.color || 'primary'}>
-            {props?.actionButtons?.back?.text || 'Back'}
+            {props?.actionButtons?.back?.text || 'Voltar'}
           </RoundedButton>
         </Stack>
       )}

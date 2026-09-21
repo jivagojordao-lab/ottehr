@@ -12,14 +12,14 @@ export default function PatientSearch({ nameFilter, setNameFilter, onClear }: Pa
   return (
     <TextField
       id="patient-name"
-      label="Name"
-      placeholder="Search patients by name (Last, First)"
+      label="Nome do Paciente"
+      placeholder="Buscar pacientes por nome (Sobrenome, Nome)"
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
             {nameFilter && nameFilter?.length > 0 ? (
               <IconButton
-                aria-label="clear patient search"
+                aria-label="limpar busca de pacientes"
                 onClick={() => {
                   if (onClear) {
                     onClear();

@@ -58,7 +58,7 @@ export default function Appointments(): ReactElement {
     const message =
       sdkError?.code === APIErrorCode.APPOINTMENT_SEARCH_TOO_BROAD
         ? sdkError.message
-        : 'Failed to load visits. Please try again in a moment.';
+        : 'Falha ao carregar atendimentos. Por favor, tente novamente em instantes.';
     enqueueSnackbar(message, { variant: 'error', preventDuplicate: true });
   }, [error]);
 
@@ -95,7 +95,7 @@ export default function Appointments(): ReactElement {
                   variant="contained"
                 >
                   <AddIcon />
-                  <Typography fontWeight="bold">Visit</Typography>
+                  <Typography fontWeight="bold">Novo Atendimento</Typography>
                 </Button>
               </Link>
             </Box>

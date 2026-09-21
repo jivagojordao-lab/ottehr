@@ -35,7 +35,7 @@ export const Contacts: FC<Props> = ({ loading, patient }) => {
       {loading ? (
         <Skeleton width={115} />
       ) : (
-        <Tooltip title="Patient phone number">
+        <Tooltip title="Telefone do paciente">
           <Box sx={{ display: 'flex', gap: 0.5 }}>
             <PhoneOutlinedIcon fontSize="small" />
             <Typography data-testid={dataTestIds.patientHeader.patientPhoneNumber}>
@@ -48,7 +48,7 @@ export const Contacts: FC<Props> = ({ loading, patient }) => {
       {loading ? (
         <Skeleton width={115} />
       ) : (
-        <Tooltip title="Emergency contact">
+        <Tooltip title="Contato de emergência">
           <Box sx={{ display: 'flex', gap: 0.5 }}>
             <ContactPhoneOutlinedIcon fontSize="small" />
             <Typography data-testid={dataTestIds.patientHeader.emergencyContact}>

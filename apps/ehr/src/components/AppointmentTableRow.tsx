@@ -638,7 +638,7 @@ export default function AppointmentTableRow({
     }
 
     if (appointment.status === 'ready for provider' && !assignedProviderId) {
-      enqueueSnackbar('Please assign provider', { variant: 'error' });
+      enqueueSnackbar('Por favor, selecione o profissional', { variant: 'error' });
       return;
     }
 
@@ -670,7 +670,7 @@ export default function AppointmentTableRow({
       navigate(getInPersonUrlByAppointmentType(appointment, ROUTER_PATH.REVIEW_AND_SIGN));
     } catch (error) {
       console.error(error);
-      enqueueSnackbar('An error occurred. Please try again.', { variant: 'error' });
+      enqueueSnackbar('Ocorreu um erro. Por favor, tente novamente.', { variant: 'error' });
     } finally {
       setLoading(false);
     }
@@ -726,7 +726,7 @@ export default function AppointmentTableRow({
   const handleApprove = async (): Promise<void> => {
     setApproveButtonLoading(true);
     if (!apiClient || !appointment?.id) {
-      enqueueSnackbar('API client not defined or appointmentId not provided', { variant: 'error' });
+      enqueueSnackbar('Cliente da API não definido ou identificador de atendimento ausente', { variant: 'error' });
       setApproveButtonLoading(false);
       return;
     }
@@ -744,7 +744,7 @@ export default function AppointmentTableRow({
       navigate(`/visits?tab=${ApptTab.completed}`);
     } catch (error) {
       console.error(error);
-      enqueueSnackbar('An error occurred while approving. Please try again.', { variant: 'error' });
+      enqueueSnackbar('Ocorreu um erro ao aprovar. Por favor, tente novamente.', { variant: 'error' });
     }
     setApproveButtonLoading(false);
   };
@@ -858,14 +858,14 @@ export default function AppointmentTableRow({
                 fontWeight: 700,
               }}
             >
-              NEXT
+              PRÓXIMO
             </Typography>
           </Box>
         )}
       </TableCell>
       <TableCell sx={{ verticalAlign: 'center' }} data-testid={dataTestIds.dashboard.tableRowStatus(appointment.id)}>
         <Typography variant="body2">
-          {isVirtual(appointment) ? 'Virtual' : 'In Person'}
+          {isVirtual(appointment) ? 'Virtual' : 'Presencial'}
           {serviceCategory}
         </Typography>
         <Typography variant="body2">{appointment.location?.name ?? ''}</Typography>
@@ -877,11 +877,11 @@ export default function AppointmentTableRow({
         <Typography variant="body2">
           {capitalize?.(
             appointment.appointmentType === 'pre-booked'
-              ? 'Scheduled'
+              ? 'Agendado'
               : appointment.appointmentType === 'walk-in'
-              ? 'On Demand'
+              ? 'Demanda Espontânea'
               : appointment.appointmentType === 'post-telemed'
-              ? 'Post Telemed'
+              ? 'Pós-Telemedicina'
               : ''
           )}
         </Typography>
@@ -932,7 +932,7 @@ export default function AppointmentTableRow({
               </Typography>
             </Link>
             {appointment.isFollowUp && (
-              <Tooltip title="Follow-up visit">
+              <Tooltip title="Consulta de retorno">
                 <CallSplitIcon sx={{ fontSize: 16, color: 'text.secondary', transform: 'rotate(180deg)' }} />
               </Tooltip>
             )}
@@ -971,7 +971,7 @@ export default function AppointmentTableRow({
                   void changeRoom(e.target.value);
                 }}
               >
-                <MenuItem value={''}>None</MenuItem>
+                <MenuItem value={''}>Nenhum</MenuItem>
                 {rooms?.map((room) => (
                   <MenuItem key={room} value={room}>
                     {room}
@@ -990,7 +990,7 @@ export default function AppointmentTableRow({
         ) : tab === ApptTab['in-office'] ? (
           <Stack spacing={0.5} sx={{ minWidth: 150 }}>
             <AppointmentTablePractitionerSelect
-              label="In:"
+              label="Triagem:"
               options={intakeOptions ?? []}
               selectedPractitionerId={assignedIntakePerformerId}
               encounter={encounter}
@@ -1000,7 +1000,7 @@ export default function AppointmentTableRow({
               dataTestId={dataTestIds.dashboard.tableRowIntakeInput(appointment.id)}
             />
             <AppointmentTablePractitionerSelect
-              label="Pr:"
+              label="Médico:"
               options={providerOptions ?? []}
               selectedPractitionerId={assignedProviderId}
               encounter={encounter}
@@ -1012,8 +1012,8 @@ export default function AppointmentTableRow({
           </Stack>
         ) : (
           <Stack spacing={0.5} sx={{ minWidth: 150 }}>
-            <Typography sx={{ fontSize: 14 }}>In: {assignedIntakeName || '—'}</Typography>
-            <Typography sx={{ fontSize: 14 }}>Pr: {assignedProviderName || '—'}</Typography>
+            <Typography sx={{ fontSize: 14 }}>Triagem: {assignedIntakeName || '—'}</Typography>
+            <Typography sx={{ fontSize: 14 }}>Médico: {assignedProviderName || '—'}</Typography>
           </Stack>
         )}
       </TableCell>
