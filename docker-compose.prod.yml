@@ -48,6 +48,7 @@ services:
       MEDPLUM_REDIS_HOST: redis
       MEDPLUM_REDIS_PORT: 6379
     volumes:
+      - ./medplum.config.json:/usr/src/medplum/medplum.config.json
       - ./medplum.config.json:/usr/src/medplum/packages/server/medplum.config.json
       - medplumdata:/var/lib/medplum/data
 
