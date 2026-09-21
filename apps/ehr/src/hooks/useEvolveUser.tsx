@@ -159,12 +159,27 @@ const useGetUser = (): UseQueryResult<User, Error> => {
     queryKey: ['get-user'],
 
     queryFn: async (): Promise<User> => {
+      if (import.meta.env.VITE_APP_IS_LOCAL === 'true') {
+        const mockUser: User = {
+          id: 'local-admin-user',
+          name: 'Dr. Brasil (Admin)',
+          email: 'admin@ottehr.com.br',
+          roles: [
+            { name: RoleType.Administrator },
+            { name: RoleType.Provider },
+            { name: RoleType.Staff },
+          ],
+          profile: 'Practitioner/local-admin-practitioner',
+        } as unknown as User;
+        useEvolveUserStore.setState({ user: mockUser });
+        return mockUser;
+      }
       const user = await getUser(token!);
       useEvolveUserStore.setState({ user: user as User });
       return user;
     },
 
-    enabled: Boolean(token && !user),
+    enabled: Boolean((token || import.meta.env.VITE_APP_IS_LOCAL === 'true') && !user),
   });
 };
 

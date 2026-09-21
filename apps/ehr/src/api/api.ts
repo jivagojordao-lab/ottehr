@@ -529,6 +529,15 @@ const FILE_INBOUND_FAX_ZAMBDA_ID = 'file-inbound-fax';
 const DELETE_INBOUND_FAX_ZAMBDA_ID = 'delete-inbound-fax';
 
 export const getUser = async (token: string): Promise<User> => {
+  if (import.meta.env.VITE_APP_IS_LOCAL === 'true') {
+    return {
+      id: 'local-admin-user',
+      name: 'Dr. Brasil (Admin)',
+      email: 'admin@ottehr.com.br',
+      roles: [{ name: 'Administrator' }, { name: 'Provider' }, { name: 'Staff' }] as any,
+      profile: 'Practitioner/local-admin-practitioner',
+    } as unknown as User;
+  }
   const oystehr = createClinicalOystehrClient(token);
   return oystehr.user.me();
 };

@@ -26,6 +26,7 @@ export function createClinicalOystehrClient(token?: string, overrides?: Partial<
     services: {
       fhirApiUrl,
       projectApiUrl,
+      userApiUrl: projectApiUrl,
       zambdaApiUrl,
     },
     projectId: import.meta.env.VITE_APP_PROJECT_ID || 'ottehr-brasil',
