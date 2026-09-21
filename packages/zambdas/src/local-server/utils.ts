@@ -11,34 +11,48 @@ export const expressLambda = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const lambdaInput = await buildLambdaInput(req);
-  const handlerResponse = await handler(
-    lambdaInput,
-    {} as unknown as Context, // Zambdas don't use it
-    undefined as unknown as Callback<APIGatewayProxyResult> // Zambdas don't use it
-  );
-  if (handlerResponse != null) {
-    _.forOwn(handlerResponse.headers, (value, key) => {
-      res.setHeader(key, value);
-    });
-    res.status(handlerResponse.statusCode);
-    let body;
-    try {
-      body = JSON.parse(handlerResponse.body);
-    } catch {
-      body = handlerResponse.body;
-    }
+  try {
+    const lambdaInput = await buildLambdaInput(req);
+    const handlerResponse = await handler(
+      lambdaInput,
+      {} as unknown as Context, // Zambdas don't use it
+      undefined as unknown as Callback<APIGatewayProxyResult> // Zambdas don't use it
+    );
+    if (handlerResponse != null) {
+      _.forOwn(handlerResponse.headers, (value, key) => {
+        res.setHeader(key, value);
+      });
+      res.status(handlerResponse.statusCode);
+      let body;
+      try {
+        body = JSON.parse(handlerResponse.body);
+      } catch {
+        body = handlerResponse.body;
+      }
 
-    res.send({
-      status: handlerResponse.statusCode,
-      output: body,
-    });
-  } else {
-    throw 'Unexpectedly have no response from handler';
+      res.send({
+        status: handlerResponse.statusCode,
+        output: body,
+      });
+    } else {
+      res.status(500).send({ message: 'No response from handler' });
+    }
+  } catch (err: any) {
+    console.error(`Erro ao executar zambda ${req.url}:`, err);
+    res.status(500).send({ message: err?.message || String(err) });
   }
 };
 
-const secrets: Record<string, string> = {};
+const defaultLocalSecrets: Record<string, string> = {
+  ENVIRONMENT: 'local',
+  FHIR_API: 'http://localhost:8103/fhir/R4',
+  PROJECT_API: 'http://localhost:3000',
+  PROJECT_ID: 'ottehr-brasil',
+  ORGANIZATION_ID: 'ottehr-brasil',
+  WEBSITE_URL: 'http://localhost:4002',
+};
+
+const secrets: Record<string, string> = { ...defaultLocalSecrets };
 
 function populateSecrets({ pathToSecretsFile }: { pathToSecretsFile: string }): void {
   console.log('Populating secrets from', pathToSecretsFile);

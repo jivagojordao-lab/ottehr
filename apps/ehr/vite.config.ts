@@ -64,6 +64,10 @@ export default ({ mode }: { mode: string }): UserConfig => {
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/local-api/, ''),
         },
+        '/zambda': {
+          target: 'http://localhost:3000',
+          changeOrigin: true,
+        },
       },
       https:
         tlsCertExists && tlsKeyExists
